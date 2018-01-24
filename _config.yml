@@ -13,14 +13,14 @@
 # you will see them accessed via {{ site.title }}, {{ site.email }}, and so on.
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
-title: Turbine Labs
-email: hello@turbinelabs.io
-support_email: support@turbinelabs.io
+title: Learn Envoy
+email: hello@learnenvoy.io
+support_email: support@learnenvoy.io
 description: > # this means to ignore newlines until "baseurl:"
-  Documentation for Turbine Labs products
+  Documentation for Learn Envoy
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
-twitter_username: goturbine
+twitter_username:
 github_username:  turbinelabs
 google_analytics: "{{env GOOGLE_ANALYTICS_KEY}}"
 

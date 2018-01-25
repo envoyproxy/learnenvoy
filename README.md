@@ -18,7 +18,7 @@ building [Houston](https://www.turbinelabs.io/product), a control plane,
 management UI, and observability platform for Envoy.
 
 We open-sourced this site because we know we're not always right, and even if we
-are, Envoy and the best practices around it are evolving faster than any single
+are, Envoy and its best practices are evolving faster than any single
 organization can keep up. Feel free to fork it, edit it, share it with others,
 and contribute back to it.
 
@@ -28,10 +28,10 @@ Want to contribute a change? Great! Here are a few ways you can jump in:
 
  - Be sure to read our [Code of Conduct](CODE_OF_CONDUCT.md)
  - Browse our [open issues](https://github.com/turbinelabs/learnenvoy/issues)
- - Suggest a new section or area for improvement by [opening an
-   issue](https://github.com/turbinelabs/learnenvoy/issues/new)
+ - Suggest a new section or area for improvement by
+   [opening an issue](https://github.com/turbinelabs/learnenvoy/issues/new)
 
-If you're running Envoy at your company and want your success story told, shoot
+If you're running Envoy at your company and want your success story told, send
 an email to hello@turbinelabs.io. We'd love to interview you and post your
 experience on the site.
 

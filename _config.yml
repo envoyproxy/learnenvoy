@@ -35,8 +35,6 @@ exclude:
   - CODE_OF_CONDUCT.md
   - LICENSE
   - README.md
-  - README-jekyll.md
-  - docker
 collections:
   reference:
     output: true

@@ -14,13 +14,14 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 title: Learn Envoy
-email: hello@learnenvoy.io
-support_email: support@learnenvoy.io
+email: learnenvoy@turbinelabs.io
+support_email: learnenvoy@turbinelabs.io
 description: > # this means to ignore newlines until "baseurl:"
-  Documentation for Learn Envoy
+  LearnEnvoy is a community content site that helps organizations get the most
+  out of the Envoy proxy
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "" # the base hostname & protocol for your site, e.g. http://example.com
-twitter_username:
+url: "https://learnenvoy.io" # the base hostname & protocol for your site, e.g. http://example.com
+twitter_username: goturbine
 github_username:  turbinelabs
 google_analytics: "{{env GOOGLE_ANALYTICS_KEY}}"
 
@@ -28,6 +29,7 @@ google_analytics: "{{env GOOGLE_ANALYTICS_KEY}}"
 markdown: redcarpet
 redcarpet:
   extensions: ["no_intra_emphasis", "fenced_code_blocks", "autolink", "tables", "with_toc_data"]
+theme: agency-jekyll-theme
 
 exclude:
   - Gemfile
@@ -35,13 +37,3 @@ exclude:
   - CODE_OF_CONDUCT.md
   - LICENSE
   - README.md
-collections:
-  reference:
-    output: true
-    print_order: 1
-  guides:
-    output: true
-    print_order: 2
-  advanced:
-    output: true
-    print_order: 3

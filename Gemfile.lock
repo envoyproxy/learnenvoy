@@ -3,6 +3,7 @@ GEM
   specs:
     addressable (2.5.0)
       public_suffix (~> 2.0, >= 2.0.2)
+    agency-jekyll-theme (1.0.0)
     colorator (1.1.0)
     ffi (1.9.18)
     forwardable-extended (2.6.0)
@@ -43,6 +44,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  agency-jekyll-theme
   jekyll (= 3.4.0)
   liquefy (~> 0.1.2)
   redcarpet (~> 3.4.0)

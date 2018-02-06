@@ -11,6 +11,8 @@ ruby ">=2.0.0"
 # Happy Jekylling!
 gem "jekyll", "3.4.0"
 
+gem "agency-jekyll-theme"
+
 # using redcarpet instead of kramdown because it supports comments in markdown
 gem "redcarpet", "~> 3.4.0"
 

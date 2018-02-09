@@ -1,0 +1,11 @@
+- name: "Service Discovery Integration"
+  icon: "shopping-cart"
+  description: "No more hard-coding IP addresses and ports. CDS and EDS let you integrate with your service registry to automatically populate which hosts are available for each services"
+
+- name: "Routing Configuration"
+  icon: "laptop"
+  description: "No more hard-coding IP addresses and ports. CDS and EDS let you integrate with your service registry to automatically populate which hosts are available for each services"
+
+- name: "Emitting the Right Data"
+  icon: "lock"
+  description: "Envoy helps you capture information about your customers' requests, and the health of the backends that served them. Define what Envoy emits in LDS."

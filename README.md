@@ -50,7 +50,9 @@ Jekyll is built with ruby. There are many ways to install ruby on a
 mac. Pick the one that is least infuriating to you. Using homebrew is a
 fine answer. You'll also need gems (installed with ruby if you're
 using homebrew) and bundler, because how else are you going to gem
-up your gems.
+up your gems. Then we wrap it all with make because we have to hoist some
+javascript out of the gems directory. It's beautiful.
+
 
 ```shell
 brew install ruby
@@ -79,7 +81,7 @@ To make sure your Gems are packaged up correctly for running jekyll
 To serve the site for local development, run
 
 ```
-jekyll serve
+make serve
 ```
 
 Then go to http://localhost:4000
@@ -87,7 +89,26 @@ Then go to http://localhost:4000
 To build the site for distribution run
 
 ```shell
-jekyll build
+make build
 ```
 
 And gizp or whatever all the stuff in `_site`.
+
+## Site Architecture
+
+### Theme
+
+We use the [agency theme](https://github.com/y7kim/agency-jekyll-theme) for the
+site. Styling overrides are in `assets/main.scss` and in the `_sass` directory.
+
+### Topics
+
+The main page is organized along a series of topics. Topics are defined in four
+places (gross).
+
+1. `_includes/nav.html` defines the topmost nav. Each section needs an entry
+   here
+2. `_layouts/main.html` has an include for each topic
+3. `_includes/<topic>.html` controls rendering for the topic
+4. `_data/<topic>.html` provides a structured "database" of entries in a topic
+

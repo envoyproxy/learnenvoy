@@ -1,0 +1,22 @@
+@import "variables.scss";
+@import "mixins.scss";
+
+header {
+  .intro-text {
+    padding-top: 125px;
+    .intro-description {
+      @include body-font;
+      padding-top: 25px;
+      padding-bottom: 25px;
+      margin-bottom: 25px;
+      font-size: 20px;
+      font-weight: 300;
+    }
+    .intro-heading {
+      padding-top: 25px;
+      margin-top: 25px;
+    }
+  }
+}
+
+ 

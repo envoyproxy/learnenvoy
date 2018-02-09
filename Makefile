@@ -1,7 +1,7 @@
 SHELL := /bin/bash
 BUNDLE := bundle
-YARN := yarn
-VENDOR_DIR = assets/vendor/
+THEME_DIR := $(shell bundle show agency-jekyll-theme)
+VENDOR_DIR := .
 JEKYLL := $(BUNDLE) exec jekyll
 
 PROJECT_DEPS := Gemfile package.json
@@ -20,19 +20,15 @@ check:
 
 install: $(PROJECT_DEPS)
 	$(BUNDLE) install --path vendor/bundler
-	$(YARN) install
 
 update: $(PROJECT_DEPS)
 	$(BUNDLE) update
-	$(YARN) upgrade
 
-include-yarn-deps:
-	mkdir -p $(VENDOR_DIR)
-	cp node_modules/jquery/dist/jquery.min.js $(VENDOR_DIR)
-	cp node_modules/bootstrap/dist/js/bootstrap.min.js $(VENDOR_DIR)
+include-vendor-deps:
+	cp -r $(THEME_DIR)/vendor $(VENDOR_DIR)
 
-build: install include-yarn-deps
+build: install include-vendor-deps
 	$(JEKYLL) build
 
-serve: install include-yarn-deps
+serve: install include-vendor-deps
 	JEKYLL_ENV=production $(JEKYLL) serve

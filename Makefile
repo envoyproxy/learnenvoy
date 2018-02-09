@@ -4,7 +4,7 @@ THEME_DIR := $(shell bundle show agency-jekyll-theme)
 VENDOR_DIR := .
 JEKYLL := $(BUNDLE) exec jekyll
 
-PROJECT_DEPS := Gemfile package.json
+PROJECT_DEPS := Gemfile
 
 .PHONY: all clean install update
 
@@ -34,4 +34,4 @@ serve: install include-vendor-deps
 	JEKYLL_ENV=production $(JEKYLL) serve
 
 clean:
-	$(JEKYLL) clean
+	$(JEKYLL) cleang

@@ -32,3 +32,6 @@ build: install include-vendor-deps
 
 serve: install include-vendor-deps
 	JEKYLL_ENV=production $(JEKYLL) serve
+
+clean:
+	$(JEKYLL) clean

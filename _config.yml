@@ -37,3 +37,9 @@ exclude:
   - CODE_OF_CONDUCT.md
   - LICENSE
   - README.md
+  - vendor/bundler
+  - node_modules
+sass:
+  load_paths:
+    - _sass
+    - node_modules

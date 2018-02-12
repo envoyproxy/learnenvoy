@@ -1,0 +1,27 @@
+<!-- Services Section -->
+<section id="configure">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <h2 class="section-heading">Dynamic Configuration</h2>
+                <h3 class="section-subheading text-muted">Envoy's powerful configuration model is miles ahead of other open-source serving layers. Envoy uses pluggable, dynamic APIs instead of static files, allowing changes to your environment to be applied instantly, with no service interruption. 
+
+You can get Envoy set up on your laptop with a bootstrap config, then extend it as you need more functionality.
+                </h3>
+            </div>
+        </div>
+        <div class="row text-center">
+          {% for service in site.data.dynamic-configuration %}
+            <div class="col-md-4">
+                <span class="fa-stack fa-4x">
+                    <i class="fa fa-circle fa-stack-2x text-primary"></i>
+                    <i class="fa fa-{{ service.icon }} fa-stack-1x fa-inverse"></i>
+                </span>
+                <h4 class="service-heading">{{ service.name }}</h4>
+                <p class="text-muted">{{ service.description }}</p>
+            </div>
+          {% endfor %}
+
+        </div>
+    </div>
+</section>

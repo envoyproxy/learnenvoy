@@ -1,0 +1,11 @@
+---
+layout: default
+---
+{% include hero.html %}
+{% include getting-started.html %}
+{% include dynamic-configuration.html %}
+{% include observability.html %}
+{% include deployment-models.html %}
+{% include advanced-envoy.html %}
+{% include portfolio-modals.html %}
+`

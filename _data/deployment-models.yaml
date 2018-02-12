@@ -1,0 +1,13 @@
+- name: "Front Proxy"
+  icon: "shopping-cart"
+  description: "How do you get traffic into your service from the internet? Envoy can take care of terminating SSL, translating traffic from HTTP1.1 to HTTP/2, and more. 
+How-to: Terminate SSL
+How-to: Proxy to gRPC"
+
+- name: "Service Mesh"
+  icon: "laptop"
+  description: "By co-locating Envoy with your code, you can let Envoy handle the complexities of the network. This makes service-to-service communication safer and more reliable, while alleviating the need to re-implement this functionality within each service."
+
+- name: "Hosted Where You Are"
+  icon: "lock"
+  description: "Use your existing deployment and production tooling to get Envoy on your infrastructure. There’s no need to reinvent the wheel to put Envoy in place as a front proxy or sidecar."

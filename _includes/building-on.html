@@ -21,7 +21,7 @@
                 {% else %}
                 <h4 class="service-heading">{{ service.name }}</h4>
                 {% endif %}
-                <p class="text-muted">{{ service.description | markdownify }}</p>
+                <div class="text-muted">{{ service.description | markdownify }}</div>
             </div>
           {% endfor %}
 

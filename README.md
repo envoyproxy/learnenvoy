@@ -110,5 +110,13 @@ places (gross).
    here
 2. `_layouts/main.html` has an include for each topic
 3. `_includes/<topic>.html` controls rendering for the topic
-4. `_data/<topic>.html` provides a structured "database" of entries in a topic
+4. `_data/<topic>.yaml` provides a structured "database" of entries in a topic
+
+### Articles
+
+If an item in `_data/<topic>.yaml` contains an `article` field, jekyll will look
+for a corresponding markdown file in the `_articles` subdirectory. Articles are
+rendered with the layout in `_layouts/article.html`. see
+`_data/getting-started.yaml` for a _very_ slim example for the 'on your laptop'
+article.
 

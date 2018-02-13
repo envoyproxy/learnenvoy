@@ -1,11 +1,14 @@
 - name: "On Your Laptop"
   icon: "laptop"
   description: "Getting Envoy configured locally is a great way to start learning about all of its parts. A minimal setup is fast, especially with a few default configurations."
+  article: on-your-laptop
 
 - name: "Sending Your Traffic"
   icon: "share"
   description: "Send your first request through the proxy to a service running on your laptop."
+  article: sending-traffic
 
 - name: "Getting Help"
   icon: "question-circle"
   description: "Stuck? Found an edge-case issue? Here's where to go to get answers, and the information you’ll need to dig into any issue."
+  article: getting-help

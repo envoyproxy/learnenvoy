@@ -1,6 +1,5 @@
 SHELL := /bin/bash
 BUNDLE := bundle
-THEME_DIR := $(shell bundle show agency-jekyll-theme)
 VENDOR_DIR := .
 JEKYLL := $(BUNDLE) exec jekyll
 
@@ -25,7 +24,7 @@ update: $(PROJECT_DEPS)
 	$(BUNDLE) update
 
 include-vendor-deps:
-	cp -r $(THEME_DIR)/vendor $(VENDOR_DIR)
+	cp -r $(shell bundle show agency-jekyll-theme)/vendor $(VENDOR_DIR)
 
 build: install include-vendor-deps
 	$(JEKYLL) build
@@ -35,3 +34,5 @@ serve: install include-vendor-deps
 
 clean:
 	$(JEKYLL) clean
+	$(BUNDLE) clean
+	rm -rf vendor

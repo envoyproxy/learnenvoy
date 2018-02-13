@@ -12,12 +12,12 @@ jobs:
 
       - restore_cache:
           keys:
-            - learnenvoy-bundle-cache-v1-{{ checksum "Gemfile.lock" }}
-            - learnenvoy-bundle-cache-v1-
+            - learnenvoy-bundler-cache-v1-{{ checksum "Gemfile.lock" }}
+            - learnenvoy-bundler-cache-v1-
 
       - run: make test
 
       - save_cache:
-          key: learnenvoy-bundle-cache-v1-{{ checksum "Gemfile.lock" }}
+          key: learnenvoy-bundler-cache-v1-{{ checksum "Gemfile.lock" }}
           paths:
             - vendor/bundler

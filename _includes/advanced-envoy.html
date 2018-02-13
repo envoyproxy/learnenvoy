@@ -19,6 +19,7 @@
                     <i class="fa fa-circle fa-stack-2x text-primary"></i>
                     <i class="fa fa-{{ service.icon }} fa-stack-1x fa-inverse"></i>
                 </span>
+                {% if service.article %}
                 <h4 class="service-heading">{{ service.name }}</h4>
                 <p class="text-muted">{{ service.description | markdownify }}</p>
                 {% endif %}

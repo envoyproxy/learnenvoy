@@ -18,7 +18,7 @@ You can get Envoy set up on your laptop with a bootstrap config, then extend it 
                     <i class="fa fa-{{ service.icon }} fa-stack-1x fa-inverse"></i>
                 </span>
                 <h4 class="service-heading">{{ service.name }}</h4>
-                <p class="text-muted">{{ service.description }}</p>
+                <p class="text-muted">{{ service.description | markdownify }}</p>
             </div>
           {% endfor %}
 

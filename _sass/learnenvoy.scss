@@ -2,6 +2,7 @@
 @import "mixins.scss";
 
 header {
+  background-image: url('../assets/img/envoy-header-bg.jpg');
   .intro-text {
     padding-top: 125px;
     .intro-description {

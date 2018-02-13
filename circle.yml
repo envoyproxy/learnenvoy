@@ -15,11 +15,9 @@ jobs:
             - learnenvoy-bundle-cache-v1-{{ checksum "Gemfile.lock" }}
             - learnenvoy-bundle-cache-v1-
 
-      - run: pwd
-
       - run: make test
 
       - save_cache:
           key: learnenvoy-bundle-cache-v1-{{ checksum "Gemfile.lock" }}
           paths:
-            - vendor/bundle
+            - vendor/bundler

@@ -25,6 +25,7 @@
                 {% else %}
                 <h4 class="service-heading">{{ service.name }}</h4>
                 <div class="text-muted">{{ service.description | markdownify }}</div>
+                {% endif %}
             </div>
           {% endfor %}
 

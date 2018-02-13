@@ -1,5 +1,5 @@
-<!-- Services Section -->
-<section id="services">
+<!-- Advanced Envoy Section -->
+<section id="advanced-envoy">
     <div class="container">
         <div class="row">
             <div class="col-lg-12 text-center">
@@ -20,9 +20,9 @@
                     <i class="fa fa-{{ service.icon }} fa-stack-1x fa-inverse"></i>
                 </span>
                 <h4 class="service-heading">{{ service.name }}</h4>
-                <p class="text-muted">{{ service.description | markdownify }}</p>
-                <p class="text-muted">{{ service.link }}</p>
-                <p class="text-muted">{{ service.link2 }}</p>
+                <div class="text-muted">{{ service.description | markdownify }}</div>
+                <div class="text-muted">{{ service.link }}</div>
+                <div class="text-muted">{{ service.link2 }}</div>
             </div>
           {% endfor %}
 

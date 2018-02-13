@@ -5,7 +5,16 @@ JEKYLL := $(BUNDLE) exec jekyll
 
 PROJECT_DEPS := Gemfile
 
-.PHONY: all clean install update
+.PHONY: \
+	all \
+	build \
+	check \
+	clean \
+	include-vendor-deps \
+	install \
+	update \
+	serve \
+	test
 
 all : serve
 
@@ -31,6 +40,10 @@ build: install include-vendor-deps
 
 serve: install include-vendor-deps
 	JEKYLL_ENV=production $(JEKYLL) serve
+
+test: build
+	# TODO: remove --allow-hash-href when the site is built out
+	$(BUNDLE) exec htmlproofer ./_site --check-html --disable-external --allow-hash-href
 
 clean:
 	$(JEKYLL) clean

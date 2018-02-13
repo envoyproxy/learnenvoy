@@ -3,8 +3,6 @@ jobs:
   build:
     docker:
       - image: circleci/ruby:2.5-node
-        environment:
-          BUNDLE_PATH: vendor/bundle
     steps:
       - checkout
 
@@ -16,6 +14,8 @@ jobs:
           keys:
             - learnenvoy-bundle-cache-v1-{{ checksum "Gemfile.lock" }}
             - learnenvoy-bundle-cache-v1-
+
+      - run: pwd
 
       - run: make test
 

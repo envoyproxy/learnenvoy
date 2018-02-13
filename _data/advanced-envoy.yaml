@@ -7,7 +7,6 @@
   description: "Finely-tune retries to ensure that hiccups don't lead to downtime, without making things worse when backends are unhealthy."
   link: "How-to: Automatic Retries"
 
-
 - name: "Distributed Tracing"
   icon: "lock"
   description: "Easy-to-implement service tracing, out-of-band from your applications gives you get a full picture of where your traffic goes."

@@ -5,7 +5,6 @@
 - name: "Verifying in Production"
   icon: "laptop"
   description: "Stop trying to run all 5,000 microservices on your laptop. You don’t have enough RAM. You’ll never have enough RAM."
-  link: "How-to: Automatic Retries"
 
 - name: "Migrations"
   icon: "lock"

@@ -31,6 +31,10 @@ redcarpet:
   extensions: ["no_intra_emphasis", "fenced_code_blocks", "autolink", "tables", "with_toc_data"]
 theme: agency-jekyll-theme
 
+collections:
+  articles:
+    output: true
+
 exclude:
   - Gemfile
   - Gemfile.lock
@@ -39,6 +43,7 @@ exclude:
   - README.md
   - vendor/bundler
   - node_modules
+  - Makefile
 sass:
   load_paths:
     - _sass

@@ -7,5 +7,6 @@ layout: default
 {% include observability.html %}
 {% include deployment-models.html %}
 {% include advanced-envoy.html %}
+{% include building-on.html %}
 {% include portfolio-modals.html %}
 `

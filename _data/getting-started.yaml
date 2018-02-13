@@ -3,10 +3,9 @@
   description: "Getting Envoy configured locally is a great way to start learning about all of its parts. A minimal setup is fast, especially with a few default configurations."
   article: on-your-laptop
 
-- name: "Sending Your Traffic"
+- name: "Routing Basics"
   icon: "share"
-  description: "Send your first request through the proxy to a service running on your laptop."
-  article: sending-traffic
+  description: "Send your first request through the proxy to a service running on your laptop, and learn how to connect more services to Envoy."
 
 - name: "Getting Help"
   icon: "question-circle"

@@ -1,26 +1,22 @@
 <!-- Services Section -->
-<section id="start">
+<section id="services">
     <div class="container">
         <div class="row">
             <div class="col-lg-12 text-center">
-                <h2 class="section-heading">Getting Started</h2>
-                <h3 class="section-subheading text-muted">You can get Envoy set up on your laptop with a bootstrap config, then extend it as you need more functionality. Start seeing the benefits, and learn how to talk to the community when you get stuck.
-</h3>
+                <h2 class="section-heading">Building On Envoy</h2>
+                <h3 class="section-subheading text-muted">Tools are good. Solutions are better. The best companies use Envoy’s capabilities to democratize capabilities that normally require arcane knowledge and deep expertise. Be careful: once you’ve tried some of these workflows, you may not be able to go back.
+                </h3>
             </div>
         </div>
         <div class="row text-center">
-          {% for service in site.data.getting-started %}
+          {% for service in site.data.building-on %}
             <div class="col-md-4">
                 <span class="fa-stack fa-4x">
                     <i class="fa fa-circle fa-stack-2x text-primary"></i>
                     <i class="fa fa-{{ service.icon }} fa-stack-1x fa-inverse"></i>
                 </span>
-                {% if service.article %}
-                <h4 class="service-heading"><a href="/articles/{{ service.article
-                }}">{{ service.name }}</a></h4>
-                {% else %}
                 <h4 class="service-heading">{{ service.name }}</h4>
-                <p class="text-muted">{{ service.description | markdownify }}</p>
+                <p class="text-muted">{{ service.description }}</p>
                 <p class="text-muted">{{ service.link }}</p>
                 <p class="text-muted">{{ service.link2 }}</p>
             </div>

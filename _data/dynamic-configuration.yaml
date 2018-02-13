@@ -4,8 +4,8 @@
 
 - name: "Routing Configuration"
   icon: "sitemap"
-  description: "No more hard-coding IP addresses and ports. CDS and EDS let you integrate with your service registry to automatically populate which hosts are available for each services"
+  description: "RDS lets you move routing configuration out of static configs and into a type-safe API, making typos and merge conflicts a thing of the past."
 
 - name: "Emitting the Right Data"
   icon: "tachometer"
-  description: "Envoy helps you capture information about your customers' requests, and the health of the backends that served them. Define what Envoy emits in LDS."
+  description: "Envoy helps you capture information about your customers' requests, and the health of the backends that served them. Define what Envoy emits in LDS"

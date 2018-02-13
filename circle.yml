@@ -12,17 +12,17 @@ jobs:
 
       - run: bundle -v
 
-      # TODO: remove --allow-hash-href when site is built out
-      - run:
-        name: check HTML
-        command: bundle exec htmlproofer ./_site --check-html --disable-external --allow-hash-href
-
       - restore_cache:
           keys:
             - learnenvoy-bundle-cache-v1-{{ checksum "Gemfile.lock" }}
             - learnenvoy-bundle-cache-v1-
 
       - run: make build
+
+      # TODO: remove --allow-hash-href when site is built out
+      - run:
+        name: check HTML
+        command: bundle exec htmlproofer ./_site --check-html --disable-external --allow-hash-href
 
       - save_cache:
           key: learnenvoy-bundle-cache-v1-{{ checksum "Gemfile.lock" }}

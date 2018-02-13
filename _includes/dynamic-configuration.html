@@ -20,9 +20,9 @@ You can get Envoy set up on your laptop with a bootstrap config, then extend it 
                 {% if service.article %}
                 <h4 class="service-heading"><a href="/articles/{{ service.article
                 }}">{{ service.name }}</a></h4>
-                {% endif %}
                 {% else %}
                 <h4 class="service-heading">{{ service.name }}</h4>
+                {% endif %}
                 <div class="text-muted">{{ service.description | markdownify }}</div>
             </div>
           {% endfor %}

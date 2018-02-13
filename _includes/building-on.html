@@ -18,9 +18,9 @@
                 {% if service.article %}
                 <h4 class="service-heading"><a href="/articles/{{ service.article
                 }}">{{ service.name }}</a></h4>
-                {% endif %}
                 {% else %}
                 <h4 class="service-heading">{{ service.name }}</h4>
+                {% endif %}
                 <p class="text-muted">{{ service.description | markdownify }}</p>
             </div>
           {% endfor %}

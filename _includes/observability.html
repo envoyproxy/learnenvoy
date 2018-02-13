@@ -17,10 +17,10 @@
                 {% if service.article %}
                 <h4 class="service-heading"><a href="/articles/{{ service.article
                 }}">{{ service.name }}</a></h4>
+                {% endif %}
                 {% else %}
                 <h4 class="service-heading">{{ service.name }}</h4>
                 <div class="text-muted">{{ service.description | markdownify }}</div>
-                {% endif %}
             </div>
           {% endfor %}
 

@@ -1,8 +1,8 @@
 - name: "Log Parsing"
   icon: "bolt"
   description: "Envoy’s logs contain a lot of data that you can’t get from the auto-generated summaries. Decide what’s useful to you, configure [LDS](https://www.envoyproxy.io/docs/envoy/latest/configuration/listeners/lds) to emit these logs, parse them and forward them to an appropriate consumer."
-  article: "basic-logging.html"
-  article: "advanced-logging.html"
+  article: basic-logging.html
+  article: advanced-logging.html
 
 - name: "Metrics Aggregation"
   icon: "database"

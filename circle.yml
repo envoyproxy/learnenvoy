@@ -1,0 +1,23 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/ruby:2.5-node
+    steps:
+      - checkout
+
+      - run: env | sort
+
+      - run: bundle -v
+
+      - restore_cache:
+          keys:
+            - learnenvoy-bundler-cache-v1-{{ checksum "Gemfile.lock" }}
+            - learnenvoy-bundler-cache-v1-
+
+      - run: make test
+
+      - save_cache:
+          key: learnenvoy-bundler-cache-v1-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundler

@@ -1,12 +1,20 @@
 SHELL := /bin/bash
 BUNDLE := bundle
-THEME_DIR := $(shell bundle show agency-jekyll-theme)
 VENDOR_DIR := .
 JEKYLL := $(BUNDLE) exec jekyll
 
 PROJECT_DEPS := Gemfile
 
-.PHONY: all clean install update
+.PHONY: \
+	all \
+	build \
+	check \
+	clean \
+	include-vendor-deps \
+	install \
+	update \
+	serve \
+	test
 
 all : serve
 
@@ -25,7 +33,7 @@ update: $(PROJECT_DEPS)
 	$(BUNDLE) update
 
 include-vendor-deps:
-	cp -r $(THEME_DIR)/vendor $(VENDOR_DIR)
+	cp -r $(shell bundle show agency-jekyll-theme)/vendor $(VENDOR_DIR)
 
 build: install include-vendor-deps
 	$(JEKYLL) build
@@ -33,5 +41,11 @@ build: install include-vendor-deps
 serve: install include-vendor-deps
 	JEKYLL_ENV=production $(JEKYLL) serve
 
+test: build
+	# TODO: remove --allow-hash-href when the site is built out
+	$(BUNDLE) exec htmlproofer ./_site --check-html --disable-external --allow-hash-href
+
 clean:
 	$(JEKYLL) clean
+	$(BUNDLE) clean
+	rm -rf vendor

@@ -1,6 +1,35 @@
 @import "variables.scss";
 @import "mixins.scss";
 
+header.article {
+  background-image: url('../assets/img/envoy-article-header-bg.jpg');
+  background-size: contain;
+  background-position: top center;
+  color: $theme-primary;
+  .intro-text {
+    padding-top: 100px;
+    padding-bottom: 25px;
+    .intro-lead-in {
+      @include serif-font;
+      font-style: italic;
+      font-size: 22px;
+      line-height: 22px;
+      margin-bottom: 25px;
+    }
+    .intro-heading {
+      @include heading-font;
+      font-weight: 700;
+      font-size: 50px;
+      line-height: 50px;
+      margin-bottom: 25px;
+    }
+  }
+}
+
+div.article {
+  padding: 25px 25px;
+}
+
 header {
   background-image: url('../assets/img/envoy-header-bg.jpg');
   .intro-text {
@@ -19,5 +48,3 @@ header {
     }
   }
 }
-
- 

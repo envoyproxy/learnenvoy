@@ -1,13 +1,13 @@
 - name: "Log Parsing"
-  icon: "shopping-cart"
+  icon: "bolt"
   description: "Envoy’s logs contain a lot of data that you can’t get from the auto-generated summaries. Decide what’s useful to you, configure LDS to emit these logs, parse them and forward them to an appropriate consumer.
 How-to: Basic logging
 How-to: Advanced logging"
 
 - name: "Metrics Aggregation"
-  icon: "laptop"
+  icon: "database"
   description: "Information on one Envoy is great, but information about your entire environment is better. Use the Envoy primitives to aggregate information about clusters/services, domains/routes, and servers/nodes."
 
 - name: "Change Logging"
-  icon: "lock"
+  icon: "eye"
   description: "Unlike traditional serving layers,, Envoy’s behavior can change without human intervention. Use the admin interface to inspect the current state of an Envoy instance, including backend health and other runtime metrics."

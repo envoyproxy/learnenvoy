@@ -1,6 +1,5 @@
 .sass-cache
 node_modules
-assets
 vendor
 .bundle
 _site

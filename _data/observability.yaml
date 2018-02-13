@@ -1,10 +1,8 @@
 - name: "Log Parsing"
   icon: "shopping-cart"
-  description: "Envoy’s logs contain a lot of data that you can’t get from the auto-generated summaries. Decide what’s useful to you, configure LDS to emit these logs, parse them and forward them to an appropriate consumer.
-
-  How-to: Basic logging
-
-  How-to: Advanced logging"
+  description: "Envoy’s logs contain a lot of data that you can’t get from the auto-generated summaries. Decide what’s useful to you, configure LDS to emit these logs, parse them and forward them to an appropriate consumer."
+  link: "How-to: Basic logging"
+  link: "How-to: Advanced logging"
 
 - name: "Metrics Aggregation"
   icon: "laptop"

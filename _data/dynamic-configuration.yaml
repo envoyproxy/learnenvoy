@@ -1,11 +1,11 @@
 - name: "Service Discovery Integration"
   icon: "server"
-  description: "No more hard-coding IP addresses and ports. CDS and EDS let you integrate with your service registry to automatically populate which hosts are available for each services"
+  description: "No more hard-coding IP addresses and ports. [CDS](https://www.envoyproxy.io/docs/envoy/latest/configuration/cluster_manager/cds.html&sa=D&ust=1518465786435000&usg=AFQjCNHBgzy-t0CUlD-pvJTNRyVuYFmtkQ) and [EDS](https://www.envoyproxy.io/docs/envoy/latest/api-v2/api/v2/eds.proto.html%23envoy-api-file-envoy-api-v2-eds-proto&sa=D&ust=1518465786435000&usg=AFQjCNEiJvGuNaYIR9S_ColWXEx2rqjWUw) let you integrate with your service registry to automatically populate which hosts are available for each services"
 
 - name: "Routing Configuration"
   icon: "sitemap"
-  description: "RDS lets you move routing configuration out of static configs and into a type-safe API, making typos and merge conflicts a thing of the past."
+  description: "[RDS](https://www.envoyproxy.io/docs/envoy/latest/configuration/http_conn_man/rds) lets you move routing configuration out of static configs and into a type-safe API, making typos and merge conflicts a thing of the past."
 
 - name: "Emitting the Right Data"
   icon: "tachometer"
-  description: "Envoy helps you capture information about your customers' requests, and the health of the backends that served them. Define what Envoy emits in LDS"
+  description: "Envoy helps you capture information about your customers' requests, and the health of the backends that served them. Define what Envoy emits in [LDS](https://www.envoyproxy.io/docs/envoy/latest/configuration/listeners/lds)"

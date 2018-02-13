@@ -1,11 +1,11 @@
 - name: "Service Discovery Integration"
-  icon: "shopping-cart"
+  icon: "server"
   description: "No more hard-coding IP addresses and ports. CDS and EDS let you integrate with your service registry to automatically populate which hosts are available for each services"
 
 - name: "Routing Configuration"
-  icon: "laptop"
+  icon: "sitemap"
   description: "RDS lets you move routing configuration out of static configs and into a type-safe API, making typos and merge conflicts a thing of the past."
 
 - name: "Emitting the Right Data"
-  icon: "lock"
+  icon: "tachometer"
   description: "Envoy helps you capture information about your customers' requests, and the health of the backends that served them. Define what Envoy emits in LDS"

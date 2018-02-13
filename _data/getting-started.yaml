@@ -3,9 +3,9 @@
   description: "Getting Envoy configured locally is a great way to start learning about all of its parts. A minimal setup is fast, especially with a few default configurations."
 
 - name: "Routing Basics"
-  icon: "shopping-cart"
+  icon: "share"
   description: "Send your first request through the proxy to a service running on your laptop, and learn how to connect more services to Envoy."
 
 - name: "Getting Help"
-  icon: "lock"
+  icon: "question-circle"
   description: "Stuck? Found an edge-case issue? Here's where to go to get answers, and the information you’ll need to dig into any issue."

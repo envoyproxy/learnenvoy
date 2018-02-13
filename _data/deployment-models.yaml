@@ -1,9 +1,8 @@
 - name: "Front Proxy"
   icon: "shopping-cart"
   description: "How do you get traffic into your service from the internet? Envoy can take care of terminating SSL, translating traffic from HTTP1.1 to HTTP/2, and more."
-  link: "How-to: Terminate SSL
-
-        How-to: Proxy to gRPC"
+  link: "How-to: Terminate SSL"
+  link2: "How-to: Proxy to gRPC"
 
 - name: "Service Mesh"
   icon: "laptop"

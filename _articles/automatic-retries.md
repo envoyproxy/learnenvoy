@@ -70,7 +70,6 @@ with HTTP headers. It’s better to configure routes to be conservative with
 their retries and allow specific calling code to request more aggressive retry
 behavior.
 
-
 ## Consider the Calling Context
 
 For internal service calls, it’s important to consider the restrictions imposed

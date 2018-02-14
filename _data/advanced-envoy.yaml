@@ -1,5 +1,5 @@
 - name: "Circuit Breaking"
-  icon: "shopping-cart"
+  icon: "bolt"
   description: "Fail quickly and apply back pressure downstream for your connections. Start with 1,000% of your max expected load on most services."
 
 - name: "Automatic Retries"
@@ -7,6 +7,6 @@
   description: "Finely-tune retries to ensure that hiccups don't lead to downtime, without making things worse when backends are unhealthy."
   article: automatic-retries.html
 
-- name: "Distributed Tracing"
-  icon: "lock"
-  description: "Easy-to-implement service tracing, out-of-band from your applications gives you get a full picture of where your traffic goes."
+- name: "Health Checks"
+  icon: "question-circle"
+  description: "Identify unhealthy hosts within services and automatically remove them from the load balancing rotation until they become healthy again."

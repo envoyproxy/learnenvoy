@@ -9,4 +9,4 @@
 
 - name: "Health Checks"
   icon: "question-circle"
-  description: "dentify unhealthy hosts within services and automatically remove them the load balancing rotation until they become healthy again."
+  description: "Identify unhealthy hosts within services and automatically remove them from the load balancing rotation until they become healthy again."

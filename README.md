@@ -99,7 +99,10 @@ And gizp or whatever all the stuff in `_site`.
 ### Theme
 
 We use the [agency theme](https://github.com/y7kim/agency-jekyll-theme) for the
-site. Styling overrides are in `assets/main.scss` and in the `_sass` directory.
+site. Styling overrides are in `assets/main.scss` and in the `_sass`
+directory. We have copied all of the scss assets from the gem, so we shouldn't
+have to worry about order of application from the gem and our thing (non-gem
+files _should_ take precedence)
 
 ### Topics
 

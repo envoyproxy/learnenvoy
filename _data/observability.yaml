@@ -1,8 +1,7 @@
 - name: "Log Parsing"
   icon: "bolt"
-  description: "Envoy’s logs contain a lot of data that you can’t get from the auto-generated summaries. Decide what’s useful to you, configure LDS to emit these logs, parse them and forward them to an appropriate consumer."
-  link: "How-to: Basic logging"
-  link2: "How-to: Advanced logging"
+  description: "Envoy’s logs contain a lot of data that you can’t get from the auto-generated summaries. Decide what’s useful to you, configure [LDS](https://www.envoyproxy.io/docs/envoy/latest/configuration/listeners/lds) to emit these logs, parse them and forward them to an appropriate consumer."
+  article: basic-logging.html
 
 - name: "Metrics Aggregation"
   icon: "database"
@@ -11,3 +10,4 @@
 - name: "Change Logging"
   icon: "eye"
   description: "Unlike traditional serving layers,, Envoy’s behavior can change without human intervention. Use the admin interface to inspect the current state of an Envoy instance, including backend health and other runtime metrics."
+  article: advanced-logging.html

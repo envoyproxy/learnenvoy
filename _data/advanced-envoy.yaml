@@ -5,7 +5,7 @@
 - name: "Automatic Retries"
   icon: "laptop"
   description: "Finely-tune retries to ensure that hiccups don't lead to downtime, without making things worse when backends are unhealthy."
-  link: "How-to: Automatic Retries"
+  article: automatic-retries.html
 
 - name: "Distributed Tracing"
   icon: "lock"

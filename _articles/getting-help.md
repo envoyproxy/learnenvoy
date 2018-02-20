@@ -14,7 +14,9 @@ configured separately in the case of a custom xDS configuration.
 
 You can also pass this command in your CLI:
 
-```-l <string>, --log-level <string> --log-path <path string>```
+```terminal
+-l <string>, --log-level <string> --log-path <path string>
+```
 
 It will set both the log level, and the path in which your logs
 are stored.

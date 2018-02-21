@@ -4,13 +4,12 @@ title: Integrating Service Discovery with Envoy
 time_to_complete: 5 minutes
 ---
 
-One of the core concepts when setting up Envoy in production is
-separating the
+One of the core concepts when setting up Envoy in production is separating the
 [data plane](https://blog.envoyproxy.io/service-mesh-data-plane-vs-control-plane-2774e720f7fc)—
 the Envoy instances that route your traffic—from the
 [control plane](https://blog.envoyproxy.io/service-mesh-data-plane-vs-control-plane-2774e720f7fc),
-which acts as the source of truth for the current state of your
-infrastructure and your desired configuration.
+which acts as the source of truth for the current state of your infrastructure
+and your desired configuration.
 
 You can start with a static config file as a control plane, but in most cases,
 teams quickly move from a static config file to an API service. Centralizing
@@ -49,8 +48,9 @@ turns them into xDS responses. Don’t be scared by the scope of Istio — P
 can be used separately to configure Envoy, without pulling in all the other
 services like Mixer.
 
-There are also **commercial implementations** available. [Turbine
-Labs](http://turbinelabs.io/) has a full xDS implementation as part of
+There are also **commercial implementations** available.
+[Turbine Labs](http://turbinelabs.io/)
+has a full xDS implementation as part of
 [Houston](http://turbinelabs.io/product).
 
 ## Mirror Services to CDS
@@ -94,9 +94,10 @@ API for a list of available IP/ports.
 
 For the full specifications, see the
 [Envoy docs](https://www.envoyproxy.io/docs/envoy/latest/api-v1/cluster_manager/cluster.html).
-Once this is configured, you can populate the endpoints that serve traffic for this cluster.
+Once this is configured, you can populate the endpoints that serve traffic for
+this cluster.
 
-Mirror instances to EDS
+## Mirror instances to EDS
 
 Envoy defines an “endpoint” as an IP and port available within a cluster. In
 order to balance traffic across a service, Envoy expects the API to provide a

@@ -1,7 +1,6 @@
 ---
 layout: article
 title: An xDS Overview
-time_to_complete: 5 minutes
 ---
 
 xDS is a suite of configuration service APIs that allow for dynamic

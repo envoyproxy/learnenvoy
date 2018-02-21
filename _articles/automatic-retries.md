@@ -1,7 +1,6 @@
 ---
 layout: article
 title: Automatic Retires
-time_to_complete: 5 minutes
 ---
 
 Automatic retries are a powerful way to add resilience to your system with

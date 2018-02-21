@@ -1,7 +1,6 @@
 ---
 layout: article
 title: Integrating Service Discovery with Envoy
-time_to_complete: 5 minutes
 ---
 
 One of the core concepts when setting up Envoy in production is separating the

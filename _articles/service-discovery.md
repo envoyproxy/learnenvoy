@@ -5,8 +5,10 @@ time_to_complete: 5 minutes
 ---
 
 One of the core concepts when setting up Envoy in production is
-separating the [data plane](https://blog.envoyproxy.io/service-mesh-data-plane-vs-control-plane-2774e720f7fc)—the Envoy instances
-that route your traffic—from the [control plane](https://blog.envoyproxy.io/service-mesh-data-plane-vs-control-plane-2774e720f7fc), which acts as the
+separating the
+[data plane](https://blog.envoyproxy.io/service-mesh-data-plane-vs-control-plane-2774e720f7fc)—the Envoy instances
+that route your traffic—from the
+[control plane](https://blog.envoyproxy.io/service-mesh-data-plane-vs-control-plane-2774e720f7fc), which acts as the
 source of truth for the current state of your infrastructure and your
 desired configuration.
 
@@ -25,23 +27,31 @@ discovery. This is generally broken down into three steps:
 
 ## Control Plane Implementation
 
-Any control plane should implement the [Envoy v2 xDS APIs](https://www.envoyproxy.io/docs/envoy/latest/api-v2/api).
-For the purpose of mirroring service discovery data, you’ll need to implement the Cluster Discovery Service [(CDS)](https://www.envoyproxy.io/docs/envoy/latest/configuration/cluster_manager/cds.html?highlight=cds) and the Endpoint
-Discovery Service [(EDS)](https://www.envoyproxy.io/docs/envoy/latest/api-v2/api/v2/eds.proto).
+Any control plane should implement the
+[Envoy v2 xDS APIs](https://www.envoyproxy.io/docs/envoy/latest/api-v2/api).
+For the purpose of mirroring service discovery data, you’ll need to implement
+the Cluster Discovery Service
+[(CDS)](https://www.envoyproxy.io/docs/envoy/latest/configuration/cluster_manager/cds.html?highlight=cds)
+and the Endpoint Discovery Service
+[(EDS)](https://www.envoyproxy.io/docs/envoy/latest/api-v2/api/v2/eds.proto).
 Here are several options to avoid starting from scratch:
 
-The Envoy repository provides [go-control-plane](https://github.com/envoyproxy/go-control-plane), an **open-source stub implementation**.
-If you want to get your hands dirty with exactly how everything is pulled from
-service discovery, cached locally, and served, this is a great starting point.
+The Envoy repository provides
+[go-control-plane](https://github.com/envoyproxy/go-control-plane),
+an **open-source stub implementation**. If you want to get your hands dirty
+with exactly how everything is pulled from service discovery, cached locally,
+and served, this is a great starting point.
 
-If you’re running in Kubernetes, the [Istio project](https://istio.io/docs/concepts/traffic-management/pilot.html) has a
-**control plane implementation called Pilot**. It takes YAML files and turns
-them into xDS responses. Don’t be scared by the scope of Istio — Pilot can be
-used separately to configure Envoy, without pulling in all the other services
-like Mixer.
+If you’re running in Kubernetes, the
+[Istio project](https://istio.io/docs/concepts/traffic-management/pilot.html)
+has a **control plane implementation called Pilot**. It takes YAML files and
+turns them into xDS responses. Don’t be scared by the scope of Istio — Pilot
+can be used separately to configure Envoy, without pulling in all the other
+services like Mixer.
 
 There are also **commercial implementations** available. [Turbine
-Labs](http://turbinelabs.io/) has a full xDS implementation as part of [Houston](http://turbinelabs.io/product).
+Labs](http://turbinelabs.io/) has a full xDS implementation as part of
+[Houston](http://turbinelabs.io/product).
 
 ## Mirror Services to CDS
 
@@ -82,7 +92,8 @@ It’s possible to hardcode the list of endpoints, though if your infrastructure
 is dynamic, you’ll want to set “type” to EDS, which tells Envoy to poll the EDS
 API for a list of available IP/ports.
 
-For the full specifications, see the [Envoy docs](https://www.envoyproxy.io/docs/envoy/latest/api-v1/cluster_manager/cluster.html).
+For the full specifications, see the
+[Envoy docs](https://www.envoyproxy.io/docs/envoy/latest/api-v1/cluster_manager/cluster.html).
 Once this is configured, you can populate the endpoints that serve traffic for this cluster.
 
 Mirror instances to EDS
@@ -146,4 +157,5 @@ organizations have reported process wins by making the routing configs
 
 Once your control plane knows about all the available services, it’s time to
 configure the routes on top of those services. Learn how to set up the Route
-Discovery Service [here](https://www.envoyproxy.io/docs/envoy/latest/configuration/http_conn_man/rds.html#config-http-conn-man-rds).
+Discovery Service
+[here](https://www.envoyproxy.io/docs/envoy/latest/configuration/http_conn_man/rds.html#config-http-conn-man-rds).

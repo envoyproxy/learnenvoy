@@ -153,7 +153,6 @@ requests, this tends to be a net win for overall system resilience. Many
 organizations have reported process wins by making the routing configs
 (discussed in the next section) partitioned and self-service, as well.
 
-
 ## Next Steps: Set up Routing
 
 Once your control plane knows about all the available services, it’s time to

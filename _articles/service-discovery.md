@@ -6,11 +6,11 @@ time_to_complete: 5 minutes
 
 One of the core concepts when setting up Envoy in production is
 separating the
-[data plane](https://blog.envoyproxy.io/service-mesh-data-plane-vs-control-plane-2774e720f7fc)—the Envoy instances
-that route your traffic—from the
-[control plane](https://blog.envoyproxy.io/service-mesh-data-plane-vs-control-plane-2774e720f7fc), which acts as the
-source of truth for the current state of your infrastructure and your
-desired configuration.
+[data plane](https://blog.envoyproxy.io/service-mesh-data-plane-vs-control-plane-2774e720f7fc)—
+the Envoy instances that route your traffic—from the
+[control plane](https://blog.envoyproxy.io/service-mesh-data-plane-vs-control-plane-2774e720f7fc),
+which acts as the source of truth for the current state of your
+infrastructure and your desired configuration.
 
 You can start with a static config file as a control plane, but in most cases,
 teams quickly move from a static config file to an API service. Centralizing

@@ -1,6 +1,6 @@
 ---
 layout: article
-title: An xDS Overview
+title: Glossary
 ---
 
 xDS is a suite of configuration service APIs that allow for dynamic

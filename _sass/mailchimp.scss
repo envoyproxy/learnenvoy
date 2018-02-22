@@ -107,19 +107,19 @@
 
 @media (max-width: 768px) {
 
-  #mc_embed_signup {
+  #mc_embed_signup form {
 
     input.email {
       width:100%;
-      margin-bottom:5px;
+      margin:0;
     }
     .clear {
       display: block;
       width: 100%
     }
     .button {
-      width: 100%;
-      margin:0;
+      width:100%;
+      margin: 10px 0 0 0;
     }
   }
 }

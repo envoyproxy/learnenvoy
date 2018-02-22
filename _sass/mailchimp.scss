@@ -2,7 +2,14 @@
 @import "mixins.scss";
 
 #mc_embed_signup form {
-  text-align:center; padding:10px 0 10px 0;
+  text-align:center;
+  margin-top: 25px;
+  padding:50px 0 75px 0;
+  background-color: rgba(255,131,34,.35);
+
+  p {
+    padding-bottom: 1em;
+  }
 
   input.email {
     @include body-font;
@@ -41,7 +48,7 @@
     border-radius: 3px;
     letter-spacing: .03em;
     color: #fff;
-    background-color: #aaa;
+    background-color: $theme-primary;
     box-sizing:border-box;
     height:32px;
     line-height:32px;
@@ -51,7 +58,7 @@
     transition: all 0.23s ease-in-out 0s;
   }
   .button:hover {
-    background-color:#777;
+    background-color:darken($theme-primary, 25%);
     cursor:pointer;
   }
 

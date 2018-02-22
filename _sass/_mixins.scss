@@ -67,18 +67,21 @@
 // Font Mixins
 
 @mixin serif-font {
-  font-family: "Lato Light", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 400;
 }
 
 @mixin script-font {
-  font-family: "Roboto Slab", "Helvetica Neue", Helvetica, Arial, cursive;
+  font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 500;
 }
 
 @mixin body-font {
-  font-family: "Lato Light", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 300;
 }
 
 @mixin heading-font {
   font-family: "Roboto Slab", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  text-transform: uppercase;
+  font-weight: 500;
 }

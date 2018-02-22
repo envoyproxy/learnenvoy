@@ -85,7 +85,7 @@ h1, h2, h3, h4, h5, h6 {
     border-color: transparent;
     .navbar-brand {
         color: $theme-primary;
-        @include script-font;
+        @include body-font;
         &:hover,
         &:focus,
         &:active,
@@ -110,9 +110,8 @@ h1, h2, h3, h4, h5, h6 {
     .nav {
         li {
             a {
-                @include heading-font;
-                font-weight: 400;
-                letter-spacing: 1px;
+                font-size: 15px;
+                @include body-font;
                 color: white;
                 &:hover,
                 &:focus {
@@ -143,7 +142,7 @@ h1, h2, h3, h4, h5, h6 {
         transition: padding 0.3s;
         border: none;
         .navbar-brand {
-            font-size: 2em;
+            font-size: 3em;
             -webkit-transition: all 0.3s;
             -moz-transition: all 0.3s;
             transition: all 0.3s;
@@ -224,21 +223,20 @@ section {
     h2.section-heading {
         font-size: 40px;
         margin-top: 0;
-        margin-bottom: 15px;
+        margin-bottom: 25px;
     }
     h3.section-subheading {
         font-size: 16px;
         @include serif-font;
         text-transform: none;
-        font-style: italic;
-        font-weight: 400;
-        margin-bottom: 25px;
+        font-weight: 300;
+        margin-bottom: 30px;
     }
 }
 
 @media(min-width:768px) {
     section {
-        padding: 25px 0;
+        padding: 35px 0;
     }
 }
 
@@ -591,14 +589,12 @@ footer {
     text-align: center;
     span.copyright {
         line-height: 40px;
-        @include heading-font;
-        text-transform: none;
+        @include body-font;
     }
     ul.quicklinks {
         margin-bottom: 0;
         line-height: 40px;
-        @include heading-font;
-        text-transform: none;
+        @include body-font;
     }
 }
 

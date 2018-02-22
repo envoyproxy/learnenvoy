@@ -142,7 +142,7 @@ h1, h2, h3, h4, h5, h6 {
         transition: padding 0.3s;
         border: none;
         .navbar-brand {
-            font-size: 3em;
+            font-size: 2.5em;
             -webkit-transition: all 0.3s;
             -moz-transition: all 0.3s;
             transition: all 0.3s;
@@ -231,6 +231,7 @@ section {
         text-transform: none;
         font-weight: 300;
         margin-bottom: 30px;
+        line-height: 1.5;
     }
 }
 

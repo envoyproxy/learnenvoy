@@ -1,0 +1,125 @@
+@import "variables.scss";
+@import "mixins.scss";
+
+#mc_embed_signup form {
+  text-align:center;
+  margin-top: 25px;
+  padding:50px 0 75px 0;
+  background-color: rgba(255,131,34,.35);
+
+  p {
+    padding-bottom: 1em;
+  }
+
+  input.email {
+    @include body-font;
+    border: 1px solid #ABB0B2;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    color: #343434;
+    background-color: #fff;
+    box-sizing:border-box;
+    height:32px;
+    padding: 0px 0.4em;
+    display: inline-block;
+    margin: 0;
+    width:350px;
+    vertical-align:top;
+  }
+
+  label {
+    @include heading-font;
+    display:block;
+    padding-bottom:10px;
+    font-weight:bold;
+  }
+
+  .clear {
+    /* positions button horizontally in line with input */
+    display: inline-block;
+  }
+
+  .button {
+    font-size: 13px;
+    border: none;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    letter-spacing: .03em;
+    color: #fff;
+    background-color: $theme-primary;
+    box-sizing:border-box;
+    height:32px;
+    line-height:32px;
+    padding:0 18px;
+    display: inline-block;
+    margin: 0;
+    transition: all 0.23s ease-in-out 0s;
+  }
+  .button:hover {
+    background-color:darken($theme-primary, 25%);
+    cursor:pointer;
+  }
+
+  div#mce-responses {
+    float:left;
+    top:-1.4em;
+    padding:0em .5em 0em .5em;
+    overflow:hidden;
+    width:90%;
+    margin: 0 5%;
+    clear: both;
+  }
+  div.response {
+    margin:1em 0;
+    padding:1em .5em .5em 0;
+    font-weight:bold;
+    float:left;
+    top:-1.5em;
+    z-index:1;
+    width:80%;
+  }
+  #mce-error-response {
+    display:none;
+  }
+  #mce-success-response {
+    color:#529214;
+    display:none;
+  }
+  label.error {
+    display:block;
+    float:none;
+    width:auto;
+    margin-left:1.05em;
+    text-align:left;
+    padding:.5em 0;
+  }
+
+}
+
+.mc-field-group {
+
+  /* positions input field horizontally */
+  display: inline-block;
+
+}
+
+@media (max-width: 768px) {
+
+  #mc_embed_signup form {
+
+    input.email {
+      width:100%;
+      margin:0;
+    }
+    .clear {
+      display: block;
+      width: 100%
+    }
+    .button {
+      width:100%;
+      margin: 10px 0 0 0;
+    }
+  }
+}

@@ -219,7 +219,11 @@ header {
 // Global Section Styles
 
 section {
-    padding: 25px 0;
+  // Account for height of fixed header when jumping to sections by anchor
+  // See https://stackoverflow.com/a/11842865
+  margin-top: -$header-height;
+  padding-top: $header-height + 35px;
+
     h2.section-heading {
         font-size: 40px;
         margin-top: 0;
@@ -237,7 +241,7 @@ section {
 
 @media(min-width:768px) {
     section {
-        padding: 35px 0;
+        padding-top: $header-height + 25px;
     }
 }
 

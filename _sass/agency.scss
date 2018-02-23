@@ -617,6 +617,9 @@ footer {
         line-height: 40px;
         @include body-font;
     }
+    img.footer-logo {
+        height: 50px;
+    }
 }
 
 // Social Buttons

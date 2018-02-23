@@ -13,7 +13,7 @@
 # limitations under the License.
 
 - name: "Service Discovery Integration"
-  icon: "server"
+  icon: "cogs"
   description: "No more hard-coding IP addresses and ports. [CDS](https://www.envoyproxy.io/docs/envoy/latest/configuration/cluster_manager/cds.html) and [EDS](https://www.envoyproxy.io/docs/envoy/latest/api-v2/api/v2/eds.proto.html) let you integrate with your service registry to automatically populate which hosts are available for each services"
   article: service-discovery.html
 
@@ -23,5 +23,5 @@
   article: routing-configuration.html
 
 - name: "Emitting the Right Data"
-  icon: "tachometer"
+  icon: "filter"
   description: "Envoy helps you capture information about your customers' requests, and the health of the backends that served them. Define what Envoy emits in [LDS](https://www.envoyproxy.io/docs/envoy/latest/configuration/listeners/lds)"

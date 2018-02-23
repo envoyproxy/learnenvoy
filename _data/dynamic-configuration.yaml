@@ -13,7 +13,7 @@
 # limitations under the License.
 
 - name: "Service Discovery Integration"
-  icon: "server"
+  icon: "cogs"
   description: "No more hard-coding IP addresses and ports. [CDS](https://www.envoyproxy.io/docs/envoy/latest/configuration/cluster_manager/cds.html) and [EDS](https://www.envoyproxy.io/docs/envoy/latest/api-v2/api/v2/eds.proto.html) let you integrate with your service registry to automatically populate which hosts are available for each services"
   article: service-discovery.html
 

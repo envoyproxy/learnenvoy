@@ -4,31 +4,27 @@
 
 header.article {
   background-image: url('../assets/img/envoy-article-header-bg.jpg');
-  background-size: contain;
-  background-position: top center;
-  color: $theme-primary;
   .intro-text {
     padding-top: 100px;
-    padding-bottom: 25px;
-    .intro-lead-in {
-      @include serif-font;
-      font-style: italic;
-      font-size: 22px;
-      line-height: 22px;
-      margin-bottom: 25px;
-    }
+    padding-bottom: 50px;
     .intro-heading {
-      @include heading-font;
-      font-weight: 700;
-      font-size: 50px;
-      line-height: 50px;
-      margin-bottom: 25px;
+      font-size: 55px;
+      padding-top: 15px;
+      margin-top: 15px;
     }
   }
 }
 
+@media (min-width: 1200px) {
+  .container{
+    max-width: 970px;
+  }
+}
+
 div.article {
-  padding: 25px 25px;
+  padding-top: 25px;
+  padding-bottom: 25px;
+  margin: auto;
 }
 
 header {

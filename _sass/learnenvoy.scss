@@ -18,7 +18,7 @@ limitations under the License.
 @import "mixins.scss";
 
 header.article {
-  background-image: url('../assets/img/envoy-article-header-bg.jpg');
+  background: linear-gradient(to right, $gray-darker, $gray);
   .intro-text {
     padding-top: 100px;
     padding-bottom: 50px;
@@ -43,7 +43,9 @@ div.article {
 }
 
 header {
-  background-image: url('../assets/img/envoy-header-bg.jpg');
+  background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url('../assets/img/envoy-header-bg.jpg');
+  background-size: cover;
+  background-position: 50% 25%;
   .intro-text {
     padding-top: 125px;
     .intro-description {
@@ -53,6 +55,8 @@ header {
       margin-bottom: 25px;
       font-size: 20px;
       font-weight: 300;
+      max-width: 550px;
+      margin: auto;
     }
     .intro-heading {
       padding-top: 25px;

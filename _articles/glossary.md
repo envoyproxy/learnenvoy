@@ -3,6 +3,20 @@ layout: article
 title: Glossary
 ---
 
+[//]: # ( Copyright 2018 Turbine Labs, Inc.                                   )
+[//]: # ( you may not use this file except in compliance with the License.    )
+[//]: # ( You may obtain a copy of the License at                             )
+[//]: # (                                                                     )
+[//]: # (     http://www.apache.org/licenses/LICENSE-2.0                      )
+[//]: # (                                                                     )
+[//]: # ( Unless required by applicable law or agreed to in writing, software )
+[//]: # ( distributed under the License is distributed on an "AS IS" BASIS,   )
+[//]: # ( WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or     )
+[//]: # ( implied. See the License for the specific language governing        )
+[//]: # ( permissions and limitations under the License.                      )
+
+[//]: # (Glossary)
+
 xDS is a suite of configuration service APIs that allow for dynamic
 configuration of an Envoy proxy. It's possible to configure Envoy with a few or
 all of these services. This overview will describe what each service does, and

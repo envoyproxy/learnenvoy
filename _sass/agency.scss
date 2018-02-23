@@ -100,8 +100,9 @@ h1, h2, h3, h4, h5, h6 {
     background-color: $gray-darker;
     border-color: transparent;
     .navbar-brand {
-        color: $theme-primary;
-        @include body-font;
+        color: $theme-secondary;
+        @include heading-font;
+        text-shadow: 1px 1px $gray-darker;
         &:hover,
         &:focus,
         &:active,
@@ -128,6 +129,7 @@ h1, h2, h3, h4, h5, h6 {
             a {
                 font-size: 15px;
                 @include body-font;
+                text-shadow: 1px 1px $gray-darker;
                 color: white;
                 &:hover,
                 &:focus {
@@ -190,6 +192,7 @@ header {
     text-align: center;
     color: white;
     .intro-text {
+        text-shadow: 1px 1px $gray-darker;
         padding-top: 100px;
         padding-bottom: 50px;
         .intro-lead-in {

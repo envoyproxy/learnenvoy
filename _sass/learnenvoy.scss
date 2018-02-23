@@ -15,8 +15,15 @@ header.article {
   }
 }
 
+@media (min-width: 1200px) {
+  .container{
+    max-width: 970px;
+  }
+}
+
 div.article {
-  padding: 25px 0 25px 0;
+  padding-top: 25px;
+  padding-bottom: 25px;
   margin: auto;
 }
 

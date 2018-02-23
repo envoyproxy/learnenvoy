@@ -23,7 +23,6 @@ baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://learnenvoy.io" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: goturbine
 github_username:  turbinelabs
-google_analytics: "{{env GOOGLE_ANALYTICS_KEY}}"
 
 # Build settings
 markdown: redcarpet

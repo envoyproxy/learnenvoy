@@ -147,8 +147,7 @@ change this value to an appropriate destination. The `address` object tells
 Envoy to create an admin server listening on port 8001.
 
 The `static_resources` block contains definitions for clusters and listeners
-that aren't [dynamically managed](./xds.html). The `admin` block
-configures our admin server.
+that aren't dynamically managed. The `admin` block configures our admin server.
 
 Our front proxy has a single listener, configured to listen on port 80, with
 a filter chain that configures Envoy to manage HTTP traffic.
@@ -221,7 +220,7 @@ clusters. Clusters are composed of endpoints – a set of network locations that
 can serve requests for the cluster. In this example, endpoints are canonically
 defined in DNS, which Envoy can read from. Endpoints can also be defined
 directly as socket addresses, or read dynamically via
-the [Endpoint Discovery Service](./xds.html).
+the Endpoint Discovery Service.
 
 ### Modifying Configuration
 

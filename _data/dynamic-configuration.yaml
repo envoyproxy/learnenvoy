@@ -1,6 +1,6 @@
 - name: "Service Discovery Integration"
   icon: "server"
-  description: "No more hard-coding IP addresses and ports. [CDS](https://www.envoyproxy.io/docs/envoy/latest/configuration/cluster_manager/cds.html&sa=D&ust=1518465786435000&usg=AFQjCNHBgzy-t0CUlD-pvJTNRyVuYFmtkQ) and [EDS](https://www.envoyproxy.io/docs/envoy/latest/api-v2/api/v2/eds.proto.html%23envoy-api-file-envoy-api-v2-eds-proto&sa=D&ust=1518465786435000&usg=AFQjCNEiJvGuNaYIR9S_ColWXEx2rqjWUw) let you integrate with your service registry to automatically populate which hosts are available for each services"
+  description: "No more hard-coding IP addresses and ports. [CDS](https://www.envoyproxy.io/docs/envoy/latest/configuration/cluster_manager/cds.html) and [EDS](https://www.envoyproxy.io/docs/envoy/latest/api-v2/api/v2/eds.proto.html) let you integrate with your service registry to automatically populate which hosts are available for each services"
   article: service-discovery.html
 
 - name: "Routing Configuration"

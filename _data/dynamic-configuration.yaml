@@ -6,6 +6,7 @@
 - name: "Routing Configuration"
   icon: "sitemap"
   description: "[RDS](https://www.envoyproxy.io/docs/envoy/latest/configuration/http_conn_man/rds) lets you move routing configuration out of static configs and into a type-safe API, making typos and merge conflicts a thing of the past."
+  article: routing-configuration.html
 
 - name: "Emitting the Right Data"
   icon: "tachometer"

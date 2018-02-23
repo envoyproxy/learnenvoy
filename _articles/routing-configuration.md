@@ -1,6 +1,6 @@
 ---
 layout: article
-title: Routing and Envoy
+title: Routing with a Control Plane
 ---
 
 When running a large Envoy fleet in production, it’s important to separate the data plane — user traffic — from the control plane, which includes Envoy configuration and infrastructure state. Setting up a simple control plane generally includes choosing configuration options like [automatic retries](automatic-retries.html) and integrating [service discovery](service-discovery.html).

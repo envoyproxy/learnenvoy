@@ -17,11 +17,9 @@ Envoy’s ability to query for new configuration and reload it on the fly. The
 first step in setting up your control plane is connecting your service
 discovery. This is generally broken down into three steps:
 
-* Decide on a control plane implementation
-
-* Mirror service definitions to Envoy clusters
-
-* Mirror hosts/containers/instances to Envoy endpoints
+1. Decide on a control plane implementation
+2. Mirror service definitions to Envoy clusters
+3. Mirror hosts/containers/instances to Envoy endpoints
 
 ## Control Plane Implementation
 

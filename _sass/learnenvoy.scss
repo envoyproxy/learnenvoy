@@ -18,7 +18,7 @@ limitations under the License.
 @import "mixins.scss";
 
 header.article {
-  background-image: url('../assets/img/envoy-article-header-bg.jpg');
+  background: linear-gradient(to right, $gray-darker, $gray);
   .intro-text {
     padding-top: 100px;
     padding-bottom: 50px;

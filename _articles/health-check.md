@@ -59,13 +59,12 @@ health checking with outlier detection.
 
 Unlike active health checking,
 [Outlier Detection](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/outlier.html?highlight=outlier%20detection)
-—sometimes called passive
-health checking—uses the **responses from real requests to determine whether an
-endpoint is healthy**. Once an endpoint is removed, Envoy uses a time-out based
-approach for re-insertion, where unhealthy hosts are re-added to the cluster
-after a configurable interval. Each subsequent removal increases the interval,
-so a persistently unhealthy endpoint does as little damage as possible to user
-traffic.
+—sometimes called passive health checking—uses the **responses from real
+requests to determine whether an endpoint is healthy**. Once an endpoint is
+removed, Envoy uses a time-out based approach for re-insertion, where unhealthy
+hosts are re-added to the cluster after a configurable interval. Each
+subsequent removal increases the interval, so a persistently unhealthy endpoint
+does as little damage as possible to user traffic.
 
 Like health checks, outlier detection is configured per-cluster. This
 configuration removes a host for 30 seconds when it returns 3 consecutive 5xx

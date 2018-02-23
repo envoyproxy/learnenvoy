@@ -45,6 +45,7 @@ div.article {
 header {
   background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url('../assets/img/envoy-header-bg.jpg');
   background-size: cover;
+  background-position: 50% 25%;
   .intro-text {
     padding-top: 125px;
     .intro-description {
@@ -54,6 +55,8 @@ header {
       margin-bottom: 25px;
       font-size: 20px;
       font-weight: 300;
+      max-width: 550px;
+      margin: auto;
     }
     .intro-heading {
       padding-top: 25px;

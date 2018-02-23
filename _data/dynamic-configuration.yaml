@@ -23,5 +23,5 @@
   article: routing-configuration.html
 
 - name: "Emitting the Right Data"
-  icon: "tachometer"
+  icon: "filter"
   description: "Envoy helps you capture information about your customers' requests, and the health of the backends that served them. Define what Envoy emits in [LDS](https://www.envoyproxy.io/docs/envoy/latest/configuration/listeners/lds)"

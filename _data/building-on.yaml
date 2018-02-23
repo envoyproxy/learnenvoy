@@ -13,13 +13,13 @@
 # limitations under the License.
 
 - name: "Incremental Blue/Green Deploys"
-  icon: "shopping-cart"
+  icon: "code-branch"
   description: "Separate deploy from release. First, deploy new versions without taking traffic. Then, shift 1% of traffic over to the new version and check the metrics. If everything looks good, try 10%, 50%, 100%. It takes all of the stress out of releasing."
 
 - name: "Verifying in Production"
-  icon: "laptop"
+  icon: "thumbs-up"
   description: "Stop trying to run all 5,000 microservices on your laptop. You don’t have enough RAM. You’ll never have enough RAM."
 
 - name: "Migrations"
-  icon: "lock"
+  icon: "angle-double-right"
   description: "Moving to Kubernetes? Going multi-cloud? Deconstructing your monolith? Run traffic to both versions simultaneously and capture metrics as you build."

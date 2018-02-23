@@ -13,7 +13,7 @@ configured separately in the case of a custom xDS configuration.
 
 You can also pass this command in your CLI:
 
-```terminal
+```console
 -l <string>, --log-level <string> --log-path <path string>
 ```
 

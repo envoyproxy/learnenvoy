@@ -107,7 +107,7 @@ h1, h2, h3, h4, h5, h6 {
         &:focus,
         &:active,
         &.active {
-            color: darken($theme-primary, 10%);
+            color: $theme-primary;
         }
     }
     .navbar-collapse {
@@ -147,7 +147,7 @@ h1, h2, h3, h4, h5, h6 {
     .navbar-nav>.active>a:hover,
     .navbar-nav>.active>a:focus {
         color: white;
-        background-color: darken($theme-primary, 10%);
+        background-color: $theme-primary;
     }
 }
 

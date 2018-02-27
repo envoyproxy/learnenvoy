@@ -22,4 +22,4 @@
 
 - name: "Change Logging"
   icon: "eye"
-  description: "Unlike traditional serving layers,, Envoy’s behavior can change without human intervention. Use the admin interface to inspect the current state of an Envoy instance, including backend health and other runtime metrics."
+  description: "Unlike traditional serving layers, Envoy’s behavior can change without human intervention. Use the admin interface to inspect the current state of an Envoy instance, including backend health and other runtime metrics."

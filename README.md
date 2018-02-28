@@ -10,19 +10,20 @@
 [//]: # ( implied. See the License for the specific language governing        )
 [//]: # ( permissions and limitations under the License.                      )
 
-[//]: # (LearnEnvoy.io)
+[//]: # (LearnEnvoy)
 
-# LearnEnvoy.io
+# LearnEnvoy
 
-LearnEnvoy is a community content site that helps organizations get the most out
-of the [Envoy proxy](https://envoyproxy.github.io).
+[LearnEnvoy](https://learnenvoy.io) is a community content site that helps
+organizations get the most out of the
+[Envoy proxy](https://envoyproxy.github.io).
 
 The goal of LearnEnvoy is to help developers go from "hey, Envoy sounds
 powerful" to a fully-functional production deployment.
 
 The content is based on real production deployments, successes and failures, and
 interviews with teams running Envoy at scale. The guides cover everything from
-the configuration basics to strategies for distributed system resiliance.
+the configuration basics to strategies for distributed system resilience.
 
 ## Project Background
 
@@ -136,4 +137,3 @@ for a corresponding markdown file in the `_articles` subdirectory. Articles are
 rendered with the layout in `_layouts/article.html`. see
 `_data/getting-started.yaml` for a _very_ slim example for the 'on your laptop'
 article.
-

@@ -1,6 +1,6 @@
 ---
 layout: article
-title: Automatic Retires
+title: Automatic Retries
 ---
 
 [//]: # ( Copyright 2018 Turbine Labs, Inc.                                   )

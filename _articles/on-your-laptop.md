@@ -171,7 +171,9 @@ change this value to an appropriate destination. The `address` object tells
 Envoy to create an admin server listening on port 8001.
 
 The `static_resources` block contains definitions for clusters and listeners
-that aren't dynamically managed. The `admin` block configures our admin server.
+that aren't dynamically managed. A cluster is a named group of hosts/ports, over
+which Envoy will load balance traffic, and listeners are named network locations
+that clients can connect to. The `admin` block configures our admin server.
 
 Our front proxy has a single listener, configured to listen on port 80, with
 a filter chain that configures Envoy to manage HTTP traffic.
@@ -249,8 +251,9 @@ the Endpoint Discovery Service.
 ### Modifying Configuration
 
 In Envoy, you can modify the config files, rebuild Docker images, and test the
-changes. To add access logging to your HTTP filter, add the `access_log` object
-to your filter config, as shown here.
+changes. Listener filters are Envoy's way of attaching additional functionality
+to listeners. For instance, to add access logging to your HTTP filter, add the
+`access_log` object to your filter config, as shown here.
 
 
 ```yaml
@@ -266,10 +269,11 @@ to your filter config, as shown here.
           route_config:
 ```
 
+
 Destroy your Docker Compose stack with `docker-compose down`, then rebuild it
 with `docker-compose up --build -d`. Make a few requests to your services using
 curl, then log into a shell with `docker-compose exec front-envoy /bin/bash`. An
-access.log file should be in /var/log, showing the results of your requests.
+`access.log` file should be in `/var/log`, showing the results of your requests.
 
 ## Admin Server
 

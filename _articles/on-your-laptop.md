@@ -102,7 +102,7 @@ Going to http://localhost:8000/service/2 should result in
 
 ```console
 $ curl localhost:8000/service/2
-Hello from behind Envoy (service 2)a! hostname: bf97b0b3294d resolvedhostname: 172.19.0.2
+Hello from behind Envoy (service 2)! hostname: bf97b0b3294d resolvedhostname: 172.19.0.2
 ```
 
 You're connecting to Envoy, operating as a front proxy, which is in turn sending

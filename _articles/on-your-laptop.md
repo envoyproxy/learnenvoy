@@ -41,15 +41,18 @@ running services.
 
 ## Running Envoy
 
-Running `docker run -it envoyproxy/envoy:latest /bin/bash` from a terminal
-should launch you into a shell in an Envoy container. Envoy is available at
-`/usr/local/bin/envoy`, but without a config file it won't do anything very
-interesting. Check out
-the [Envoy source repository](https://github.com/envoyproxy/envoy) in a
-terminal, and go to the `examples/front-proxy` directory. This contains
-Dockerfiles, config files and a Docker Compose manifest for setting up a very
-simple proxy topology. This example illustrates a simple front proxy, which
-sends traffic to two service backends.
+Running the latest Docker image will technically get you Envoy on your laptop,
+but without a config file it won't do anything very interesting. Let's get a
+simple front proxy topology running, which will send traffic to two service
+backends. The [Envoy source repository](https://github.com/envoyproxy/envoy) has
+a couple of examples, so to start, clone that repository and go to the
+`examples/front-proxy` directory. This contains Dockerfiles, config files and a
+Docker Compose manifest for setting up a the topology.
+
+```console
+$ git clone https://github.com/envoyproxy/envoy
+$ cd envoy/examples/front-proxy
+```
 
 The services run a very simple Flask application, defined in `service.py`. An
 Envoy runs in the same container as a sidecar, configured with the
@@ -61,11 +64,17 @@ The front proxy is simpler. It runs Envoy, configured with the
 definition.
 
 The `docker-compose.yaml` file provides a description of how to build, package,
-and run the front proxy and services together. Running `docker-compose up
---build -d` (`--build` means build containers before starting up, and `-d` means
-run them in detached mode) will build our containers, then start a single
-instance of the front proxy and two service instances, one configured as
-"service1" and the other as "service2".
+and run the front proxy and services together.
+
+To build our containers, run:
+
+```console
+$ docker-compose up --build -d
+```
+
+This starts a single instance of the front proxy and two service instances, one
+configured as "service1" and the other as "service2", `--build` means build
+containers before starting up, and `-d` means run them in detached mode.
 
 Running `docker-compose ps` should show the following output:
 

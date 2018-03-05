@@ -87,13 +87,6 @@ frontproxy_service1_1      /bin/sh -c /usr/local/bin/ ...   Up      80/tcp
 frontproxy_service2_1      /bin/sh -c /usr/local/bin/ ...   Up      80/tcp
 ```
 
-You can log into a bash shell on a container by using Docker Compose as well.
-
-```console
-$ docker-compose exec front-envoy /bin/bash
-root@4bae7506fa03:/#
-```
-
 ## Sending Traffic
 
 Docker Compose has mapped port 8000 on the front-proxy to your local

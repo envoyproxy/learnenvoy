@@ -37,23 +37,31 @@ Discovery Service (RDS).
 
 ## A typical Envoy retry policy
 
-The retry_on parameter specifies **which types of responses to retry** this
+Here's what a simple retry configuration looks like for a single route:
+
+```yaml
+retry_on: "5xx"
+num_retries: 3
+per_try_timeout_ms: 2000
+```
+
+The `retry_on` parameter specifies **which types of responses to retry** this
 request on. 5xx is a good place to start, as it will retry all server errors.
 There are more specific subsets that Envoy supports (e.g. gateway-error,
 connect-failure, and refused-stream), but all of these are caught with 5xx.
 
-By default, Envoy will set the **number of retries** to one. There’s little
-downside to increasing this to three, especially for relatively short requests,
-as Envoy will limit the total time spent to the overall request timeout,
-including the initial request and all retries.
+By default, Envoy will set the **number of retries** to one with
+`num_retries`. There’s little downside to increasing this to three, especially
+for relatively short requests, as Envoy will limit the total time spent to the
+overall request timeout, including the initial request and all retries.
 
-The *per_try_request_timeout* field sets a **timeout for each retry**. Without
-this parameter, any request that times out will not be retried, since the
-default is the same as the calling request’s timeout. While it’s not a big deal
-to leave this out, setting it to the 99th percentile of normal latency allows
-Envoy to retry requests that are taking a long time due to a failure. (Note
-that this limit may be longer than the total request timeout — more on that
-below.)
+The `per_try_request_timeout` field sets a **timeout for each retry** in
+milliseconds. Without this parameter, any request that times out will not be
+retried, since the default is the same as the calling request’s timeout. While
+it’s not a big deal to leave this out, setting it to the 99th percentile of
+normal latency allows Envoy to retry requests that are taking a long time due to
+a failure. (Note that this limit may be longer than the total request
+timeout — more on that below.)
 
 ## Limit Retry-able Requests
 Once you have your defaults in place, there are several types of calls for
@@ -120,4 +128,4 @@ service. Global circuit breaking helps selectively shed load when this sort of
 failure occurs, preventing it from cascading to multiple services.
 
 For more detail, and advanced configuration information, read about them in the
-Envoy docs.
+[Envoy docs](https://www.envoyproxy.io/docs/envoy/latest/api-v1/route_config/route.html#config-http-conn-man-route-table-route-retry).

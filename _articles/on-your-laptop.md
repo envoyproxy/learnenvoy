@@ -110,8 +110,13 @@ your request to service 1 or service 2.
 
 ## Configuring Envoy
 
-Let's take a look at how Envoy is configured. Inside the `docker-compose.yaml`
-file, you'll see the following definition for the front-envoy service:
+This is a simple way to configure Envoy statically for the purpose of
+demonstration. As we move on, you'll see how you can really harness its power by
+dynamically configuring it.
+
+Let's take a look at how Envoy is configured. To get the right services set up,
+Docker Compose looks at the `docker-compose.yaml` file. You'll see the following
+definition for the `front-envoy` service:
 
 ```yaml
   front-envoy:

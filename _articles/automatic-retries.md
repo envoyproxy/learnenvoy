@@ -55,7 +55,7 @@ By default, Envoy will set the **number of retries** to one with
 for relatively short requests, as Envoy will limit the total time spent to the
 overall request timeout, including the initial request and all retries.
 
-The `per_try_request_timeout` field sets a **timeout for each retry** in
+The `per_try_timeout_ms` field sets a **timeout for each retry** in
 milliseconds. Without this parameter, any request that times out will not be
 retried, since the default is the same as the calling request’s timeout. While
 it’s not a big deal to leave this out, setting it to the 99th percentile of

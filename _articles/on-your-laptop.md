@@ -136,16 +136,18 @@ definition for the `front-envoy` service:
 ```
 
 Going from top to bottom, this says:
-  1. Build a container using the Dockerfile-frontenvoy file located in the
+
+  1. Build a container using the `Dockerfile-frontenvoy` file located in the
   current directory
-  2. Mount the front-envoy.yaml file in this directory as /etc/front-envoy.yaml
-  3. Create and use a Docker network named "envoymesh" for this container
+  2. Mount the `front-envoy.yaml` file in this directory as `/etc/front-envoy.yaml`
+  3. Create and use a Docker network named "`envoymesh`" for this container
   4. Expose ports 80 (for general traffic) and 8001 (for the admin server)
   5. Map the host port 8000 to container port 80, and the host port 8001 to
   container port 8001
 
-Knowing that our front proxy uses the front-envoy.yaml file, let's take a deeper
-look. Our file has two top level elements, `static_resources` and `admin`.
+Knowing that our front proxy uses the `front-envoy.yaml` to configure Envoy,
+let's take a deeper look. Our file has two top level elements,
+`static_resources` and `admin`.
 
 ```yaml
 static_resources:
@@ -163,7 +165,7 @@ admin:
       port_value: 8001
 ```
 
-The `access_log_path` field is set to /dev/null, meaning access logs to the
+The `access_log_path` field is set to `/dev/null`, meaning access logs to the
 admin server are discarded. In a testing or production environment, users would
 change this value to an appropriate destination. The `address` object tells
 Envoy to create an admin server listening on port 8001.

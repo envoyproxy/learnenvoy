@@ -97,27 +97,40 @@ For internal service calls, it’s important to consider the restrictions impose
 on the caller as well.
 
 Since Envoy will limit the total duration of retries, consider the relationship
-between the caller’s timeout, the per-retry timeout, and the number of retries.
-Specifically, don’t let the # of retries times the individual time be
-significantly higher than the caller’s timeout. If the total request time is
-limited to 500ms, and each upstream call is limited to 250ms, Envoy can’t make
-more than 2 calls before failing the original call. This isn’t fundamentally
-bad, but the 250ms timeout isn’t actually allowing a full retry on timeout.
-(Sometimes failures are quick, so Envoy will be able to complete the second
-request, and having a lot of retries will help.) As a starting point, lowering
-the upstream timeout to 100ms will allow several calls, including the jitter
-that Envoy adds between calls.
+between the route's global timeout
+([`timeout_ms`](https://www.envoyproxy.io/docs/envoy/latest/api-v1/route_config/route.html#config-http-conn-man-route-table-route-timeout)),
+the upstream routes' timeout (also
+([`timeout_ms`](https://www.envoyproxy.io/docs/envoy/latest/api-v1/route_config/route.html#config-http-conn-man-route-table-route-timeout)),
+the per-retry timeout
+([`per_try_timeout_ms`](https://www.envoyproxy.io/docs/envoy/latest/api-v1/route_config/route.html#config-http-conn-man-route-table-route-retry)),
+and the number of retries
+([`num_retries`](https://www.envoyproxy.io/docs/envoy/latest/api-v1/route_config/route.html#config-http-conn-man-route-table-route-retry)).
+In general, it's better to fail quickly and retry than to let long requests
+attempt to finish. This will, perhaps counterintuitively, increase success rates
+and decrease most latency.
 
-On the other hand, if the caller’s request has a high caller timeout and makes
-many parallel requests (“high fan-out”), adding retries will result in
-consistently poor performance. Imagine a service (with no caller timeout) that
-makes 100 requests with an average of 150ms latency and a 500ms per-request
-timeout. Without retries, the request will be bounded at ~500ms. With retries,
-a few requests will (statistically) time out, resulting in one or more retries.
-Simply adding 3 retries will cause this service to shoot from 500ms to
-2,000ms — a huge slowdown, which is only compounded in a service mesh with deep
-calls stacks. Make sure to add a caller timeout to any service that has
-high-fanout before adding retries to its upstream calls.
+As an example, consider a request with a 500ms timeout that makes a single
+upstream call with a maximum of 3 retries, limited to 250ms each. The problem
+here is the # of retries times the individual retry limit is significantly
+higher than the global timeout, so Envoy can’t make more than 2 calls before the
+global timeout fails the request. This isn’t fundamentally bad, but the 250ms
+timeout doesn't allow a full retry on timeout.  (Sometimes failures are quick,
+so Envoy will be able to complete the second request, and having a lot of
+retries will help.) As a starting point, lowering the upstream timeout to 100ms
+will allow several retries, accounting for the jitter that Envoy adds between
+calls.
+
+On the other hand, if the request makes many parallel requests (“high fan-out”)
+without an aggresive global timeout, adding retries will result in consistently
+poor performance. Imagine a service (with no global timeout) that makes 100
+requests with an average of 150ms latency and a 500ms timeout on each upstream
+called. Without retries, the request will be bounded at ~500ms -- either the
+request will fail when some of the upstream calls fail, or it will
+succeed. Adding 3 retries will cause this service to shoot from 500ms to
+2,000ms on failure — a huge slowdown, which is only compounded in a service mesh
+with deep calls stacks. This kind of added latency may cause more failures than
+they fix! To avoid this, make sure to add a caller timeout to any service that
+has high-fanout before adding retries to its upstream calls.
 
 ## Next Steps
 

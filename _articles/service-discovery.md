@@ -144,13 +144,13 @@ are fairly overwhelming. Envoy can handle them, but if something goes wrong,
 making sense of a 5,000-line API response can be quite challenging. The
 industry standard is to partition your configs in two ways:
 
-* **Partition by datacenter / region.** In general, services in one datacenter
+- **Partition by datacenter / region.** In general, services in one datacenter
 don’t need to know about the exact endpoint available in other datacenters. To
 set up a trickle of traffic between regions (“backhaul,” making the service
 robust to region-specific failures), add the remote datacenter’s front proxy to
 the local load balancer.
 
-* **Partition by service need.** While generally not feasible for an initial
+- **Partition by service need.** While generally not feasible for an initial
 roll-out, the most sophisticated Envoy deployments limit intra-service
 communication by only configuring Envoy sidecars to talk to a whitelist of
 services. This helps manage the complexity of having 1,000 microservices talk

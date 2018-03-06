@@ -25,9 +25,9 @@ issues.
 Envoy provides a simple configuration option for retrying requests. Consider
 specifics of your system as you set up retries across each route:
 
-* Choose appropriate defaults
-* Limit retry-able requests
-* Consider the calling context
+- Choose appropriate defaults
+- Limit retry-able requests
+- Consider the calling context
 
 ## Choose Appropriate Defaults
 

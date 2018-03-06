@@ -32,8 +32,8 @@ first step in setting up your control plane is connecting your service
 discovery. This is generally broken down into three steps:
 
 1. Decide on a control plane implementation
-2. Public service definitions to Envoy clusters
-3. Public hosts/containers/instances to Envoy endpoints
+2. Publish service definitions to Envoy clusters
+3. Publish hosts/containers/instances to Envoy endpoints
 
 ## Control Plane Implementation
 

@@ -41,15 +41,18 @@ running services.
 
 ## Running Envoy
 
-Running `docker run -it envoyproxy/envoy:latest /bin/bash` from a terminal
-should launch you into a shell in an Envoy container. Envoy is available at
-`/usr/local/bin/envoy`, but without a config file it won't do anything very
-interesting. Check out
-the [Envoy source repository](https://github.com/envoyproxy/envoy) in a
-terminal, and go to the `examples/front-proxy` directory. This contains
-Dockerfiles, config files and a Docker Compose manifest for setting up a very
-simple proxy topology. This example illustrates a simple front proxy, which
-sends traffic to two service backends.
+Running the latest Docker image will technically get you Envoy on your laptop,
+but without a config file it won't do anything very interesting. Let's get a
+simple front proxy topology running, which will send traffic to two service
+backends. The [Envoy source repository](https://github.com/envoyproxy/envoy) has
+a couple of examples, so to start, clone that repository and go to the
+`examples/front-proxy` directory. This contains Dockerfiles, config files and a
+Docker Compose manifest for setting up a the topology.
+
+```console
+$ git clone https://github.com/envoyproxy/envoy
+$ cd envoy/examples/front-proxy
+```
 
 The services run a very simple Flask application, defined in `service.py`. An
 Envoy runs in the same container as a sidecar, configured with the
@@ -61,11 +64,17 @@ The front proxy is simpler. It runs Envoy, configured with the
 definition.
 
 The `docker-compose.yaml` file provides a description of how to build, package,
-and run the front proxy and services together. Running `docker-compose up
---build -d` (`--build` means build containers before starting up, and `-d` means
-run them in detached mode) will build our containers, then start a single
-instance of the front proxy and two service instances, one configured as
-"service1" and the other as "service2".
+and run the front proxy and services together.
+
+To build our containers, run:
+
+```console
+$ docker-compose up --build -d
+```
+
+This starts a single instance of the front proxy and two service instances, one
+configured as "service1" and the other as "service2", `--build` means build
+containers before starting up, and `-d` means run them in detached mode.
 
 Running `docker-compose ps` should show the following output:
 
@@ -76,13 +85,6 @@ $ docker-compose ps
 frontproxy_front-envoy_1   /bin/sh -c /usr/local/bin/ ...   Up      0.0.0.0:8000->80/tcp, 0.0.0.0:8001->8001/tcp
 frontproxy_service1_1      /bin/sh -c /usr/local/bin/ ...   Up      80/tcp
 frontproxy_service2_1      /bin/sh -c /usr/local/bin/ ...   Up      80/tcp
-```
-
-You can log into a bash shell on a container by using Docker Compose as well.
-
-```console
-$ docker-compose exec front-envoy /bin/bash
-root@4bae7506fa03:/#
 ```
 
 ## Sending Traffic
@@ -100,7 +102,7 @@ Going to http://localhost:8000/service/2 should result in
 
 ```console
 $ curl localhost:8000/service/2
-Hello from behind Envoy (service 2)a! hostname: bf97b0b3294d resolvedhostname: 172.19.0.2
+Hello from behind Envoy (service 2)! hostname: bf97b0b3294d resolvedhostname: 172.19.0.2
 ```
 
 You're connecting to Envoy, operating as a front proxy, which is in turn sending
@@ -108,8 +110,13 @@ your request to service 1 or service 2.
 
 ## Configuring Envoy
 
-Let's take a look at how Envoy is configured. Inside the `docker-compose.yaml`
-file, you'll see the following definition for the front-envoy service:
+This is a simple way to configure Envoy statically for the purpose of
+demonstration. As we move on, you'll see how you can really harness its power by
+dynamically configuring it.
+
+Let's take a look at how Envoy is configured. To get the right services set up,
+Docker Compose looks at the `docker-compose.yaml` file. You'll see the following
+definition for the `front-envoy` service:
 
 ```yaml
   front-envoy:
@@ -129,16 +136,18 @@ file, you'll see the following definition for the front-envoy service:
 ```
 
 Going from top to bottom, this says:
-  1. Build a container using the Dockerfile-frontenvoy file located in the
+
+  1. Build a container using the `Dockerfile-frontenvoy` file located in the
   current directory
-  2. Mount the front-envoy.yaml file in this directory as /etc/front-envoy.yaml
-  3. Create and use a Docker network named "envoymesh" for this container
+  2. Mount the `front-envoy.yaml` file in this directory as `/etc/front-envoy.yaml`
+  3. Create and use a Docker network named "`envoymesh`" for this container
   4. Expose ports 80 (for general traffic) and 8001 (for the admin server)
   5. Map the host port 8000 to container port 80, and the host port 8001 to
   container port 8001
 
-Knowing that our front proxy uses the front-envoy.yaml file, let's take a deeper
-look. Our file has two top level elements, `static_resources` and `admin`.
+Knowing that our front proxy uses the `front-envoy.yaml` to configure Envoy,
+let's take a deeper look. Our file has two top level elements,
+`static_resources` and `admin`.
 
 ```yaml
 static_resources:
@@ -156,13 +165,15 @@ admin:
       port_value: 8001
 ```
 
-The `access_log_path` field is set to /dev/null, meaning access logs to the
+The `access_log_path` field is set to `/dev/null`, meaning access logs to the
 admin server are discarded. In a testing or production environment, users would
 change this value to an appropriate destination. The `address` object tells
 Envoy to create an admin server listening on port 8001.
 
 The `static_resources` block contains definitions for clusters and listeners
-that aren't dynamically managed. The `admin` block configures our admin server.
+that aren't dynamically managed. A cluster is a named group of hosts/ports, over
+which Envoy will load balance traffic, and listeners are named network locations
+that clients can connect to. The `admin` block configures our admin server.
 
 Our front proxy has a single listener, configured to listen on port 80, with
 a filter chain that configures Envoy to manage HTTP traffic.
@@ -240,8 +251,9 @@ the Endpoint Discovery Service.
 ### Modifying Configuration
 
 In Envoy, you can modify the config files, rebuild Docker images, and test the
-changes. To add access logging to your HTTP filter, add the `access_log` object
-to your filter config, as shown here.
+changes. Listener filters are Envoy's way of attaching additional functionality
+to listeners. For instance, to add access logging to your HTTP filter, add the
+`access_log` object to your filter config, as shown here.
 
 
 ```yaml
@@ -257,10 +269,11 @@ to your filter config, as shown here.
           route_config:
 ```
 
+
 Destroy your Docker Compose stack with `docker-compose down`, then rebuild it
 with `docker-compose up --build -d`. Make a few requests to your services using
 curl, then log into a shell with `docker-compose exec front-envoy /bin/bash`. An
-access.log file should be in /var/log, showing the results of your requests.
+`access.log` file should be in `/var/log`, showing the results of your requests.
 
 ## Admin Server
 

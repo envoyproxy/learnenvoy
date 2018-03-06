@@ -28,19 +28,7 @@ limitations under the License.
         </div>
         <div class="row text-center">
           {% for service in site.data.deployment-models %}
-            <div class="col-md-4">
-                <span class="fa-stack fa-4x">
-                    <i class="fa fa-circle fa-stack-2x text-primary"></i>
-                    <i class="fa fa-{{ service.icon }} fa-stack-1x fa-inverse"></i>
-                </span>
-                {% if service.article %}
-                <h4 class="service-heading"><a href="/articles/{{ service.article
-                }}">{{ service.name }}</a></h4>
-                {% else %}
-                <h4 class="service-heading">{{ service.name }}</h4>
-                {% endif %}
-                <div class="text-muted">{{ service.description | markdownify }}</div>
-            </div>
+            {% include article-link.html %}
           {% endfor %}
         </div>
     </div>

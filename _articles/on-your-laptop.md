@@ -30,10 +30,10 @@ the easiest way to get started is by using the
 official [Docker images](https://hub.docker.com/u/envoyproxy/).  So before
 starting out, you'll need the following software installed and configured:
 
-* [Docker](https://docs.docker.com/install/)
-* [Docker Compose](https://docs.docker.com/compose/install/)
-* [Git](https://help.github.com/articles/set-up-git/)
-* [curl](https://curl.haxx.se/)
+- [Docker](https://docs.docker.com/install/)
+- [Docker Compose](https://docs.docker.com/compose/install/)
+- [Git](https://help.github.com/articles/set-up-git/)
+- [curl](https://curl.haxx.se/)
 
 We use Docker and Docker Compose to set up and run example service topologies
 using Envoy, git to access the Envoy examples, and curl to send traffic to

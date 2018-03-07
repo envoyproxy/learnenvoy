@@ -98,10 +98,11 @@ file parses correctly.
 Practically, porting web server config files to Envoy bootstrap config files is
 a natural first step to try out Envoy. In order to put this into production,
 it’s recommended to at least centralize these files behind a single service,
-using a reference xDS implementation like go-control-plane. Allowing multiple
-teams to edit these configs (#2 and #3, below) becomes a fragile part of the
-system. Moving the source of truth behind an API allows concurrent updates and
-prevents many nonsensical updates to routing definitions.
+using a reference xDS implementation like
+[go-control-plane](https://github.com/envoyproxy/go-control-plane). Allowing
+multiple teams to edit these configs (#2 and #3, below) becomes a fragile part
+of the system. Moving the source of truth behind an API allows concurrent
+updates and prevents many nonsensical updates to routing definitions.
 
 ## #2: Distribute control to teams
 

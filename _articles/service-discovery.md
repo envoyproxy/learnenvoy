@@ -32,14 +32,14 @@ first step in setting up your control plane is connecting your service
 discovery. This is generally broken down into three steps:
 
 1. Decide on a control plane implementation
-2. Mirror service definitions to Envoy clusters
-3. Mirror hosts/containers/instances to Envoy endpoints
+2. Publish service definitions to Envoy clusters
+3. Publish hosts/containers/instances to Envoy endpoints
 
 ## Control Plane Implementation
 
 Any control plane should implement the
 [Envoy v2 xDS APIs](https://www.envoyproxy.io/docs/envoy/latest/api-v2/api).
-For the purpose of mirroring service discovery data, you’ll need to implement
+For the purpose of publishing service discovery data, you’ll need to implement
 the Cluster Discovery Service
 [(CDS)](https://www.envoyproxy.io/docs/envoy/latest/configuration/cluster_manager/cds.html?highlight=cds)
 and the Endpoint Discovery Service
@@ -64,7 +64,7 @@ There are also **commercial implementations** available.
 has a full xDS implementation as part of
 [Houston](http://turbinelabs.io/product).
 
-## Mirror Services to CDS
+## Publish Services to CDS
 
 In Envoy’s vernacular, a “cluster” is a named group of hosts/ports, over which
 it will load balance traffic. You may call clusters services, microservices, or
@@ -108,7 +108,7 @@ For the full specifications, see the
 Once this is configured, you can populate the endpoints that serve traffic for
 this cluster.
 
-## Mirror instances to EDS
+## Publish instances to EDS
 
 Envoy defines an “endpoint” as an IP and port available within a cluster. In
 order to balance traffic across a service, Envoy expects the API to provide a
@@ -144,13 +144,13 @@ are fairly overwhelming. Envoy can handle them, but if something goes wrong,
 making sense of a 5,000-line API response can be quite challenging. The
 industry standard is to partition your configs in two ways:
 
-* **Partition by datacenter / region.** In general, services in one datacenter
+- **Partition by datacenter / region.** In general, services in one datacenter
 don’t need to know about the exact endpoint available in other datacenters. To
 set up a trickle of traffic between regions (“backhaul,” making the service
 robust to region-specific failures), add the remote datacenter’s front proxy to
 the local load balancer.
 
-* **Partition by service need.** While generally not feasible for an initial
+- **Partition by service need.** While generally not feasible for an initial
 roll-out, the most sophisticated Envoy deployments limit intra-service
 communication by only configuring Envoy sidecars to talk to a whitelist of
 services. This helps manage the complexity of having 1,000 microservices talk

@@ -169,6 +169,7 @@ Logging ejections from the cluster will help you tune any rules you put in
 place and prevent hosts from flapping in and out of the cluster.
 
 For more details, see:
-* [Health Checking overview](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/health_checking.html#arch-overview-health-checking) in the Envoy docs
-* [Outlier Detection overview](https://www.envoyproxy.io/docs/envoy/latest/api-v2/api/v2/cds.proto) in the Envoy docs
-* [Cluster configuration](https://www.envoyproxy.io/docs/envoy/latest/api-v2/api/v2/cds.proto) in the Envoy docs
+
+- [Health Checking overview](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/health_checking.html#arch-overview-health-checking) in the Envoy docs
+- [Outlier Detection overview](https://www.envoyproxy.io/docs/envoy/latest/api-v2/api/v2/cds.proto) in the Envoy docs
+- [Cluster configuration](https://www.envoyproxy.io/docs/envoy/latest/api-v2/api/v2/cds.proto) in the Envoy docs

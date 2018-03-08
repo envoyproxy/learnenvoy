@@ -1,7 +1,6 @@
-# Practical retries
+# Practical Circuit Breaking and Retries
 
-Now that you've configured [Envoy on your laptop](on-your-laptop.html) and understand the basics, there are a few routing excercises and traffic control
-examples you can explore.
+Circuit breaking and automatic retries are two powerful features of Envoy, and this article gives you a few examples of how to configure and use them.
 
 ## The setup
 
@@ -21,18 +20,16 @@ Additionally, install this service to drive load to our examples:
 
 ## Configuring latency and success rate
 
-In our first example we add a configurable latency and success rate to the
+In our first example we've add a configurable latency and success rate to the
 Python service that underlies all the Envoy examples.
 
-First, check out the this tag of our examples:
+First, check out this tag of the example repo:
 
 `https://github.com/turbinelabs/envoy-examples/tree/step1`
 
-Next, start the Zipkin tracing example by running:
+Next, start the Zipkin tracing example in the `zipkin-tracing` directory by running:
 
 `docker-compose up --build -d`
-
-in the `zipkin-tracing` directory.
 
 Run wrk with:
 
@@ -57,8 +54,8 @@ Requests/sec:     18.04
 Transfer/sec:      4.73KB
 ```
 
-In this example, success rate is less than 100%, and the latency histogram has a
-median of roughly 50 ms.
+In this example, success rate for requests is less than 100%, and the latency
+histogram has a median of roughly 50 ms.
 
 ## Adding a retry policy
 
@@ -78,15 +75,15 @@ Shut down the example we ran previously by running this command in the `zipkin-t
 
 `docker-compose down --remove-orphans`
 
-Start your example again by running
+Start your example again by running:
 
 `docker-compose up --build -d`
 
-Run wrk with
+Run wrk with:
 
 `wrk -c 1 -t 1 --latency -d 5s http://localhost:8000/service/1`
 
-and you should see the following:
+You should see the following:
 
 ```console
   Thread Stats   Avg      Stdev     Max   +/- Stdev
@@ -102,7 +99,68 @@ Requests/sec:     17.49
 Transfer/sec:      4.36KB
 ```
 
-As you can see, success rate is back to 100%. Retrying the request has brought
-our success rate from 95% to 99.75%.
+With those changes, success rate is back to 100%. Retrying the request
+automatically has brought our success rate from 95% to 99.75%, and in the real
+world would drastically change your user's experience.
 
-To proceed to the next step run `git checkout step3`.
+## Excluding POST requests
+
+Next, let's modify our retry policy to not affect POST requests. POST
+request tend to modify state, and are generally unsafe to retry. By adding a new
+match rule to the `zipkin-tracing/front-envoy-zipkin.yml` file we can cause
+POSTs to have no retry policy, but leave the existing retry policy in place for
+all other requests.
+
+```diff
++              - match:
++                  prefix: "/"
++                  headers:
++                    - name: ":method"
++                      value: "POST"
++                route:
++                  cluster: service1
++                decorator:
++                  operation: updateAvailability
+```
+
+Shut down your example in the `zipkin-tracing` directory by running:
+
+`docker-compose down --remove-orphans`
+
+Start your example again by running:
+
+`docker-compose up --build -d`
+
+Run wrk with
+
+`wrk -c 1 -t 1 --latency -d 5s http://localhost:8000/service/1`
+
+Now, you should see results like:
+
+```console
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency    56.99ms   10.16ms 126.43ms   96.67%
+    Req/Sec    17.18      4.17    20.00     78.00%
+  Latency Distribution
+     50%   54.97ms
+     75%   57.91ms
+     90%   60.97ms
+     99%  126.43ms
+  89 requests in 5.09s, 22.17KB read
+Requests/sec:     17.49
+Transfer/sec:      4.36KB
+```
+
+With our new changes, success rate for GET requests is still 100%. However if
+you run curl in a loop like the following
+
+`for i in `seq 1 100`; do curl -XPOST -v -q --stderr - localhost:8000/service/1 | grep '< HTTP'; done | sort | uniq -c`
+
+You should see some failures.
+
+```console
+  97 < HTTP/1.1 200 OK
+   3 < HTTP/1.1 503 Service Unavailable
+```
+
+This is good! Our retry policy doesn't affect POST requests, only GETs

@@ -32,7 +32,8 @@ and checking out our routing steps:
 
 In this example we've created a second cluster to represent a new version of our
 service. This change is visible in this
-[yaml file for Zipkin](https://github.com/turbinelabs/envoy-examples/blob/step5/zipkin-tracing/front-envoy-zipkin.yaml) illustrated here:
+[yaml file for Zipkin](https://github.com/turbinelabs/envoy-examples/blob/step5/zipkin-tracing/front-envoy-zipkin.yaml),
+illustrated here:
 
 ```yaml
      - socket_address:
@@ -57,7 +58,7 @@ service. This change is visible in this
          port_value: 80
 ```
 
-Next we've added routing rule in the same file that lets us test the new version of that service by including an HTTP header:
+Next, we've added routing rules in the same file, which lets us test the new version of that service by including an HTTP header:
 
 ```yaml
                    priority: HIGH
@@ -158,7 +159,7 @@ Start your new example services by running
 
 `docker-compose up --build -d`
 
-Now if we make a request to our service with no headers we should see responses
+Now, if we make a request to our service with no headers we should see responses
 from service 1a about 25% of the time.
 
 ## Wrap-up

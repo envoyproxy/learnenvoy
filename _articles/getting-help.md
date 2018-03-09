@@ -25,7 +25,7 @@ configured separately in the case of a custom xDS configuration.
 
 `GET /logging`
 
-You can also pass this command in your CLI:
+You can also pass these flags to the envoy binary:
 
 ```console
 -l <string>, --log-level <string> --log-path <path string>

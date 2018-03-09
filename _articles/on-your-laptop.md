@@ -80,6 +80,9 @@ Running `docker-compose ps` should show the following output:
 
 ```console
 $ docker-compose ps
+```
+
+```shell
           Name                        Command               State                      Ports
 ----------------------------------------------------------------------------------------------------------------
 frontproxy_front-envoy_1   /bin/sh -c /usr/local/bin/ ...   Up      0.0.0.0:8000->80/tcp, 0.0.0.0:8001->8001/tcp
@@ -95,6 +98,9 @@ localhost:8000/service/1`. You should see
 
 ```console
 $ curl localhost:8000/service/1
+```
+
+```shell
 Hello from behind Envoy (service 1)! hostname: 6632a613837e resolvedhostname: 172.19.0.3
 ```
 
@@ -102,6 +108,9 @@ Going to http://localhost:8000/service/2 should result in
 
 ```console
 $ curl localhost:8000/service/2
+```
+
+```shell
 Hello from behind Envoy (service 2)! hostname: bf97b0b3294d resolvedhostname: 172.19.0.2
 ```
 

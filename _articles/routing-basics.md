@@ -27,7 +27,6 @@ We’ll cover header-based routing of Envoy and incremental release in a few ste
 [On Your Laptop](on-your-laptop.html)
 article.
 
-
 ## The setup
 
 The Envoy documentation provides a good overview of
@@ -66,8 +65,8 @@ clusters:
       port_value: 80
 ```
 
-we'll create a new version of service1 to illustrate the power of header-based
-routing for incremental release of your services.
+we'll create a new version of service1 to illustrate the power of
+header-based routing for your services
 
 ```yaml
   - name: service1a

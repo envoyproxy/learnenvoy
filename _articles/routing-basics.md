@@ -1,3 +1,22 @@
+---
+layout: article
+title: Routing Basics
+---
+
+[//]: # ( Copyright 2018 Turbine Labs, Inc.                                   )
+[//]: # ( you may not use this file except in compliance with the License.    )
+[//]: # ( You may obtain a copy of the License at                             )
+[//]: # (                                                                     )
+[//]: # (     http://www.apache.org/licenses/LICENSE-2.0                      )
+[//]: # (                                                                     )
+[//]: # ( Unless required by applicable law or agreed to in writing, software )
+[//]: # ( distributed under the License is distributed on an "AS IS" BASIS,   )
+[//]: # ( WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or     )
+[//]: # ( implied. See the License for the specific language governing        )
+[//]: # ( permissions and limitations under the License.                      )
+
+[//]: # (Routing Basics)
+
 # Routing Basics
 
 Now that you've configured
@@ -16,72 +35,77 @@ For this guide, you’ll need:
 - [Git](https://help.github.com/articles/set-up-git/)
 - [curl](https://curl.haxx.se/)
 
-Additionally, install this service to create traffic to your example servers:
+## Header-based Routing
 
-- [wrk](https://github.com/wg/wrk)
-
-and clone the example files by cloning our example repo:
-
-`git clone git@github.com:turbinelabs/envoy-examples.git`
-
-Then, check out the appropriate git tag:
-
-`git checkout step5`
-
-## Routing to a new version of a service
-
-In this example we've created a second cluster to represent a new version of our
-service. This change is visible in this
-[yaml file for Zipkin](https://github.com/turbinelabs/envoy-examples/blob/step5/zipkin-tracing/front-envoy-zipkin.yaml), illustrated here:
+Using our cluster definitons from [on your laptop](on-your-laptop.html)
 
 ```yaml
-     - socket_address:
-         address: service1
-         port_value: 80
-+  - name: service1a
-+    connect_timeout: 0.250s
-+    type: strict_dns
-+    lb_policy: round_robin
-+    http2_protocol_options: {}
-+    circuit_breakers:
-+      thresholds:
-+        - priority: DEFAULT
-+          max_connections: 1
-+          max_requests: 1
-+        - priority: HIGH
-+          max_connections: 2
-+          max_requests: 2
-+    hosts:
-     - socket_address:
-         address: service1a
-         port_value: 80
+clusters:
+- name: service1
+  connect_timeout: 0.25s
+  type: strict_dns
+  lb_policy: round_robin
+  http2_protocol_options: {}
+  hosts:
+  - socket_address:
+      address: service1
+      port_value: 80
+- name: service2
+  connect_timeout: 0.25s
+  type: strict_dns
+  lb_policy: round_robin
+  http2_protocol_options: {}
+  hosts:
+  - socket_address:
+      address: service2
+      port_value: 80
 ```
 
-Next, we've added routing rules in the same file, which lets us test the new version of that service by including an HTTP header:
+we'll create a new version of service1 to illustrate the power of header-based
+routing for incremental release of your services.
 
 ```yaml
-                   priority: HIGH
+  - name: service1a
+    connect_timeout: 0.250s
+    type: strict_dns
+    lb_policy: round_robin
+    http2_protocol_options: {}
+    circuit_breakers:
+      thresholds:
+        - priority: DEFAULT
+          max_connections: 1
+          max_requests: 1
+        - priority: HIGH
+          max_connections: 2
+          max_requests: 2
+    hosts:
+    - socket_address:
+         address: service1a
+         port_value: 80
+         priority: HIGH
                  decorator:
                    operation: updateAvailability
-+              - match:
-+                  prefix: "/"
-+                  headers:
-+                    - name: "x-canary-version"
-+                      value: "service1a"
-+                route:
-+                  cluster: service1a
-+                  retry_policy:
-+                    retry_on: 5xx
-+                    num_retries: 3
-+                    per_try_timeout: 0.300s
+              - match:
+                  prefix: "/"
+                  headers:
+                    - name: "x-canary-version"
+                      value: "service1a"
+                route:
+                  cluster: service1a
+                  retry_policy:
+                    retry_on: 5xx
+                    num_retries: 3
+                    per_try_timeout: 0.300s
                - match:
                    prefix: "/"
                  route:
 ```
 
-Our header rule says that if a header with `x-canary-version` and a value of
-`service1a` is present, route the request to our new service. If that header is
-absent, requests will continue to route to our original service.
+Shut down and then relaunch your example services with:
+
+`docker-compose down --remove-orphans`
+
+`docker-compose up --build -d`
 
 If we make a request to our service with no headers, you'll get a response from
 service 1.
@@ -101,55 +125,9 @@ Hello from behind Envoy (service 1a)! hostname: 569ee89eebc8 resolvedhostname: 1
 
 This is a powerful feature. It allows you to
 [separate the deploy and release phases](https://blog.turbinelabs.io/deploy-not-equal-release-part-one-4724bc1e726b)
-of your application, paving the way for canary releases and
+of your application, paving the way for canary releases and 
 [testing in production](https://opensource.com/article/17/8/testing-production).
 
-## Incremental releases
-
-This example exercise will show how Envoy handles incremental release routing.
-
-To get started, checkout new example files with:
-
-`git checkout step6`.
-
-First, you'll notice that we've added a new match rule to our Zipkin yaml file
-that activates only 25% of the time. The `runtime` object in the route match
-tells Envoy to roll a 100 sided die, and if the result is less than the value
-of the runtime key (we default it to 25 here), then activate the match. By
-routing to a different cluster in this match, we can send a percentage of
-traffic to our new version.
-
-```yaml
-                     retry_on: 5xx
-                     num_retries: 3
-                     per_try_timeout: 0.300s
-+              - match:
-+                  prefix: "/"
-+                  runtime:
-+                    default_value: 25
-+                    runtime_key: routing.traffic_shift.helloworld
-+                route:
-+                  cluster: service1a
-+                  retry_policy:
-+                    retry_on: 5xx
-+                    num_retries: 3
-+                    per_try_timeout: 0.300s
-               - match:
-                   prefix: "/"
-                 route:
-```
-
-Shut down your previous example services in the `zipkin-tracing` directory, by
-running:
-
-`docker-compose down --remove-orphans`
-
-Start your new example services by running
-
-`docker-compose up --build -d`
-
-Now, if we make a request to our service with no headers, we should see responses
-from service 1a about 25% of the time.
 
 ## Wrap-up
 

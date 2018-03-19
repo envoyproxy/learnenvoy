@@ -100,6 +100,17 @@ header-based routing for your services
                     retry_on: 5xx
                     num_retries: 3
                     per_try_timeout: 0.300s
+              - match:
+                   prefix: "/"
+                   runtime:
+                   default_value: 25
+                   runtime_key: routing.traffic_shift.helloworld
+                   route:
+                   cluster: service1a
+                   retry_policy:
+                      retry_on: 5xx
+                      num_retries: 3
+                      per_try_timeout: 0.300s
                - match:
                    prefix: "/"
                  route:

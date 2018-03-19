@@ -23,6 +23,11 @@ Now that you've configured
 [Envoy on your laptop](on-your-laptop.html)
 and understand the basics of using Envoy, there are a few routing exercises you can explore.
 
+We’ll cover header-based routing of Envoy and incremental release in a few steps, by modifying the service configuration files from the
+[On Your Laptop](on-your-laptop.html)
+article.
+
+
 ## The setup
 
 The Envoy documentation provides a good overview of
@@ -125,7 +130,7 @@ Hello from behind Envoy (service 1a)! hostname: 569ee89eebc8 resolvedhostname: 1
 
 This is a powerful feature. It allows you to
 [separate the deploy and release phases](https://blog.turbinelabs.io/deploy-not-equal-release-part-one-4724bc1e726b)
-of your application, paving the way for canary releases and 
+of your application, paving the way for canary releases and
 [testing in production](https://opensource.com/article/17/8/testing-production).
 
 

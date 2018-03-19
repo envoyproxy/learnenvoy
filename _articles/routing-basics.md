@@ -9,22 +9,22 @@ and understand the basics of using Envoy, there are a few routing exercises you 
 The Envoy documentation provides a good overview of
 [how to run the example](https://www.envoyproxy.io/docs/envoy/latest/start/sandboxes/zipkin_tracing)
 
-You should already have the following installed from running Envoy on your laptop:
+For this guide, you’ll need:
 
 - [Docker](https://docs.docker.com/install/)
 - [Docker Compose](https://docs.docker.com/compose/install/)
 - [Git](https://help.github.com/articles/set-up-git/)
 - [curl](https://curl.haxx.se/)
 
-Additionally, install this service to drive load to our examples:
+Additionally, install this service to create traffic to your example servers:
 
 - [wrk](https://github.com/wg/wrk)
 
-and checkout the example files by cloning our example repo:
+and clone the example files by cloning our example repo:
 
 `git clone git@github.com:turbinelabs/envoy-examples.git`
 
-and checking out our routing steps:
+Then, check out the appropriate git tag:
 
 `git checkout step5`
 
@@ -32,8 +32,7 @@ and checking out our routing steps:
 
 In this example we've created a second cluster to represent a new version of our
 service. This change is visible in this
-[yaml file for Zipkin](https://github.com/turbinelabs/envoy-examples/blob/step5/zipkin-tracing/front-envoy-zipkin.yaml),
-illustrated here:
+[yaml file for Zipkin](https://github.com/turbinelabs/envoy-examples/blob/step5/zipkin-tracing/front-envoy-zipkin.yaml), illustrated here:
 
 ```yaml
      - socket_address:
@@ -83,16 +82,6 @@ Next, we've added routing rules in the same file, which lets us test the new ver
 Our header rule says that if a header with `x-canary-version` and a value of
 `service1a` is present, route the request to our new service. If that header is
 absent, requests will continue to route to our original service.
-
-If you've previously run the Envoy Zipkin examples, you may need to shut down
-those containers with this command in the `zipkin-tracing` directory:
-
-`docker-compose down --remove-orphans`
-
-Start your example again in the `zipkin-tracing` directory by running this
-command
-
-`docker-compose up --build -d`
 
 If we make a request to our service with no headers, you'll get a response from
 service 1.
@@ -159,7 +148,7 @@ Start your new example services by running
 
 `docker-compose up --build -d`
 
-Now, if we make a request to our service with no headers we should see responses
+Now, if we make a request to our service with no headers, we should see responses
 from service 1a about 25% of the time.
 
 ## Wrap-up

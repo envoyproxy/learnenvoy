@@ -28,8 +28,7 @@ While Envoy can route traffic like a conventional web server, much of its power
 comes from its ability to modify its routing rules on the fly. Starting with
 the simple routes we set up previously
 [on your laptop](on-your-laptop.html),
-we’ll
-extend that config to release a new version of one of the services using
+we’ll extend that config to release a new version of one of the services using
 traffic shifting. We’ll cover header-based routing and weighted load balancing
 to show how to use traffic management to canary a release, first to special
 requests (e.g. requests from your laptop), then to a small fraction of all
@@ -46,8 +45,10 @@ For this guide, we’ll need:
 
 ## Header-based Routing
 
-We can create a new version of service1 to illustrate the power of
-header-based routing for our services.
+First, we'll create a new version of service1 to illustrate the power of
+header-based routing for our services. Requests with a header that matches our
+new rule will be sent to our new service, while requests that don't include
+this header will still get service 1.
 
 ```yaml
 - name: service1a

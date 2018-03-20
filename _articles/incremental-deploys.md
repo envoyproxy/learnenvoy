@@ -100,14 +100,18 @@ request to service 1a:
 Hello from behind Envoy (service 1a)! hostname: 569ee89eebc8 resolvedhostname: 172.18.0.6
 ```
 
-Header-based routing in Envoy is a powerful feature. By employing it, we're able to handle complex workflows in order to
+Header-based routing in Envoy is a powerful feature. By employing it, we're
+able to handle complex workflows in order to
 [separate the deploy and release phases](https://blog.turbinelabs.io/deploy-not-equal-release-part-one-4724bc1e726b)
 of our application, paving the way for canary releases and
 [testing in production](https://opensource.com/article/17/8/testing-production).
 
 ## Weighted Load Balancing
 
-Next, let's modify our config further to enable an incremental release to our new service version. The following config should look familiar, but we've added a new routing rule to move 25% of the traffic pointed at our service to this version.
+Next, let's modify our config further to enable an incremental release to our
+new service version. The following config should look familiar, but we've added
+a new routing rule to move 25% of the traffic pointed at our service to this
+version.
 
 ```yaml
 - match:
@@ -167,7 +171,10 @@ and in the wild would also be paired with monitoring to ensure the delta
 between versions of services, or between heterogeneous backends was trending
 well before increasing or completing a release.
 
-If we wanted to simulate a successful release, we could set the value of our rule to 100, which would ensure all traffic is now sent to service 1a instead of service 1. Similarly, by setting this value to 0, we could roll-back a bad release.
+If we wanted to simulate a successful release, we could set the value of our
+rule to 100, which would ensure all traffic is now sent to service 1a instead
+of service 1. Similarly, by setting this value to 0, we could roll-back a bad
+release.
 
 ## Wrap-up
 

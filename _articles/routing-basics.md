@@ -92,7 +92,7 @@ clusters:
           port_value: 80
 ```
 
-## Configuring listerners
+## Configuring listeners
 
 Listener configuration can be declared statically in the bootstrap config, or
 dynamically via LDS. The following static configuration defines one listener,

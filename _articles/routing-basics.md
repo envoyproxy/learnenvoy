@@ -100,17 +100,10 @@ clusters:
 While example uses DNS for load balancing, but Envoy can also be configured to
 work with service discovery.
 
-### Dynamic configuration of routes and clusters
-
-The routes and clusters noted here are defined statically, but by using RDS and
-CDS to define them dynamically, you can centralize the route tables and cluster
-definitions and apply the same rules to multiple envoys, easing the propagation
-of your changes on a large scale across your infrastructure.
-
 ## Configuring listeners
 
 The following static configuration defines one listener, with some filters that
-map to two different services.
+map to two different services. These listeners are fairly simple, and also match to the services in our cluster and route definitions.
 
 ```yaml
 listeners:
@@ -143,6 +136,14 @@ listeners:
           - name: envoy.router
             config: {}
 ```
+
+## Dynamic configuration of routes, clusters, and listeners
+
+The routes and clusters noted here are defined statically, but by using RDS and
+CDS to define them dynamically, you can centralize the route tables and cluster
+definitions, and listeners and apply the same rules to multiple envoys, easing
+the propagation of your changes on a large scale across your infrastructure.
+
 
 ## Further Exploration
 

@@ -4,8 +4,8 @@ title: Routing Basics
 ---
 
 [//]: # ( Copyright 2018 Turbine Labs, Inc.                                   )
-[//]: # ( we may not use this file except in compliance with the License.    )
-[//]: # ( we may obtain a copy of the License at                             )
+[//]: # ( we may not use this file except in compliance with the License.     )
+[//]: # ( we may obtain a copy of the License at                              )
 [//]: # (                                                                     )
 [//]: # (     http://www.apache.org/licenses/LICENSE-2.0                      )
 [//]: # (                                                                     )
@@ -22,7 +22,8 @@ title: Routing Basics
 This article discusses Envoy's routing in more detail. You may have already
 seen how routing works
 [on your laptop](on-your-laptop.html)
-but now you can see more of how routes, clusters, and listeners are configured with static files.
+but now you can see more of how routes, clusters, and listeners are configured
+with static files.
 
 ## Routing components
 
@@ -34,15 +35,17 @@ definion, or via the route discovery service (RDS).
 
 ### Cluster
 
-A cluster is a group upstream hosts that accept traffic from Envoy. Clusters
-are configured either via static definitions, or by using the cluster discovery
-service (CDS).
+A cluster is a group of similar upstream hosts that accept traffic from Envoy.
+Clusters allow for load balancing of homogenous service sets, and better
+infrastructure resiliency. Clusters are configured either via static
+definitions, or by using the cluster discovery service (CDS).
 
 ### Listener
 
 A listener is a named network location (e.g., port, unix domain socket, etc.)
 that can accept connections from  downstream clients. Envoy exposes one or more
-listeners. Listener configuration can be declared statically in the bootstrap config, or dynamically via the listener discovery service (LDS).
+listeners. Listener configuration can be declared statically in the bootstrap
+config, or dynamically via the listener discovery service (LDS).
 
 ## Defining Routes
 
@@ -68,8 +71,9 @@ virtual_hosts:
         cluster: service2
 ```
 
-Clusters pull their membership data from DNS and use a round-robin load balancing over all hosts.
-
+Clusters pull their membership data from DNS and use a round-robin load
+balancing over all hosts. This cluster definition is from the examples
+[on your laptop](on-your-laptop.html).
 
 ```yaml
 clusters:
@@ -92,6 +96,16 @@ clusters:
           address: service2
           port_value: 80
 ```
+
+This example uses DNS for load balancing, but Envoy can also be configured to
+work with service discovery.
+
+### Dynamic configuration of routes and clusters
+
+The routes and clusters noted here are defined statically, but by using RDS and
+CDS to define them dynamically, you can centralize the route tables and cluster
+definitions and apply the same rules to multiple envoys, easing the propagation
+of your changes on a large scale across your infrastructure.
 
 ## Configuring listeners
 
@@ -136,4 +150,6 @@ Defining routes and listeners is crucial for using Envoy to connect traffic to
 your services. Now that you understand basic configurations, you can see how
 more complex traffic-shifting works in Envoy during
 [incremental deploys and releases](incremental-deploys.html),
-or learn how to [configure routing with RDS](routing-configuration), the route discovery service.
+or learn how to
+[configure routing with RDS](routing-configuration),
+the route discovery service.

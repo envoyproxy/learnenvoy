@@ -26,12 +26,22 @@ but now you can see more of how routes are defined for simple round-robin
 load-balancing. We will also cover how listeners are configured for your
 services, both through static files, and dynamically.
 
+## What is a route?
+
+A route is a set of rules that match virtual hosts to clusters and allow you to
+create traffic shifting rules.
+
+## What is a cluster?
+
+A cluster is a group upstream hosts that accept traffic from Envoy. Clusters
+are configured either via static definitions, or by using the cluster discovery
+service (CDS).
+
 ## Defining Routes
 
-Envoy’s routing definitions map a domain + URL to a clusters — a named group of
-host/posts. From our previous tutorial On Your Laptop, we defined a simple
-setup with 2 clusters (service1 and service2), each of which lived at a
-separate URL (/service1 and /service2).
+Envoy’s routing definitions map a domain + URL to a cluster. In our previous
+tutorial
+[On Your Laptop](on-your-laptop.html), we defined a simple setup with 2 clusters (service1 and service2), each of which lived at a separate URL (/service1 and /service2).
 
 ```
 virtual_hosts:
@@ -166,4 +176,7 @@ resources:
 ```
 
 Defining routes and listeners is crucial for using Envoy to connect traffic to
-your services. Now that you understand basic configurations, you can see how more complex traffic-shifting works in Envoy during [incremental deploys and releases](incremental-deploys.html)
+your services. Now that you understand basic configurations, you can see how
+more complex traffic-shifting works in Envoy during
+[incremental deploys and releases](incremental-deploys.html),
+or learn how to [configure routing with RDS](routing-configuration), the route discovery service.

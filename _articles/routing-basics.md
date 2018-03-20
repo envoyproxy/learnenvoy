@@ -26,16 +26,24 @@ but now you can see more of how routes are defined for simple round-robin
 load-balancing. We will also cover how listeners are configured for your
 services, both through static files, and dynamically.
 
-## What is a route?
+## Routing components
+
+### Route
 
 A route is a set of rules that match virtual hosts to clusters and allow you to
 create traffic shifting rules.
 
-## What is a cluster?
+### Cluster
 
 A cluster is a group upstream hosts that accept traffic from Envoy. Clusters
 are configured either via static definitions, or by using the cluster discovery
 service (CDS).
+
+### Listener
+
+A listener is a named network location (e.g., port, unix domain socket, etc.)
+that can accept connections from  downstream clients. Envoy exposes one or more
+listeners.
 
 ## Defining Routes
 
@@ -84,18 +92,7 @@ clusters:
           port_value: 80
 ```
 
-## LDS
-
-In Envoy, LDS is the listener discovery service, which allows for dynamic
-configuration of listeners.
-
-### What is a listener?
-
-A listener is a named network location (e.g., port, unix domain socket, etc.)
-that can accept connections from  downstream clients. Envoy exposes one or more
-listeners.
-
-## Static listener configuration
+## Configuring listerners
 
 Listener configuration can be declared statically in the bootstrap config, or
 dynamically via LDS. The following static configuration defines one listener,

@@ -20,12 +20,18 @@ title: Routing Basics
 # Routing Basics
 
 Now that we've configured
-[Envoy on your laptop](on-your-laptop.html)
-and understand the basics of using Envoy, there are a few routing exercises we can explore.
+[Envoy on our laptop](on-our-laptop.html)
+and understand the basics of using Envoy, there are a few routing exercises we
+can explore.
 
-We’ll cover header-based routing of Envoy and incremental release in a few steps, by modifying the service configuration files from the
-[On your Laptop](on-your-laptop.html)
-article.
+While Envoy can route traffic like a conventional web server, much of its power
+comes from its ability to modify its routing rules on the fly. Starting with
+the simple routes from the [previous article](on-your-laptop.html), we’ll
+extend that config to release a new version of one of the services using
+traffic shifting. We’ll cover header-based routing and weighted load balancing
+to show how to use traffic management to canary a release, first to special
+requests (e.g. requests from your laptop), then to a small fraction of all
+requests.
 
 ## The setup
 
@@ -39,82 +45,85 @@ For this guide, we’ll need:
 - [Git](https://help.github.com/articles/set-up-git/)
 - [curl](https://curl.haxx.se/)
 
-## Header-based Routing
+## Defining Routes
 
-Using our cluster definitons from
-[on your laptop](on-your-laptop.html)
+Envoy’s routing definitions map a domain + URL to a clusters — a named group of
+host/posts. From our previous tutorial On Your Laptop, we defined a simple
+setup with 2 clusters (service1 and service2), each of which lived at a
+separate URL (/service1 and /service2).
+
+```
+virtual_hosts:
+  - name: backend
+    domains:
+    - "*"
+    routes:
+    - match:
+        prefix: "/service/1"
+      route:
+        cluster: service1
+    - match:
+        prefix: "/service/2"
+      route:
+        cluster: service2
+```
+
+The clusters pull their membership data from DNS and use a round-robin load balancing over all hosts.
+
 
 ```yaml
 clusters:
-- name: service1
-  connect_timeout: 0.25s
-  type: strict_dns
-  lb_policy: round_robin
-  http2_protocol_options: {}
-  hosts:
-  - socket_address:
-      address: service1
-      port_value: 80
-- name: service2
-  connect_timeout: 0.25s
-  type: strict_dns
-  lb_policy: round_robin
-  http2_protocol_options: {}
-  hosts:
-  - socket_address:
-      address: service2
-      port_value: 80
+  - name: service1
+      connect_timeout: 0.25s
+      type: strict_dns
+      lb_policy: round_robin
+      http2_protocol_options: {}
+      hosts:
+      - socket_address:
+          address: service1
+          port_value: 80
+  - name: service2
+      connect_timeout: 0.25s
+      type: strict_dns
+      lb_policy: round_robin
+      http2_protocol_options: {}
+      hosts:
+      - socket_address:
+          address: service2
+          port_value: 80
 ```
 
-we can create a new version of service1 to illustrate the power of
-header-based routing for our services
+## Header-based Routing
+
+We can create a new version of service1 to illustrate the power of
+header-based routing for our services.
 
 ```yaml
-  - name: service1a
+- name: service1a
     connect_timeout: 0.250s
     type: strict_dns
     lb_policy: round_robin
-    http2_protocol_options: {}
-    circuit_breakers:
-      thresholds:
-        - priority: DEFAULT
-          max_connections: 1
-          max_requests: 1
-        - priority: HIGH
-          max_connections: 2
-          max_requests: 2
     hosts:
     - socket_address:
          address: service1a
          port_value: 80
          priority: HIGH
-                 decorator:
-                   operation: updateAvailability
-              - match:
-                  prefix: "/"
-                  headers:
-                    - name: "x-canary-version"
-                      value: "service1a"
+         decorator:
+            operation: updateAvailability
+            - match:
+                prefix: "/"
+                headers:
+                  - name: "x-canary-version"
+                    value: "service1a"
                 route:
-                  cluster: service1a
-                  retry_policy:
-                    retry_on: 5xx
-                    num_retries: 3
-                    per_try_timeout: 0.300s
-              - match:
-                   prefix: "/"
-                   runtime:
-                   default_value: 25
-                   runtime_key: routing.traffic_shift.helloworld
-                   route:
-                   cluster: service1a
-                   retry_policy:
-                      retry_on: 5xx
-                      num_retries: 3
-                      per_try_timeout: 0.300s
-               - match:
-                   prefix: "/"
+                    cluster: service1a
+            - match:
+                 prefix: "/"
+                 runtime:
+                     default_value: 25
+                     runtime_key: routing.traffic_shift.helloworld
                  route:
+                     cluster: service1a
 ```
 
 Shut down and then relaunch our example services with:
@@ -144,16 +153,18 @@ Header-based routing in Envoy is a powerful feature. By employing it, we're able
 of our application, paving the way for canary releases and
 [testing in production](https://opensource.com/article/17/8/testing-production).
 
+## Weighted Load Balancing
+
 Next, let's modify our config further to enable an incremental release to our new service version. The following config should look familiar, but we've added a new routing rule to move 25% of the traffic pointed at our service to this version.
 
 ```yaml
 - match:
      prefix: "/"
      runtime:
-     default_value: 25
-     runtime_key: routing.traffic_shift.helloworld
+         default_value: 25
+         runtime_key: routing.traffic_shift.helloworld
      route:
-     cluster: service1a
+        cluster: service1a
 ```
 
 Here's the full service config with the updated changes for a 25% release:
@@ -164,14 +175,6 @@ Here's the full service config with the updated changes for a 25% release:
     type: strict_dns
     lb_policy: round_robin
     http2_protocol_options: {}
-    circuit_breakers:
-      thresholds:
-        - priority: DEFAULT
-          max_connections: 1
-          max_requests: 1
-        - priority: HIGH
-          max_connections: 2
-          max_requests: 2
     hosts:
     - socket_address:
          address: service1a
@@ -186,24 +189,13 @@ Here's the full service config with the updated changes for a 25% release:
                       value: "service1a"
                 route:
                   cluster: service1a
-                  retry_policy:
-                    retry_on: 5xx
-                    num_retries: 3
-                    per_try_timeout: 0.300s
               - match:
                    prefix: "/"
                    runtime:
                    default_value: 25
                    runtime_key: routing.traffic_shift.helloworld
                    route:
-                   cluster: service1a
-                   retry_policy:
-                      retry_on: 5xx
-                      num_retries: 3
-                      per_try_timeout: 0.300s
-               - match:
-                   prefix: "/"
-                 route:
+                      cluster: service1a
 ```
 
 With this in place, shut down your previous example services by running:
@@ -215,13 +207,15 @@ Then, start it again with:
 `docker-compose up --build -d`
 
 Now, if we make a request to our service with no headers we should see
-responses from service 1a about 25% of the time, or when the approrpiate header
+responses from service 1a about 25% of the time, or when the appropriate header
 is loaded.
 
 This example illustrates the power of an incremental release of your service,
 and in the wild would also be paired with monitoring to ensure the delta
-between versions of services, or between heterogenous backends was trending
+between versions of services, or between heterogeneous backends was trending
 well before increasing or completing a release.
+
+If we wanted to simulate a successful release, we could set the value of our rule to 100, which would ensure all traffic is now sent to service 1a instead of service 1. Similarly, by setting this value to 0, we could roll-back a bad release.
 
 ## Wrap-up
 

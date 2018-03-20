@@ -22,16 +22,15 @@ title: Routing Basics
 This article discusses Envoy's routing in more detail. You may have already
 seen how routing works
 [on your laptop](on-your-laptop.html)
-but now you can see more of how routes are defined for simple round-robin
-load-balancing. We will also cover how listeners are configured for your
-services, both through static files, and dynamically.
+but now you can see more of how routes, clusters, and listeners are configured with static files.
 
 ## Routing components
 
 ### Route
 
 A route is a set of rules that match virtual hosts to clusters and allow you to
-create traffic shifting rules.
+create traffic shifting rules. Routes are configured either via static
+definion, or via the route discovery service (RDS).
 
 ### Cluster
 
@@ -43,13 +42,15 @@ service (CDS).
 
 A listener is a named network location (e.g., port, unix domain socket, etc.)
 that can accept connections from  downstream clients. Envoy exposes one or more
-listeners.
+listeners. Listener configuration can be declared statically in the bootstrap config, or dynamically via the listener discovery service (LDS).
 
 ## Defining Routes
 
 Envoy’s routing definitions map a domain + URL to a cluster. In our previous
 tutorial
-[On Your Laptop](on-your-laptop.html), we defined a simple setup with 2 clusters (service1 and service2), each of which lived at a separate URL (/service1 and /service2).
+[On Your Laptop](on-your-laptop.html),
+we defined a simple setup with 2 clusters (service1 and service2), each of
+which lived at a separate URL (/service1 and /service2).
 
 ```
 virtual_hosts:
@@ -67,7 +68,7 @@ virtual_hosts:
         cluster: service2
 ```
 
-The clusters pull their membership data from DNS and use a round-robin load balancing over all hosts.
+Clusters pull their membership data from DNS and use a round-robin load balancing over all hosts.
 
 
 ```yaml
@@ -94,9 +95,8 @@ clusters:
 
 ## Configuring listeners
 
-Listener configuration can be declared statically in the bootstrap config, or
-dynamically via LDS. The following static configuration defines one listener,
-with some filters that map to two different services.
+The following static configuration defines one listener, with some filters that
+map to two different services.
 
 ```yaml
 listeners:
@@ -130,47 +130,7 @@ listeners:
             config: {}
 ```
 
-## Dynamic LDS configuration
-
-It's also possible to obtain listener configuration dynamically. For example,
-adding the following to your bootstrap config declares an LDS-based dynamic
-listener configuration.
-
-```json
-dynamic_resources:
- lds_config:
-    api_config_source:
-      api_type: GRPC
-      cluster_names: [xds_cluster]
-```
-
-The responses from the management server will look very similar to the previous
-static definition for listeners:
-
-```yaml
-version_info: "0"
-resources:
-- "@type": type.googleapis.com/envoy.api.v2.Listener
-  name: listener_0
-  address:
-    socket_address:
-      address: 127.0.0.1
-      port_value: 10000
-  filter_chains:
-  - filters:
-    - name: envoy.http_connection_manager
-      config:
-        stat_prefix: ingress_http
-        codec_type: AUTO
-        rds:
-          route_config_name: local_route
-          config_source:
-            api_config_source:
-              api_type: GRPC
-              cluster_names: [xds_cluster]
-        http_filters:
-        - name: envoy.router
-```
+## Further Exploration
 
 Defining routes and listeners is crucial for using Envoy to connect traffic to
 your services. Now that you understand basic configurations, you can see how

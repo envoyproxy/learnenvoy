@@ -20,11 +20,11 @@ title: Routing Basics
 # Routing Basics
 
 Now that we've configured
-[Envoy on our laptop](on-our-laptop.html)
+[Envoy on your laptop](on-your-laptop.html)
 and understand the basics of using Envoy, there are a few routing exercises we can explore.
 
 We’ll cover header-based routing of Envoy and incremental release in a few steps, by modifying the service configuration files from the
-[On our Laptop](on-our-laptop.html)
+[On your Laptop](on-your-laptop.html)
 article.
 
 ## The setup
@@ -41,7 +41,8 @@ For this guide, we’ll need:
 
 ## Header-based Routing
 
-Using our cluster definitons from [on our laptop](on-our-laptop.html)
+Using our cluster definitons from
+[on your laptop](on-your-laptop.html)
 
 ```yaml
 clusters:

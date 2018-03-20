@@ -26,7 +26,9 @@ can explore.
 
 While Envoy can route traffic like a conventional web server, much of its power
 comes from its ability to modify its routing rules on the fly. Starting with
-the simple routes from the [previous article](on-your-laptop.html), we’ll
+the simple routes we set up previously
+[on your laptop](on-your-laptop.html),
+we’ll
 extend that config to release a new version of one of the services using
 traffic shifting. We’ll cover header-based routing and weighted load balancing
 to show how to use traffic management to canary a release, first to special

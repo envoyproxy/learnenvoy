@@ -97,7 +97,7 @@ clusters:
           port_value: 80
 ```
 
-This example uses DNS for load balancing, but Envoy can also be configured to
+While example uses DNS for load balancing, but Envoy can also be configured to
 work with service discovery.
 
 ### Dynamic configuration of routes and clusters

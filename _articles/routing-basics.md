@@ -1,5 +1,5 @@
 ---
-lawet: article
+layout: article
 title: Routing Basics
 ---
 
@@ -19,31 +19,12 @@ title: Routing Basics
 
 # Routing Basics
 
-Now that we've configured
-[Envoy on our laptop](on-our-laptop.html)
-and understand the basics of using Envoy, there are a few routing exercises we
-can explore.
-
-While Envoy can route traffic like a conventional web server, much of its power
-comes from its ability to modify its routing rules on the fly. Starting with
-the simple routes from the [previous article](on-your-laptop.html), we’ll
-extend that config to release a new version of one of the services using
-traffic shifting. We’ll cover header-based routing and weighted load balancing
-to show how to use traffic management to canary a release, first to special
-requests (e.g. requests from your laptop), then to a small fraction of all
-requests.
-
-## The setup
-
-The Envoy documentation provides a good overview of
-[how to run the example](https://www.envoyproxy.io/docs/envoy/latest/start/sandboxes/zipkin_tracing)
-
-For this guide, we’ll need:
-
-- [Docker](https://docs.docker.com/install/)
-- [Docker Compose](https://docs.docker.com/compose/install/)
-- [Git](https://help.github.com/articles/set-up-git/)
-- [curl](https://curl.haxx.se/)
+This article discusses Envoy's routing in more detail. You may have already
+seen how routing works
+[on your laptop](on-your-laptop.html)
+but now you can see more of how routes are defined for simple round-robin
+load-balancing. We will also cover how listeners are configured for your
+services, both through static files, and dynamically.
 
 ## Defining Routes
 
@@ -93,134 +74,96 @@ clusters:
           port_value: 80
 ```
 
-## Header-based Routing
+## LDS
 
-We can create a new version of service1 to illustrate the power of
-header-based routing for our services.
+In Envoy, LDS is the listener discovery service, which allows for dynamic
+configuration of listeners.
 
-```yaml
-- name: service1a
-    connect_timeout: 0.250s
-    type: strict_dns
-    lb_policy: round_robin
-    hosts:
-    - socket_address:
-         address: service1a
-         port_value: 80
-         priority: HIGH
-         decorator:
-            operation: updateAvailability
-            - match:
-                prefix: "/"
-                headers:
-                  - name: "x-canary-version"
-                    value: "service1a"
-                route:
-                    cluster: service1a
-            - match:
-                 prefix: "/"
-                 runtime:
-                     default_value: 25
-                     runtime_key: routing.traffic_shift.helloworld
-                 route:
-                     cluster: service1a
-```
+### What is a listener?
 
-Shut down and then relaunch our example services with:
+A listener is a named network location (e.g., port, unix domain socket, etc.)
+that can accept connections from  downstream clients. Envoy exposes one or more
+listeners.
 
-`docker-compose down --remove-orphans`
+## Static listener configuration
 
-`docker-compose up --build -d`
-
-If we make a request to our service with no headers, we'll get a response
-from service 1:
-
-```console
-> curl localhost:8000/service/1
-Hello from behind Envoy (service 1)! hostname: d0adee810fc4 resolvedhostname: 172.18.0.2
-```
-
-However if we include the `x-canary-version` header, Envoy will route our
-request to service 1a:
-
-```console
-> curl -H 'x-canary-version: service1a' localhost:8000/service/1
-Hello from behind Envoy (service 1a)! hostname: 569ee89eebc8 resolvedhostname: 172.18.0.6
-```
-
-Header-based routing in Envoy is a powerful feature. By employing it, we're able to handle complex workflows in order to
-[separate the deploy and release phases](https://blog.turbinelabs.io/deploy-not-equal-release-part-one-4724bc1e726b)
-of our application, paving the way for canary releases and
-[testing in production](https://opensource.com/article/17/8/testing-production).
-
-## Weighted Load Balancing
-
-Next, let's modify our config further to enable an incremental release to our new service version. The following config should look familiar, but we've added a new routing rule to move 25% of the traffic pointed at our service to this version.
+Listener configuration can be declared statically in the bootstrap config, or
+dynamically via LDS. The following static configuration defines one listener,
+with some filters that map to two different services.
 
 ```yaml
-- match:
-     prefix: "/"
-     runtime:
-         default_value: 25
-         runtime_key: routing.traffic_shift.helloworld
-     route:
-        cluster: service1a
-```
-
-Here's the full service config with the updated changes for a 25% release:
-
-```yaml
-  - name: service1a
-    connect_timeout: 0.250s
-    type: strict_dns
-    lb_policy: round_robin
-    http2_protocol_options: {}
-    hosts:
-    - socket_address:
-         address: service1a
-         port_value: 80
-         priority: HIGH
-                 decorator:
-                   operation: updateAvailability
+listeners:
+  - address:
+      socket_address:
+        address: 0.0.0.0
+        port_value: 80
+    filter_chains:
+    - filters:
+      - name: envoy.http_connection_manager
+        config:
+          codec_type: auto
+          stat_prefix: ingress_http
+          route_config:
+            name: local_route
+            virtual_hosts:
+            - name: backend
+              domains:
+              - "*"
+              routes:
               - match:
-                  prefix: "/"
-                  headers:
-                    - name: "x-canary-version"
-                      value: "service1a"
+                  prefix: "/service/1"
                 route:
-                  cluster: service1a
+                  cluster: service1
               - match:
-                   prefix: "/"
-                   runtime:
-                   default_value: 25
-                   runtime_key: routing.traffic_shift.helloworld
-                   route:
-                      cluster: service1a
+                  prefix: "/service/2"
+                route:
+                  cluster: service2
+          http_filters:
+          - name: envoy.router
+            config: {}
 ```
 
-With this in place, shut down your previous example services by running:
+## Dynamic LDS configuration
 
-`docker-compose down --remove-orphans`
+It's also possible to obtain listener configuration dynamically. For example,
+adding the following to your bootstrap config declares an LDS-based dynamic
+listener configuration.
 
-Then, start it again with:
+```json
+dynamic_resources:
+ lds_config:
+    api_config_source:
+      api_type: GRPC
+      cluster_names: [xds_cluster]
+```
 
-`docker-compose up --build -d`
+The responses from the management server will look very similar to the previous
+static definition for listeners:
 
-Now, if we make a request to our service with no headers we should see
-responses from service 1a about 25% of the time, or when the appropriate header
-is loaded.
+```yaml
+version_info: "0"
+resources:
+- "@type": type.googleapis.com/envoy.api.v2.Listener
+  name: listener_0
+  address:
+    socket_address:
+      address: 127.0.0.1
+      port_value: 10000
+  filter_chains:
+  - filters:
+    - name: envoy.http_connection_manager
+      config:
+        stat_prefix: ingress_http
+        codec_type: AUTO
+        rds:
+          route_config_name: local_route
+          config_source:
+            api_config_source:
+              api_type: GRPC
+              cluster_names: [xds_cluster]
+        http_filters:
+        - name: envoy.router
+```
 
-This example illustrates the power of an incremental release of your service,
-and in the wild would also be paired with monitoring to ensure the delta
-between versions of services, or between heterogeneous backends was trending
-well before increasing or completing a release.
-
-If we wanted to simulate a successful release, we could set the value of our rule to 100, which would ensure all traffic is now sent to service 1a instead of service 1. Similarly, by setting this value to 0, we could roll-back a bad release.
-
-## Wrap-up
-
-Now that you've seen a few examples of incremental and header-based routing
-using Envoy, you may want to investigate more advanced features of Envoy, like
-[automatic retries](automatic-retries.html)
-or learn how to
-[dynamically configure routing](https://www.learnenvoy.io/articles/routing-configuration.html)
+Defining routes and listeners is crucial for using Envoy to connect traffic to
+your services. Now that you understand basic configurations, you can see how more complex traffic-shifting works in Envoy during [incremental deploys and releases](incremental-deploys.html)

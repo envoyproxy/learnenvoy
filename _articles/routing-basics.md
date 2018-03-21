@@ -103,7 +103,8 @@ work with service discovery.
 ## Configuring listeners
 
 The following static configuration defines one listener, with some filters that
-map to two different services. These listeners are fairly simple, and also match to the services in our cluster and route definitions.
+map to two different services. These listeners are fairly simple, and also
+match to the services in our cluster and route definitions.
 
 ```yaml
 listeners:

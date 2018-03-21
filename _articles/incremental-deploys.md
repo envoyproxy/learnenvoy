@@ -67,7 +67,7 @@ to spin up a new service, called `service1a`.
 ```
 
 To make sure Envoy can discover this service, we’ll also add it to the
-`clusters’ section of our configuration file.
+`clusters` section of our configuration file.
 
 ```yaml
   - name: service1a
@@ -120,7 +120,10 @@ If we make a request to our service with no headers, we'll get a response
 from service 1:
 
 ```console
-> curl localhost:8000/service/1
+$ curl localhost:8000/service/1
+```
+
+```shell
 Hello from behind Envoy (service 1)! hostname: d0adee810fc4 resolvedhostname: 172.18.0.2
 ```
 
@@ -128,7 +131,10 @@ However if we include the `x-canary-version` header, Envoy will route our
 request to service 1a:
 
 ```console
-> curl -H 'x-canary-version: service1a' localhost:8000/service/1
+$ curl -H 'x-canary-version: service1a' localhost:8000/service/1
+```
+
+```shell
 Hello from behind Envoy (service 1a)! hostname: 569ee89eebc8 resolvedhostname: 172.18.0.6
 ```
 

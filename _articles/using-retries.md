@@ -1,13 +1,15 @@
 # Practical Circuit Breaking and Retries
 
-Circuit breaking and automatic retries are two powerful features of Envoy, and this article gives you a few examples of how to configure and use them.
+Circuit breaking and automatic retries are two powerful features of Envoy, and
+this article gives you a few examples of how to configure and use them.
 
 ## The setup
 
 The Envoy documentation provides a good overview of
 [how to run the example](https://www.envoyproxy.io/docs/envoy/latest/start/sandboxes/zipkin_tracing)
 
-You should already have the following installed from running Envoy on your laptop:
+You should already have the following installed from running Envoy on your
+laptop:
 
 - [Docker](https://docs.docker.com/install/)
 - [Docker Compose](https://docs.docker.com/compose/install/)
@@ -25,19 +27,20 @@ Python service that underlies all the Envoy examples.
 
 First, check out this tag of the example repo:
 
-`https://github.com/turbinelabs/envoy-examples/tree/step1`
+`$ git clone https://github.com/turbinelabs/envoy-examples/tree/step1`
 
-Next, start the Zipkin tracing example in the `zipkin-tracing` directory by running:
+Next, start the Zipkin tracing example in the `zipkin-tracing` directory by
+running:
 
-`docker-compose up --build -d`
+`$ docker-compose up --build -d`
 
 Run wrk with:
 
-`wrk -c 1 -t 1 --latency -d 5s http://localhost:8000/service/1`
+`$ wrk -c 1 -t 1 --latency -d 5s http://localhost:8000/service/1`
 
 which returns, for example:
 
-```console
+```shell
 Running 5s test @ http://localhost:8000/service/1
   1 threads and 1 connections
   Thread Stats   Avg      Stdev     Max   +/- Stdev
@@ -71,21 +74,22 @@ to the `zipkin-tracing/front-envoy-zipkin.yml` file
                  decorator:
 ```
 
-Shut down the example we ran previously by running this command in the `zipkin-tracing` directory:
+Shut down the example we ran previously by running this command in the
+`zipkin-tracing` directory:
 
-`docker-compose down --remove-orphans`
+`$ docker-compose down --remove-orphans`
 
 Start your example again by running:
 
-`docker-compose up --build -d`
+`$ docker-compose up --build -d`
 
 Run wrk with:
 
-`wrk -c 1 -t 1 --latency -d 5s http://localhost:8000/service/1`
+`$ wrk -c 1 -t 1 --latency -d 5s http://localhost:8000/service/1`
 
 You should see the following:
 
-```console
+```shell
   Thread Stats   Avg      Stdev     Max   +/- Stdev
     Latency    56.99ms   10.16ms 126.43ms   96.67%
     Req/Sec    17.18      4.17    20.00     78.00%
@@ -125,19 +129,19 @@ all other requests.
 
 Shut down your example in the `zipkin-tracing` directory by running:
 
-`docker-compose down --remove-orphans`
+`$ docker-compose down --remove-orphans`
 
 Start your example again by running:
 
-`docker-compose up --build -d`
+`$ docker-compose up --build -d`
 
 Run wrk with
 
-`wrk -c 1 -t 1 --latency -d 5s http://localhost:8000/service/1`
+`$ wrk -c 1 -t 1 --latency -d 5s http://localhost:8000/service/1`
 
 Now, you should see results like:
 
-```console
+```shell
   Thread Stats   Avg      Stdev     Max   +/- Stdev
     Latency    56.99ms   10.16ms 126.43ms   96.67%
     Req/Sec    17.18      4.17    20.00     78.00%
@@ -154,13 +158,13 @@ Transfer/sec:      4.36KB
 With our new changes, success rate for GET requests is still 100%. However if
 you run curl in a loop like the following
 
-`for i in `seq 1 100`; do curl -XPOST -v -q --stderr - localhost:8000/service/1 | grep '< HTTP'; done | sort | uniq -c`
+`$ for i in `seq 1 100`; do curl -XPOST -v -q --stderr - localhost:8000/service/1 | grep '< HTTP'; done | sort | uniq -c`
 
 You should see some failures.
 
-```console
-  97 < HTTP/1.1 200 OK
-   3 < HTTP/1.1 503 Service Unavailable
+```shell
+97 < HTTP/1.1 200 OK
+3 < HTTP/1.1 503 Service Unavailable
 ```
 
 This is good! Our retry policy doesn't affect POST requests, only GETs

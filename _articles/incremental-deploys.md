@@ -20,7 +20,7 @@ title: Incremental Deploys
 # Incremental Blue/Green Deploys
 
 Now that we've configured
-[Envoy on our laptop](on-your-laptop.html)
+[Envoy on our laptop](on-our-laptop.html)
 and understand the basics of using Envoy, there are a few routing exercises we
 can explore.
 
@@ -29,10 +29,10 @@ comes from its ability to modify its routing rules on the fly. Starting with
 the simple routes we set up previously
 [on your laptop](on-your-laptop.html),
 we’ll extend that config to release a new version of one of the services using
-traffic shifting. We’ll cover header-based routing and weighted load balancing
-to show how to use traffic management to canary a release, first to special
-requests (e.g. requests from your laptop), then to a small fraction of all
-requests.
+traffic shifting. We’ll also cover header-based routing and weighted load
+balancing to show how to use traffic management to canary a release, first to
+special requests (e.g. requests from your laptop), then to a small fraction of
+all requests.
 
 ## The setup
 
@@ -46,36 +46,65 @@ For this guide, we’ll need:
 ## Header-based Routing
 
 First, we'll create a new version of service1 to illustrate the power of
-header-based routing for our services. Requests with a header that matches our
-new rule will be sent to our new service, while requests that don't include
-this header will still get service 1.
+header-based routing for our services. Still following along with the
+[front-proxy](https://github.com/envoyproxy/envoy/tree/master/examples/front-proxy) example from the Envoy repo, modify the
+[docker-compose.yml](https://github.com/envoyproxy/envoy/blob/master/examples/front-proxy/docker-compose.yml) to spin up a new service, called `service1a`.
 
 ```yaml
-- name: service1a
-    connect_timeout: 0.250s
+  service1a:
+    build:
+      context: .
+      dockerfile: Dockerfile-service
+    volumes:
+      - ./service-envoy.yaml:/etc/service-envoy.yaml
+    networks:
+      envoymesh:
+        aliases:
+          - service1a
+    environment:
+      - SERVICE_NAME=1a
+    expose:
+      - "80"
+```
+
+To make sure Envoy can discover this service, we’ll also add it to the
+`clusters’ section of our configuration file.
+
+```yaml
+  - name: service1a
+    connect_timeout: 0.25s
     type: strict_dns
     lb_policy: round_robin
+    http2_protocol_options: {}
     hosts:
     - socket_address:
-         address: service1a
-         port_value: 80
-         priority: HIGH
-         decorator:
-            operation: updateAvailability
-            - match:
-                prefix: "/"
-                headers:
-                  - name: "x-canary-version"
-                    value: "service1a"
-                route:
-                    cluster: service1a
-            - match:
-                 prefix: "/"
-                 runtime:
-                     default_value: 25
-                     runtime_key: routing.traffic_shift.helloworld
-                 route:
-                     cluster: service1a
+        address: service1a
+        port_value: 80
+```
+
+To make this routable, we can add a new route with a `headers` field in the
+match. Since routing rules are applied in order, we’ll add this rule to the top
+of the `routes` key. Requests with a header that matches our new rule will be
+sent to our new service, while requests that don't include this header will
+still get service 1.
+
+```yaml
+routes:
+- match:
+    prefix: "/service/1"
+    headers:
+      - name: "x-canary-version"
+        value: "service1a"
+  route:
+    cluster: service1a
+- match:
+    prefix: "/service/1"
+  route:
+    cluster: service1
+- match:
+    prefix: "/service/2"
+  route:
+    cluster: service2
 ```
 
 Shut down and then relaunch our example services with:
@@ -109,49 +138,21 @@ of our application, paving the way for canary releases and
 ## Weighted Load Balancing
 
 Next, let's modify our config further to enable an incremental release to our
-new service version. The following config should look familiar, but we've added
-a new routing rule to move 25% of the traffic pointed at our service to this
-version.
+new service version. The following config should look familiar, but we've
+swapped out the `cluster` key for `clusters` array under the default
+routing rule, which moves 25% of the traffic pointed at our service to this
+new version.
 
 ```yaml
 - match:
-     prefix: "/"
-     runtime:
-         default_value: 25
-         runtime_key: routing.traffic_shift.helloworld
-     route:
-        cluster: service1a
-```
-
-Here's the full service config with the updated changes for a 25% release:
-
-```yaml
-  - name: service1a
-    connect_timeout: 0.250s
-    type: strict_dns
-    lb_policy: round_robin
-    http2_protocol_options: {}
-    hosts:
-    - socket_address:
-         address: service1a
-         port_value: 80
-         priority: HIGH
-                 decorator:
-                   operation: updateAvailability
-              - match:
-                  prefix: "/"
-                  headers:
-                    - name: "x-canary-version"
-                      value: "service1a"
-                route:
-                  cluster: service1a
-              - match:
-                   prefix: "/"
-                   runtime:
-                   default_value: 25
-                   runtime_key: routing.traffic_shift.helloworld
-                   route:
-                      cluster: service1a
+    prefix: "/service/1"
+  route:
+    weighted_clusters:
+      clusters:
+      - name: service1a
+        weight: 25
+      - name: service1
+        weight: 75
 ```
 
 With this in place, shut down your previous example services by running:
@@ -174,7 +175,36 @@ well before increasing or completing a release.
 If we wanted to simulate a successful release, we could set the value of our
 rule to 100, which would ensure all traffic is now sent to service 1a instead
 of service 1. Similarly, by setting this value to 0, we could roll-back a bad
-release.
+Release.
+
+## Best practices
+
+With the basics of using header-based routing and incremental weighted release,
+you can now take advantage of a few best-practice patterns of software deploy
+and release.
+
+To start, separate the deploy and release processes . For most teams, this
+means using CI/CD to get new versions of software onto your infrastructure.
+Release is when that software begins serving production traffic using the
+traffic shifting tools above. This can either be automated through CI/CD (after
+the deploy step), or run as a manual process. By separating these steps, you
+can limit the damage of a bad release, by ensuring software on production
+infrastructure isn’t immediately production taking traffic.
+
+While not every release will require all of these capabilities, you can use
+Envoy’s routing tools to build a process to release software slowly while
+gaining confidence in it. Once your new service is deployed, routing all
+internal traffic to it with a header will let your teams verify a PR, or
+internally dogfood it. Once you think it’s ready for users, you can then use
+weighted incremental release patterns to gracefully release your new version to
+them. A good pattern for weights as you approach 100% of traffic starts small
+and takes progressively large leaps 1%, 5%, 10%, 50%. This pattern gives you
+actionable feedback on your release (watch the metrics after each adjustment!),
+with only small portions of your users affected.
+
+With deploy and release as separate steps, using header-based routing to test
+production deploys before release, and building incremental release slowly,
+your teams will greatly benefit from the powerful benefits to using Envoy.
 
 ## Wrap-up
 

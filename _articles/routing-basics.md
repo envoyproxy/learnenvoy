@@ -152,5 +152,5 @@ your services. Now that you understand basic configurations, you can see how
 more complex traffic-shifting works in Envoy during
 [incremental deploys and releases](incremental-deploys.html),
 or learn how to
-[configure routing with RDS](routing-configuration),
+[configure routing with RDS](routing-configuration.html),
 the route discovery service.

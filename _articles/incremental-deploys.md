@@ -20,7 +20,7 @@ title: Incremental Deploys
 # Incremental Blue/Green Deploys
 
 Now that we've configured
-[Envoy on our laptop](on-our-laptop.html)
+[Envoy on our laptop](on-your-laptop.html)
 and understand the basics of using Envoy, there are a few routing exercises we
 can explore.
 

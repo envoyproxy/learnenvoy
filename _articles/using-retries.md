@@ -177,7 +177,10 @@ With our new changes, success rate for GET requests is still 100%. However if
 you run curl in a loop like the following
 
 ```console
-$ for i in `seq 1 100`; do curl -XPOST -v -q --stderr - localhost:8000/service/1 | grep '< HTTP'; done | sort | uniq -c
+$ for i in `seq 1 100`; do \
+     curl -XPOST -v -q --stderr - localhost:8000/service/1 \
+     | grep '< HTTP'; \
+  done | sort | uniq -c
 ```
 
 You should see some failures.

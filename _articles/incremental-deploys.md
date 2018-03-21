@@ -109,11 +109,11 @@ routes:
 Shut down and then relaunch our example services with:
 
 ```console
-$ docker-compose down --remove-orphans`
+$ docker-compose down --remove-orphans
 ```
 
 ```console
-`$ docker-compose up --build -d`
+$ docker-compose up --build -d
 ```
 
 In a production Envoy deployment, configuration changes like this won’t require

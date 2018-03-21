@@ -4,8 +4,8 @@ title: Incremental Deploys
 ---
 
 [//]: # ( Copyright 2018 Turbine Labs, Inc.                                   )
-[//]: # ( we may not use this file except in compliance with the License.    )
-[//]: # ( we may obtain a copy of the License at                             )
+[//]: # ( we may not use this file except in compliance with the License.     )
+[//]: # ( we may obtain a copy of the License at                              )
 [//]: # (                                                                     )
 [//]: # (     http://www.apache.org/licenses/LICENSE-2.0                      )
 [//]: # (                                                                     )
@@ -20,14 +20,13 @@ title: Incremental Deploys
 # Incremental Blue/Green Deploys
 
 One of most common workflows for any microservice is releasing a new version.
-Thinking about releases as a traffic management problem — as opposed to an
-infrastructure update — opens up new tools for protecting users from bad
-releases.
+Thinking about releases as a traffic management problem—as opposed to an
+infrastructure update—opens up new tools for protecting users from bad releases.
 
 Starting with the simple routes we set up previously
 [on your laptop](on-your-laptop.html),
 we’ll extend that config to release a new version of one of the services using
-traffic shifting. We’ll also cover header-based routing and weighted load 
+traffic shifting. We’ll also cover header-based routing and weighted load
 balancing to show how to use traffic management to canary a release, first to
 special requests (e.g. requests from your laptop), then to a small fraction of
 all requests.
@@ -43,10 +42,12 @@ For this guide, we’ll need:
 
 ## Header-based Routing
 
-First, we'll create a new version of service1 to illustrate the power of
+First, we'll create a new version of service1 to illustrate the value of
 header-based routing for our services. Still following along with the
-[front-proxy](https://github.com/envoyproxy/envoy/tree/master/examples/front-proxy) example from the Envoy repo, modify the
-[docker-compose.yml](https://github.com/envoyproxy/envoy/blob/master/examples/front-proxy/docker-compose.yml) to spin up a new service, called `service1a`.
+[front-proxy](https://github.com/envoyproxy/envoy/tree/master/examples/front-proxy)
+example from the Envoy repo, modify the
+[docker-compose.yml](https://github.com/envoyproxy/envoy/blob/master/examples/front-proxy/docker-compose.yml)
+to spin up a new service, called `service1a`.
 
 ```yaml
   service1a:
@@ -111,6 +112,10 @@ Shut down and then relaunch our example services with:
 
 `docker-compose up --build -d`
 
+In a production Envoy deployment, configuration changes like this won’t require
+a restart of Envoy, but since we’re running everything locally, we aren’t able
+to take advantage of its dynamic configuration abilities.
+
 If we make a request to our service with no headers, we'll get a response
 from service 1:
 
@@ -128,9 +133,7 @@ Hello from behind Envoy (service 1a)! hostname: 569ee89eebc8 resolvedhostname: 1
 ```
 
 Header-based routing in Envoy is a powerful feature. By employing it, we're
-able to handle complex workflows in order to
-[separate the deploy and release phases](https://blog.turbinelabs.io/deploy-not-equal-release-part-one-4724bc1e726b)
-of our application, paving the way for canary releases and
+able to handle complex workflows in order to do
 [testing in production](https://opensource.com/article/17/8/testing-production).
 
 ## Weighted Load Balancing
@@ -181,30 +184,30 @@ With the basics of using header-based routing and incremental weighted release,
 you can now take advantage of a few best-practice patterns of software deploy
 and release.
 
-To start, separate the deploy and release processes . For most teams, this
-means using CI/CD to get new versions of software onto your infrastructure.
-Release is when that software begins serving production traffic using the
-traffic shifting tools above. This can either be automated through CI/CD (after
-the deploy step), or run as a manual process. By separating these steps, you
-can limit the damage of a bad release, by ensuring software on production
-infrastructure isn’t immediately production taking traffic.
+To start, separate the deploy and release processes. For most teams, this means
+using CI/CD to get new versions of software onto your infrastructure, but
+taking no traffic. Then release the software by incrementally shifting
+production traffic as described above. This can either be automated through
+CI/CD (after the deploy step), or run as a manual process. By separating these
+steps, you ensuring software on production infrastructure isn’t immediately
+production taking traffic, limiting the damage of a bad release.
+
+## Wrap-up
 
 While not every release will require all of these capabilities, you can use
-Envoy’s routing tools to build a process to release software slowly while
-gaining confidence in it. Once your new service is deployed, routing all
+Envoy’s routing tools to build a process to release software incrementally
+while gaining confidence in it. Once your new service is deployed, routing all
 internal traffic to it with a header will let your teams verify a PR, or
-internally dogfood it. Once you think it’s ready for users, you can then use
+internally test it. Once you think it’s ready for users, you can then use
 weighted incremental release patterns to gracefully release your new version to
 them. A good pattern for weights as you approach 100% of traffic starts small
 and takes progressively large leaps 1%, 5%, 10%, 50%. This pattern gives you
 actionable feedback on your release (watch the metrics after each adjustment!),
-with only small portions of your users affected.
+with only small portions of your users initially affected. 
 
-With deploy and release as separate steps, using header-based routing to test
-production deploys before release, and building incremental release slowly,
-your teams will greatly benefit from the powerful benefits to using Envoy.
-
-## Wrap-up
+By separating deploy from release, using header-based routing to test
+production deploys before release, and building incremental release
+thoughtfully, your teams will greatly benefit  from the capabilities of Envoy.
 
 Now that you've seen a few examples of incremental and header-based routing
 using Envoy, you may want to investigate more advanced features of Envoy, like

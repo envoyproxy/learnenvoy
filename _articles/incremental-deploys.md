@@ -23,10 +23,10 @@ One of most common workflows for any microservice is releasing a new version.
 Thinking about releases as a traffic management problem—as opposed to an
 infrastructure update—opens up new tools for protecting users from bad releases.
 
-Starting with the simple routes we set up previously
-[on your laptop](on-your-laptop.html),
-we’ll extend that config to release a new version of one of the services using
-traffic shifting. We’ll also cover header-based routing and weighted load
+We’ll begin with the simple routes we set up previously
+[on your laptop](on-your-laptop.html).
+Next, we’ll extend that config to release a new version of one of the services
+using traffic shifting. We’ll also cover header-based routing and weighted load
 balancing to show how to use traffic management to canary a release, first to
 special requests (e.g. requests from your laptop), then to a small fraction of
 all requests.
@@ -176,7 +176,7 @@ well before increasing or completing a release.
 If we wanted to simulate a successful release, we could set the value of our
 rule to 100, which would ensure all traffic is now sent to service 1a instead
 of service 1. Similarly, by setting this value to 0, we could roll-back a bad
-Release.
+release.
 
 ## Best practices
 
@@ -203,7 +203,7 @@ weighted incremental release patterns to gracefully release your new version to
 them. A good pattern for weights as you approach 100% of traffic starts small
 and takes progressively large leaps 1%, 5%, 10%, 50%. This pattern gives you
 actionable feedback on your release (watch the metrics after each adjustment!),
-with only small portions of your users initially affected. 
+with only small portions of your users initially affected.
 
 By separating deploy from release, using header-based routing to test
 production deploys before release, and building incremental release

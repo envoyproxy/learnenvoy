@@ -132,9 +132,8 @@ request to service 1a:
 Hello from behind Envoy (service 1a)! hostname: 569ee89eebc8 resolvedhostname: 172.18.0.6
 ```
 
-Header-based routing in Envoy is a powerful feature. By employing it, we're
-able to handle complex workflows in order to do
-[testing in production](https://opensource.com/article/17/8/testing-production).
+Header-based routing with Envoy unlocks the ability to
+[test development code in production](https://opensource.com/article/17/8/testing-production).
 
 ## Weighted Load Balancing
 

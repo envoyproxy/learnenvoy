@@ -27,7 +27,9 @@ Python service that underlies all the Envoy examples.
 
 First, check out this tag of the example repo:
 
-`$ git clone https://github.com/turbinelabs/envoy-examples/tree/step1`
+```console
+$ git clone https://github.com/turbinelabs/envoy-examples/tree/step1
+```
 
 Next, start the Zipkin tracing example in the `zipkin-tracing` directory by
 running:
@@ -149,7 +151,7 @@ Start your example again by running:
 $ docker-compose up --build -d
 ```
 
-Run wrk with
+Run wrk with:
 
 ```console
 $ wrk -c 1 -t 1 --latency -d 5s http://localhost:8000/service/1

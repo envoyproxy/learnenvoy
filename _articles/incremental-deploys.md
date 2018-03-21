@@ -19,17 +19,15 @@ title: Incremental Deploys
 
 # Incremental Blue/Green Deploys
 
-Now that we've configured
-[Envoy on our laptop](on-our-laptop.html)
-and understand the basics of using Envoy, there are a few routing exercises we
-can explore.
+One of most common workflows for any microservice is releasing a new version.
+Thinking about releases as a traffic management problem — as opposed to an
+infrastructure update — opens up new tools for protecting users from bad
+releases.
 
-While Envoy can route traffic like a conventional web server, much of its power
-comes from its ability to modify its routing rules on the fly. Starting with
-the simple routes we set up previously
+Starting with the simple routes we set up previously
 [on your laptop](on-your-laptop.html),
 we’ll extend that config to release a new version of one of the services using
-traffic shifting. We’ll also cover header-based routing and weighted load
+traffic shifting. We’ll also cover header-based routing and weighted load 
 balancing to show how to use traffic management to canary a release, first to
 special requests (e.g. requests from your laptop), then to a small fraction of
 all requests.

@@ -55,7 +55,7 @@ tutorial
 we defined a simple setup with 2 clusters (service1 and service2), each of
 which lived at a separate URL (/service1 and /service2).
 
-```
+```yaml
 virtual_hosts:
   - name: backend
     domains:

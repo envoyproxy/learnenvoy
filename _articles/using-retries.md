@@ -32,11 +32,15 @@ First, check out this tag of the example repo:
 Next, start the Zipkin tracing example in the `zipkin-tracing` directory by
 running:
 
-`$ docker-compose up --build -d`
+```console
+$ docker-compose up --build -d
+```
 
 Run wrk with:
 
-`$ wrk -c 1 -t 1 --latency -d 5s http://localhost:8000/service/1`
+```
+$ wrk -c 1 -t 1 --latency -d 5s http://localhost:8000/service/1
+```
 
 which returns, for example:
 
@@ -77,15 +81,21 @@ to the `zipkin-tracing/front-envoy-zipkin.yml` file
 Shut down the example we ran previously by running this command in the
 `zipkin-tracing` directory:
 
-`$ docker-compose down --remove-orphans`
+```console
+$ docker-compose down --remove-orphans
+```
 
 Start your example again by running:
 
-`$ docker-compose up --build -d`
+```console
+$ docker-compose up --build -d
+```
 
 Run wrk with:
 
-`$ wrk -c 1 -t 1 --latency -d 5s http://localhost:8000/service/1`
+```console
+$ wrk -c 1 -t 1 --latency -d 5s http://localhost:8000/service/1
+```
 
 You should see the following:
 
@@ -129,15 +139,21 @@ all other requests.
 
 Shut down your example in the `zipkin-tracing` directory by running:
 
-`$ docker-compose down --remove-orphans`
+```console
+$ docker-compose down --remove-orphans
+```
 
 Start your example again by running:
 
-`$ docker-compose up --build -d`
+```console
+$ docker-compose up --build -d
+```
 
 Run wrk with
 
-`$ wrk -c 1 -t 1 --latency -d 5s http://localhost:8000/service/1`
+```console
+$ wrk -c 1 -t 1 --latency -d 5s http://localhost:8000/service/1
+```
 
 Now, you should see results like:
 
@@ -158,7 +174,9 @@ Transfer/sec:      4.36KB
 With our new changes, success rate for GET requests is still 100%. However if
 you run curl in a loop like the following
 
-`$ for i in `seq 1 100`; do curl -XPOST -v -q --stderr - localhost:8000/service/1 | grep '< HTTP'; done | sort | uniq -c`
+```console
+$ for i in `seq 1 100`; do curl -XPOST -v -q --stderr - localhost:8000/service/1 | grep '< HTTP'; done | sort | uniq -c
+```
 
 You should see some failures.
 

@@ -108,9 +108,13 @@ routes:
 
 Shut down and then relaunch our example services with:
 
-`docker-compose down --remove-orphans`
+```console
+$ docker-compose down --remove-orphans`
+```
 
-`docker-compose up --build -d`
+```console
+`$ docker-compose up --build -d`
+```
 
 In a production Envoy deployment, configuration changes like this won’t require
 a restart of Envoy, but since we’re running everything locally, we aren’t able
@@ -163,11 +167,15 @@ new version.
 
 With this in place, shut down your previous example services by running:
 
-`docker-compose down --remove-orphans`
+```console
+$ docker-compose down --remove-orphans
+```
 
 Then, start it again with:
 
-`docker-compose up --build -d`
+```console
+$ docker-compose up --build -d
+```
 
 Now, if we make a request to our service with no headers we should see
 responses from service 1a about 25% of the time, or when the appropriate header

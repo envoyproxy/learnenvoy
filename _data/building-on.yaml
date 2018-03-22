@@ -15,6 +15,7 @@
 - name: "Incremental Blue/Green Deploys"
   icon: "code-branch"
   description: "Separate deploy from release. First, deploy new versions without taking traffic. Then, shift 1% of traffic over to the new version and check the metrics. If everything looks good, try 10%, 50%, 100%. It takes all of the stress out of releasing."
+  article: incremental-deploys.html
 
 - name: "Verifying in Production"
   icon: "thumbs-up"

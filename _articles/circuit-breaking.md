@@ -2,6 +2,9 @@
 
 Circuit breaking and automatic retries are two great features of Envoy, and
 this article gives you a few examples of how to configure and use them.
+Effective implentation of these tools will greatly increase your service
+success rates by letting Envoy do a lot of the heavy lifting around simple
+failures and issues with GET requests.
 
 ## The setup
 
@@ -190,4 +193,7 @@ You should see some failures.
 3 < HTTP/1.1 503 Service Unavailable
 ```
 
-This is good! Our retry policy doesn't affect POST requests, only GETs
+This is good! Our retry policy doesn't affect POST requests, only GETs, so our
+goal was achieved.
+
+## Wrap-up

@@ -1,6 +1,6 @@
 # Practical Circuit Breaking and Retries
 
-Circuit breaking and automatic retries are two powerful features of Envoy, and
+Circuit breaking and automatic retries are two great features of Envoy, and
 this article gives you a few examples of how to configure and use them.
 
 ## The setup

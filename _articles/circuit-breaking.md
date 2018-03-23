@@ -1,330 +1,101 @@
-# Practical Circuit Breaking and Retries
+---
+layout: article
+title: Circuit Breaking
+---
 
-Circuit breaking and automatic retries are two great features of Envoy, and
-this article gives you a few examples of how to configure and use them.
-Effective implentation of these tools will greatly increase your service
-success rates by letting Envoy do a lot of the heavy lifting around simple
-failures and issues with GET requests.
+[//]: # ( Copyright 2018 Turbine Labs, Inc.                                   )
+[//]: # ( you may not use this file except in compliance with the License.    )
+[//]: # ( You may obtain a copy of the License at                             )
+[//]: # (                                                                     )
+[//]: # (     http://www.apache.org/licenses/LICENSE-2.0                      )
+[//]: # (                                                                     )
+[//]: # ( Unless required by applicable law or agreed to in writing, software )
+[//]: # ( distributed under the License is distributed on an "AS IS" BASIS,   )
+[//]: # ( WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or     )
+[//]: # ( implied. See the License for the specific language governing        )
+[//]: # ( permissions and limitations under the License.                      )
 
-## The setup
+[//]: # (Circuit Breaking)
 
-The Envoy documentation provides a good overview of
-[how to run the example](https://www.envoyproxy.io/docs/envoy/latest/start/sandboxes/zipkin_tracing)
+Circuit breaking is a great feature of Envoy, as it's always better for your
+services to fail quickly at the network level, and gracefully prioritize
+important requests.
 
-You should already have the following installed from running Envoy on your
-laptop:
+## Configuring circuit breaking
 
-- [Docker](https://docs.docker.com/install/)
-- [Docker Compose](https://docs.docker.com/compose/install/)
-- [Git](https://help.github.com/articles/set-up-git/)
-- [curl](https://curl.haxx.se/)
+Envoy provides a simple configuration option for circuit breaking. Consider the
+specifics of your system as you set up circuit breaking.
 
-Additionally, install this service to drive load to our examples:
+Circuit breaking is specified as part of a cluster definition by adding a
+circuit-breakers field. In the API, this would be returned from the Cluster
+Discovery Service (CDS).
 
-- [wrk](https://github.com/wg/wrk)
+## A typical Envoy circuit breaker policy
 
-## Configuring latency and success rate
+Here's what a simple circuit breaking configuration looks like:
 
-In our first example we've add a configurable latency and success rate to the
-Python service that underlies all the Envoy examples.
-
-First, check out this tag of the example repo:
-
-```console
-$ git clone https://github.com/turbinelabs/envoy-examples/tree/step1
+```yaml
+circuit_breakers:
+      thresholds:
+        - priority: DEFAULT
+          max_connections: 1
+          max_requests: 1
+        - priority: HIGH
+          max_connections: 2
+          max_requests: 2
 ```
 
-Next, start the Zipkin tracing example in the `zipkin-tracing` directory by
-running:
+In this example, there are a few fields that allow for a lot of service
+flexibility:
 
-```console
-$ docker-compose up --build -d
-```
+`threshholds` allows us to define priorities and limits to the type of traffic
+that our service is responding to.
 
-Run wrk with:
+`priority` can be set to either `DEFAULT` or `HIGH` which allows certain types
+of traffic to be treated differently. Using the settings above, we would want
+to set any requests that we don't want to wait in a long queue to HIGH, for
+example, POST requests in a service where a user wants to make a purchase, or
+save a state.
 
-```console
-$ wrk -c 1 -t 1 --latency -d 5s http://localhost:8000/service/1
-```
+`max_connections` are the maximum number of connections that Envoy will make to
+our service clusters. The default for these is 1024, but in real-world
+instances we may drastically lower them.
 
-which returns, for example:
+`max_requests` are the maximum number of parallel retries that Envoy makes to
+our service clusters. The default is also 1024.
 
-```shell
-Running 5s test @ http://localhost:8000/service/1
-  1 threads and 1 connections
-  Thread Stats   Avg      Stdev     Max   +/- Stdev
-    Latency    55.01ms    2.41ms  61.58ms   72.83%
-    Req/Sec    17.72      3.82    20.00     84.00%
-  Latency Distribution
-     50%   54.84ms
-     75%   56.53ms
-     90%   58.25ms
-     99%   61.58ms
-  92 requests in 5.10s, 24.12KB read
-  Non-2xx or 3xx responses: 7
-Requests/sec:     18.04
-Transfer/sec:      4.73KB
-```
+## Advanced circuit breaking
 
-In this example, success rate for requests is less than 100%, and the latency
-histogram has a median of roughly 50 ms.
+- Break on latency. With Envoy, you essentially do this by reducing the latency
+threshold for retries and breaking on lots of retries. If you set this too low,
+you can DoS your services. Start higher than you think you need, and lower it
+over time. This is the primary failure mode of over-engineered circuit breakers.
 
-## Adding a retry policy
+- Configure breaking based on a long queue of retries. This can be done in
+conjunction with latency tuning or as a separate exercise (e.g. if you’re
+retrying based on errors only). When you turn on retries, add a retries-based
+breaker for the number of requests in a typical 10-second period.
+Justification: if you have as many retries outstanding as the typical number of
+requests, it’s broken.
 
-Next, let's add a retry policy to all service requests by adding the following
-to the `zipkin-tracing/front-envoy-zipkin.yml` file
+ - Add fallbacks. Try/catch at the organizational level. This almost mandates
+ failure / chaos testing, because you are introducing code paths that won’t be
+ run in production until an incident. Make sure they’re good before you’re in a
+ panic. Prefer locally computable data, or stale cache.
 
-```diff
-                   cluster: service1
-+                  retry_policy:
-+                    retry_on: 5xx
-+                    num_retries: 3
-+                    per_try_timeout: 0.300s
-                 decorator:
-```
+- Consider adding client checks. Circuit breaking is a pattern that fixes “as a
+service how do I degrade gracefully in the face of downstream pressure?” Even
+if the service is health enough that the global breaker doesn’t open, it’s
+possible a particular client consumes its own thread pool. Consider combining
+with a client-side breaker library.
 
-Shut down the example we ran previously by running this command in the
-`zipkin-tracing` directory:
+## Next Steps
 
-```console
-$ docker-compose down --remove-orphans
-```
-
-Start your example again by running:
-
-```console
-$ docker-compose up --build -d
-```
-
-Run wrk with:
-
-```console
-$ wrk -c 1 -t 1 --latency -d 5s http://localhost:8000/service/1
-```
-
-You should see the following:
-
-```shell
-  Thread Stats   Avg      Stdev     Max   +/- Stdev
-    Latency    56.99ms   10.16ms 126.43ms   96.67%
-    Req/Sec    17.18      4.17    20.00     78.00%
-  Latency Distribution
-     50%   54.97ms
-     75%   57.91ms
-     90%   60.97ms
-     99%  126.43ms
-  89 requests in 5.09s, 22.17KB read
-Requests/sec:     17.49
-Transfer/sec:      4.36KB
-```
-
-With those changes, success rate is back to 100%. Retrying the request
-automatically has brought our success rate from 95% to 99.75%, and in the real
-world would drastically change your user's experience.
-
-## Excluding POST requests
-
-Next, let's modify our retry policy to not affect POST requests. POST
-request tend to modify state, and are generally unsafe to retry. By adding a new
-match rule to the `zipkin-tracing/front-envoy-zipkin.yml` file we can cause
-POSTs to have no retry policy, but leave the existing retry policy in place for
-all other requests.
-
-```diff
-+              - match:
-+                  prefix: "/"
-+                  headers:
-+                    - name: ":method"
-+                      value: "POST"
-+                route:
-+                  cluster: service1
-+                decorator:
-+                  operation: updateAvailability
-```
-
-Shut down your example in the `zipkin-tracing` directory by running:
-
-```console
-$ docker-compose down --remove-orphans
-```
-
-Start your example again by running:
-
-```console
-$ docker-compose up --build -d
-```
-
-Run wrk with:
-
-```console
-$ wrk -c 1 -t 1 --latency -d 5s http://localhost:8000/service/1
-```
-
-Now, you should see results like:
-
-```shell
-  Thread Stats   Avg      Stdev     Max   +/- Stdev
-    Latency    56.99ms   10.16ms 126.43ms   96.67%
-    Req/Sec    17.18      4.17    20.00     78.00%
-  Latency Distribution
-     50%   54.97ms
-     75%   57.91ms
-     90%   60.97ms
-     99%  126.43ms
-  89 requests in 5.09s, 22.17KB read
-Requests/sec:     17.49
-Transfer/sec:      4.36KB
-```
-
-With our new changes, success rate for GET requests is still 100%. However if
-you run curl in a loop like the following
-
-```console
-$ for i in `seq 1 100`; do \
-     curl -XPOST -v -q --stderr - localhost:8000/service/1 \
-     | grep '< HTTP'; \
-  done | sort | uniq -c
-```
-
-You should see some failures.
-
-```shell
-97 < HTTP/1.1 200 OK
-3 < HTTP/1.1 503 Service Unavailable
-```
-
-This is good! Our retry policy doesn't affect POST requests, only GETs, so our
-goal was achieved.
-
-## Circuit breaking
-
-Next, we'll add load shedding capabilities to our configuration by setting a
-few new variables and changing our service a bit:
-
-```console
-$ git clone https://github.com/turbinelabs/envoy-examples/tree/step1
-```
-
-Until now we've been running `wrk` with a single thread a concurrency level of
-one. This matches up well with our python service, which is single threaded.
-Let's try upping the thread count to ten and the concurrency level to ten by
-running
-
-```console
-wrk -c 10 -t 10 --latency -d 5s http://localhost:8000/service/1
-```
-
-```shell
-Running 5s test @ http://localhost:8000/service/1
-  10 threads and 10 connections
-  Thread Stats   Avg      Stdev     Max   +/- Stdev
-    Latency   471.00ms  345.43ms   1.47s    80.60%
-    Req/Sec     2.72      1.12     9.00     86.84%
-  Latency Distribution
-     50%  310.00ms
-     75%  311.54ms
-     90%    1.00s
-     99%    1.46s
-  114 requests in 5.04s, 17.54KB read
-  Non-2xx or 3xx responses: 110
-Requests/sec:     22.62
-Transfer/sec:      3.48KB
-```
-
-Our output here is pretty grim. We made 114 requests, and all but 4 of them
-failed. In addition, our 99th percentile latency has jumped to 1.46 seconds, and
-the median is up to 310 ms. We're not only failing a lot of requests, we're
-taking a long time to do so. In addition, imagine that all our POST requests are
-important (e.g. they're used to make a purchase). In this case those POST
-requests have to wait behind a flood of GET requests, and the vast majority will
-fail.
-
-Envoy provides circuit breakers and priority routes to manage load shedding. In
-this step we've added a new service instance to our Docker Compose file, so we
-can reserve at least one for high priority requests.
-
-We've also set the priority of the route that handles POST requests to high
-
-```diff
-                       value: "POST"
-                 route:
-                   cluster: service1
-+                  priority: HIGH
-                 decorator:
-                   operation: updateAvailability
-               - match:
-```
-
-And we've added circuit breaker definitions to the service1 cluster
-
-
-```diff
-     type: strict_dns
-     lb_policy: round_robin
-     http2_protocol_options: {}
-+    circuit_breakers:
-+      thresholds:
-+        - priority: DEFAULT
-+          max_connections: 1
-+          max_requests: 1
-+        - priority: HIGH
-+          max_connections: 2
-+          max_requests: 2
-     hosts:
-     - socket_address:
-         address: service1
-         port_value: 80
-+    - socket_address:
-+        address: service1a
-+        port_value: 80
-```
-
-Shut down your example, if needed by running
-
-```console
-docker-compose down --remove-orphans
-```
-
-in the `zipkin-tracing` directory, and then start your example again by running
-
-```console
-docker-compose up --build -d
-```
-
-Run wrk with
-
-```console
-wrk -c 10 -t 10 --latency -d 5s http://localhost:8000/service/1
-```
-
-and you should see results like
-
-```shell
-Running 5s test @ http://localhost:8000/service/1
-  10 threads and 10 connections
-  Thread Stats   Avg      Stdev     Max   +/- Stdev
-    Latency     5.68ms   11.38ms 103.72ms   91.48%
-    Req/Sec   443.27    292.13     1.68k    75.00%
-  Latency Distribution
-     50%    1.80ms
-     75%    3.95ms
-     90%   13.41ms
-     99%   57.06ms
-  22122 requests in 5.03s, 4.58MB read
-  Non-2xx or 3xx responses: 22037
-Requests/sec:   4402.34
-Transfer/sec:      0.91MB
-```
-
-We're still failing a lot of requests, but our latency is back down to normal
-levels. Envoy is using circuit breakers to return 502s immediately instead of
-waiting on the service to handle them. This leaves capacity on the servers to
-handle high priority requests. If you attempt a POST request while running work
-it will succeed.
-
-
-## Wrap-up
-
-By using the examples in this guide, we now have a better understanding of how
-Envoy's automatic retries and circuit breaking can ensure that your services
-respond to simple failures gracefully by using these robust tools. 
+Global Circuit Breaking helps prepare your service for using
+[automatic retries](automatic-retries.html).
+Retrying error requests 3x can triple the volume of error traffic, making Envoy
+an amplifier for a misconfigured calling service. With circuit breaking
+configured, your service is equipped to helps selectively shed load when this
+sort of failure occurs, preventing it from cascading to multiple services.
+Combining these tools makes for robust services, able to handle common service
+issues at the network level.

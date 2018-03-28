@@ -69,8 +69,6 @@ traffic that our service is responding to.
 the circuit breaker. Using the settings above, we would want to set any
 requests that we don't want to wait in a long queue to HIGH, for example, POST
 requests in a service where a user wants to make a purchase, or save a state.
-The route priority that determines if a route is `DEFAULT` or `HIGH` is set
-inside of the route definition using RDS or your static route configuration.
 
 `max_connections` are the maximum number of connections that Envoy will make to
 our service clusters. The default for these is 1024, but in real-world

@@ -63,8 +63,7 @@ circuit_breakers:
 In this example, there are a few fields that allow for a lot of service
 flexibility:
 
- `thresholds` allows us to define priorities and limits for the type of traffic
- that our service responds to.
+ `thresholds` allows us to define priorities and limits for the type of traffic that our service responds to.
 
 `priority` refers to how routes defined as `DEFAULT` or `HIGH` are treated by
 the circuit breaker. Using the settings above, we would want to set any
@@ -109,9 +108,9 @@ practices will add more resiliency to your infrastructure at the network level.
 
 ###  Break on latency
 
-As mentioned above, one of the most common use cases of circuit breakers is to 
+As mentioned above, one of the most common use cases of circuit breakers is to
 prevent failures that are caused when a service is excessively slow, but not
-fully down. While Envoy doesn’t directly provide an option to trip the breaker
+fully down. While Envoy doesn’t directly provide an option to trip the breaker 
 on latency, you can combine it with [Automatic Retries](automatic-retries.html)
 to emulate this behavior.
 

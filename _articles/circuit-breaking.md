@@ -110,7 +110,7 @@ practices will add more resiliency to your infrastructure at the network level.
 
 As mentioned above, one of the most common use cases of circuit breakers is to
 prevent failures that are caused when a service is excessively slow, but not
-fully down. While Envoy doesn’t directly provide an option to trip the breaker 
+fully down. While Envoy doesn’t directly provide an option to trip the breaker
 on latency, you can combine it with [Automatic Retries](automatic-retries.html)
 to emulate this behavior.
 
@@ -153,11 +153,6 @@ Make sure to treat these fallback paths with the same engineering discipline
 that you would any other piece of functionality. Exercising them via chaos
 engineering or other controlled failure is crucial; otherwise, they could make
 failures worse instead of better.
-
-Try/catch at the organizational level. This almost mandates failure / chaos
-testing, because you are introducing code paths that won’t be run in production
-until an incident. Make sure they’re good before you’re in a panic. Give
-preference to locally computable data, or stale cache.
 
 ### Consider adding client checks
 

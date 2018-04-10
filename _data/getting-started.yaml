@@ -20,6 +20,7 @@
 - name: "Routing Basics"
   icon: "share"
   description: "Send your first request through the proxy to a service running on your laptop, and learn how to connect more services to Envoy."
+  article: routing-basics.html
 
 - name: "Getting Help"
   icon: "question-circle"

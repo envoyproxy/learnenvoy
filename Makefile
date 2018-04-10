@@ -56,8 +56,7 @@ serve: install include-vendor-deps
 	JEKYLL_ENV=production $(JEKYLL) serve
 
 test: build
-	# TODO: remove --allow-hash-href when the site is built out
-	$(BUNDLE) exec htmlproofer ./_site --check-html --disable-external --allow-hash-href
+	$(BUNDLE) exec htmlproofer ./_site --check-html --disable-external
 
 clean:
 	$(JEKYLL) clean

@@ -105,7 +105,7 @@ Now that you’ve seen a basic configuration and policy for circuit breaking,
 we’ll discuss more advanced circuit breaking practices. These advanced
 practices will add more resiliency to your infrastructure at the network level.
 
-###  Break on latency
+### Break–on–latency
 
 As mentioned above, one of the most common use cases of circuit breakers is to
 prevent failures that are caused when a service is excessively slow, but not
@@ -126,8 +126,7 @@ time.
 
 ### Configure breaking based on a long queue of retries
 
-Even if you’re only
-[retrying requests](automatic-retries.html)
+Even if you’re only [retrying requests](automatic-retries.html)
 on connection errors, it is valuable to set up circuit breaking. Because
 retries have the  potential to increase the number of requests by 2x or more,
 circuit breaking  using the `max_retries` parameter protects services from
@@ -136,7 +135,6 @@ number as `max_connections` or `max_requests`—a fraction of the total number o
 requests the service typically handles in a 10-second window. If the service
 has as many retries outstanding as the typical number of requests, it’s broken
 and should be disabled.
-
 
 ## Next Steps
 

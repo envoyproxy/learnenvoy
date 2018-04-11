@@ -20,7 +20,8 @@ title: Circuit Breaking
 In the world of microservices, services are often making calls to other
 services. What happens when a service is busy, or unable to respond to that
 call? How do you avoid a failure in one part of your infrastructure cascading
-into other parts of your infrastructure? With circuit breaking.
+into other parts of your infrastructure? One approach is to use circuit
+breaking.
 
 Circuit breaking lets you configure failure thresholds that ensure safe
 maximums after which these requests stop. This allows for a more graceful
@@ -28,22 +29,19 @@ failure, and time to respond to potential issues before they become larger.
 It’s possible to implement circuit breaking in a few parts of your
 infrastructure, but implementing these circuit breakers within services means
 they are vulnerable to the same overload and failure we’re hoping to prevent.
-At the network level, we can combine circuit breaking with other traffic
-shifting patterns to ensure healthy and stable infrastructure.
-
-Circuit breaking is a great feature of Envoy, as it's always better for your
-services to fail quickly at the network level, and to gracefully prioritize
-important requests.
+Instead, we can configure circuit breaking at the network layer within Envoy,
+and combine it with other traffic shaping patterns to ensure healthy and stable
+infrastructure.
 
 ## Configuring circuit breaking
 
-Envoy provides a simple configuration option for circuit breaking. Consider the
+Envoy provides simple configuration r of circuit breaking. Consider the
 specifics of your system as you set up circuit breaking.
 
 Circuit breaking is specified as part of a Cluster (a group of similar upstream
-hosts) definition by adding a `circuit_breakers` field. In the API, this would
-be returned from the Cluster Discovery Service (CDS), either in the bootstrap
-config, or in a Cluster returned by the Cluster Discovery Service (XDS).
+hosts) definition by adding a `circuit_breakers` field. Clusters are returned
+from the Cluster Discovery Service (CDS), either in the bootstrap config, or a
+remote CDS server .
 
 ## Circuit Breaker Configuration
 
@@ -63,7 +61,8 @@ circuit_breakers:
 In this example, there are a few fields that allow for a lot of service
 flexibility:
 
- `thresholds` allows us to define priorities and limits for the type of traffic that our service responds to.
+ `thresholds` allows us to define priorities and limits for the type of traffic
+ that our service responds to.
 
 `priority` refers to how routes defined as `DEFAULT` or `HIGH` are treated by
 the circuit breaker. Using the settings above, we would want to set any
@@ -111,7 +110,8 @@ practices will add more resiliency to your infrastructure at the network level.
 As mentioned above, one of the most common use cases of circuit breakers is to
 prevent failures that are caused when a service is excessively slow, but not
 fully down. While Envoy doesn’t directly provide an option to trip the breaker
-on latency, you can combine it with [Automatic Retries](automatic-retries.html)
+on latency, you can combine it with
+[Automatic Retries](automatic-retries.html)
 to emulate this behavior.
 
 To break on an unexpected spike in slow requests, reduce the latency threshold
@@ -126,42 +126,17 @@ time.
 
 ### Configure breaking based on a long queue of retries
 
-Even if you’re only [retrying requests](automatic-retries.html) on connection
-errors, it is valuable to set up circuit breaking. Because retries has the
-potential to increase the number of requests by 2x or more, circuit breaking
-using the `max_retries` parameter protects services from being overloaded by
-retries. Set this value to a similar number as `max_connections` or
-`max_requests` — a fraction of the total number of requests the service
-typically handles in a 10-second window. If the service has as many retries
-outstanding as the typical number of requests, it’s broken and should be
-disabled.
+Even if you’re only
+[retrying requests](automatic-retries.html)
+on connection errors, it is valuable to set up circuit breaking. Because
+retries have the  potential to increase the number of requests by 2x or more,
+circuit breaking  using the `max_retries` parameter protects services from
+being overloaded by  too many active retries. Set this value to a similar
+number as `max_connections` or `max_requests`—a fraction of the total number of
+requests the service typically handles in a 10-second window. If the service
+has as many retries outstanding as the typical number of requests, it’s broken
+and should be disabled.
 
- ### Add fallbacks
-
-Since circuit breakers are a way to throw errors, one of the best things your
-can do for user experience is to add a secondary code path to your services
-that tries to recover from those errors. This is similar to try/catch blocks in
-code, except at a system level: what should a caller do when the service it
-called is down?
-
-Use this pattern when a service returns data that could be stale or incomplete,
-such as shopping recommendations or a daily top 10 list. The backup path could
-be a cached version, or it could be a simple version that the caller computes
-locally.
-
-Make sure to treat these fallback paths with the same engineering discipline
-that you would any other piece of functionality. Exercising them via chaos
-engineering or other controlled failure is crucial; otherwise, they could make
-failures worse instead of better.
-
-### Consider adding client checks
-
-Circuit breaking is a design that allows for graceful response to failures and
-downstream pressure. Even if the service is healthy enough that the global
-breaker doesn’t open, it’s possible that a particular client consumes its own
-thread pool, which leads to timeouts in the client. Consider combining this
-with a client-side breaker library, like
-[Netflix’ Hystrix](https://github.com/Netflix/Hystrix)
 
 ## Next Steps
 

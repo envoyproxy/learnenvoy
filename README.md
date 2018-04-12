@@ -107,7 +107,7 @@ To build the site for distribution run
 make build
 ```
 
-And gizp or whatever all the stuff in `_site`.
+And gzip or whatever all the stuff in `_site`.
 
 ## Site Architecture
 

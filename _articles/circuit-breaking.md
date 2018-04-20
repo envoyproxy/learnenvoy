@@ -17,11 +17,10 @@ title: Circuit Breaking
 
 [//]: # (Circuit Breaking)
 
-In the world of microservices, services are often making calls to other
-services. What happens when a service is busy, or unable to respond to that
-call? How do you avoid a failure in one part of your infrastructure cascading
-into other parts of your infrastructure? One approach is to use circuit
-breaking.
+In the world of microservices, services often make calls to other services. But
+what happens when a service is busy, or unable to respond to that call? How do
+you avoid a failure in one part of your infrastructure cascading into other
+parts of your infrastructure? One approach is to use circuit breaking.
 
 Circuit breaking lets you configure failure thresholds that ensure safe
 maximums after which these requests stop. This allows for a more graceful
@@ -49,13 +48,13 @@ Here's what a simple circuit breaking configuration looks like:
 
 ```yaml
 circuit_breakers:
-      thresholds:
-        - priority: DEFAULT
-          max_connections: 1000
-          max_requests: 1000
-        - priority: HIGH
-          max_connections: 2000
-          max_requests: 2000
+  thresholds:
+    - priority: DEFAULT
+      max_connections: 1000
+      max_requests: 1000
+    - priority: HIGH
+      max_connections: 2000
+      max_requests: 2000
 ```
 
 In this example, there are a few fields that allow for a lot of service

@@ -35,7 +35,7 @@ discovery. This is generally broken down into three steps:
 2. Publish service definitions to Envoy clusters
 3. Publish hosts/containers/instances to Envoy endpoints
 
-Control Plane Implementation
+## Control Plane Implementation
 
 Any control plane should implement the
 [Envoy v2 xDS APIs](https://www.envoyproxy.io/docs/envoy/latest/api-v2/api).

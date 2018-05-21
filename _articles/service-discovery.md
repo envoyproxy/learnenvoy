@@ -41,16 +41,23 @@ Any control plane should implement the
 [Envoy v2 xDS APIs](https://www.envoyproxy.io/docs/envoy/latest/api-v2/api).
 For the purpose of publishing service discovery data, you’ll need to implement
 the Cluster Discovery Service
-[(CDS)](https://www.envoyproxy.io/docs/envoy/latest/configuration/cluster_manager/cds.html?highlight=cds)
+[(CDS)](https://www.envoyproxy.io/docs/envoy/latest/configuration/cluster_manager/cds.html)
 and the Endpoint Discovery Service
 [(EDS)](https://www.envoyproxy.io/docs/envoy/latest/api-v2/api/v2/eds.proto).
 Here are several options to avoid starting from scratch:
 
+[Rotor](https://github.com/turbinelabs/rotor) is a **fast, lightweight xDS
+implementation with service discovery integration** to Kubernetes, Consul, AWS,
+and more. It provides a set of defaults for routing and listeners (RDS and
+LDS). It’s also part of the commercial solution
+[Houston, by Turbine Labs](https://turbinelabs.io), which adds more
+configuration around routing, resilience, and metrics.
+
 The Envoy repository provides
-[go-control-plane](https://github.com/envoyproxy/go-control-plane),
-an **open-source stub implementation**. If you want to get your hands dirty
-with exactly how everything is pulled from service discovery, cached locally,
-and served, this is a great starting point.
+[go-control-plane](https://github.com/envoyproxy/go-control-plane), an
+**open-source stub implementation**. If you want to get your hands dirty with
+exactly how everything is pulled from service discovery, cached locally, and
+served, this is a great starting point.
 
 If you’re running in Kubernetes, the
 [Istio project](https://istio.io/docs/concepts/traffic-management/pilot.html)
@@ -58,11 +65,6 @@ has a **control plane implementation called Pilot**. It takes YAML files and
 turns them into xDS responses. Don’t be scared by the scope of Istio — Pilot
 can be used separately to configure Envoy, without pulling in all the other
 services like Mixer.
-
-There are also **commercial implementations** available.
-[Turbine Labs](http://turbinelabs.io/)
-has a full xDS implementation as part of
-[Houston](http://turbinelabs.io/product).
 
 ## Publish Services to CDS
 

@@ -22,6 +22,6 @@
   description: "[RDS](https://www.envoyproxy.io/docs/envoy/latest/configuration/http_conn_man/rds) lets you move routing configuration out of static configs and into a type-safe API, making typos and merge conflicts a thing of the past."
   article: routing-configuration.html
 
-- name: "Emitting the Right Data"
+- name: "Securing with SSL"
   icon: "filter"
-  description: "Envoy helps you capture information about your customers' requests, and the health of the backends that served them. Define what Envoy emits in [LDS](https://www.envoyproxy.io/docs/envoy/latest/configuration/listeners/lds)."
+  description: "Ensure your client-to-proxy traffic is secure by configuring Envoy to use SSL or TLS Envoy."

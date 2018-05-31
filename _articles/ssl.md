@@ -29,7 +29,7 @@ services.
 There are three steps to get this running:
 
 1. Specifying the certificate for Envoy to use
-2.  Envoy for TLS
+2. Envoy for TLS
 3. Configuring Envoy to redirect insecure traffic
 
 ## Certificate Files

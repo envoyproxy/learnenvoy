@@ -25,3 +25,4 @@
 - name: "Securing with SSL"
   icon: "filter"
   description: "Ensure your client-to-proxy traffic is secure by configuring Envoy to use SSL or TLS Envoy."
+  article: ssl.html

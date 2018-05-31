@@ -41,7 +41,7 @@ private key file `key.pem` and self-signed certificate `cert.pem` using
 OpenSSL. The only important detail it will as you for is the Common Name. We’ll
 use `example.com`:
 
-```console
+```shell
 $ openssl req -x509 -newkey rsa:4096 -keyout example-com.key -out example-com.crt -days 365
 Generating a 2048 bit RSA private key
 ...........................+++
@@ -75,7 +75,7 @@ ADD ./cert.pem /etc/cert.pem
 
 Since TLS configured via Envoy listeners, we’ll add a `tls_context` block next to our list of filters with the locations of these files in `front-envoy.yaml`:
 
-```console
+```yaml
 tls_context:
   common_tls_context:
     tls_certificates:
@@ -87,7 +87,7 @@ tls_context:
 
 This will affect all traffic, and while this will work on any port, we should also change this listener to the standard TLS port, 443.
 
-```console
+```yaml
   - address:
       socket_address:
         address: 0.0.0.0
@@ -96,7 +96,7 @@ This will affect all traffic, and while this will work on any port, we should al
 
 Finally, we also have to specify the domain to serve traffic on instead of using a wildcard match.
 
-```console
+```yaml
 domains:
 - "example.com"
 ```
@@ -177,6 +177,7 @@ That’s it, you’re done! Get the whole front-envoy.yaml file
 ```yaml
 front-envoy-ssl.yaml
 
+```yaml
 static_resources:
   listeners:
   - address:

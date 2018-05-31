@@ -23,6 +23,6 @@
   article: routing-configuration.html
 
 - name: "Securing with SSL"
-  icon: "filter"
-  description: "Ensure your client-to-proxy traffic is secure by configuring Envoy to use SSL or TLS Envoy."
+  icon: "lock"
+  description: "Ensure your client-to-proxy traffic is secure by configuring Envoy to use [SSL or TLS](https://www.envoyproxy.io/docs/envoy/v1.6.0/intro/arch_overview/ssl.html) for upstream clusters and listeners."
   article: ssl.html

@@ -171,11 +171,7 @@ server: envoy
 content-length: 0
 ```
 
-That’s it, you’re done! Get the whole front-envoy.yaml file
-[here](front-envoy-ssl.yaml).
-
-```yaml
-front-envoy-ssl.yaml
+That’s it, you’re done! The front-envoy.yaml file is included here:
 
 ```yaml
 static_resources:

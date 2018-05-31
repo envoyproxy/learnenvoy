@@ -163,7 +163,13 @@ You can test this with curl, and it will return a 301:
 ```console
 $ docker-compose build
 $ docker-compose up
+```
+
+```console
 $ curl -I -H 'Host: example.com' http://localhost/service/1
+```
+
+```shell
 HTTP/1.1 301 Moved Permanently
 location: https://example.com/
 date: Fri, 25 May 2018 22:17:24 GMT

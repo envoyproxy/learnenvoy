@@ -41,8 +41,11 @@ private key file `key.pem` and self-signed certificate `cert.pem` using
 OpenSSL. The only important detail it will as you for is the Common Name. We’ll
 use `example.com`:
 
-```shell
+```console
 $ openssl req -x509 -newkey rsa:4096 -keyout example-com.key -out example-com.crt -days 365
+```
+
+```shell
 Generating a 2048 bit RSA private key
 ...........................+++
 ...............+++

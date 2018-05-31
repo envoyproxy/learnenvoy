@@ -15,7 +15,7 @@ title: Setting Up SSL in Envoy
 [//]: # ( implied. See the License for the specific language governing        )
 [//]: # ( permissions and limitations under the License.                      )
 
-[//]: # (Setting Up SSL in Envoy)
+[//]: # (Setting Up SSL with Envoy)
 
 When serving any kind of traffic over the public internet, it’s best to secure
 it. When used as either a front proxy or a service mesh proxy, Envoy supports
@@ -104,7 +104,7 @@ domains:
 - "example.com"
 ```
 
-Note that Envoy does support SNI for multiple domains (e.g. example.com and
+Note that Envoy supports SNI for multiple domains (e.g. example.com and
 www.example.com) by essentially repeating this configuration across several
 filter chains within the same listener. You can see an example
 [in the Envoy docs](https://www.envoyproxy.io/docs/envoy/latest/faq/sni). At

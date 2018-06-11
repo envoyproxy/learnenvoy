@@ -130,7 +130,7 @@ that replaces Kubernetes!
 
 Front proxies are a natural place to terminate SSL, to ensure that individual
 services don’t have to. You can either do in your cloud’s load balancer (e.g.
-AWS ELB) or in Envoy itself. To configure SSL, see this article.
+AWS ELB) or in Envoy itself. To configure SSL, see [this article](ssl.html).
 
 As a common choke point for all traffic, front proxies are a great place to
 generate high-level metrics for your site. Make sure to at least send request
@@ -153,15 +153,16 @@ There are two strategies for running services in multiple zones (availability
 zones, regions, data centers, etc.). You can pick a single strategy, or you can
 run both hierarchically.
 
-If you have a single network space, your best bet is to use Envoy’s Zone Aware
-Routing to handle any underlying discrepancies in the topology seamlessly. This
-strategy is best used with closely connected zones like AWS Availability Zones,
-where multiple zones are operationally a single unit, but cross-zone traffic
-incurs a cost. In this setup, your network load balancer would balance across a
-front proxy that spans multiple zones, and Envoy would keep each request in the
-zone it was first load balanced to. This will minimize cross-zone traffic
-(which is expensive and slow), while maintaining the ability to incrementally
-fall back to out-of-zone instances if the local ones are failing.
+If you have a _single network space_, your best bet is to use
+**Envoy’s Zone Aware Routing** to handle any underlying discrepancies in the
+topology seamlessly. This strategy is best used with closely connected zones
+like AWS Availability Zones, where multiple zones are operationally a single
+unit, but cross-zone traffic incurs a cost. In this setup, your network load
+balancer would balance across a front proxy that spans multiple zones, and
+Envoy would keep each request in the zone it was first load balanced to. This
+will minimize cross-zone traffic (which is expensive and slow), while
+maintaining the ability to incrementally fall back to out-of-zone instances if
+the local ones are failing.
 
 Setting up zone-aware load balancing requires two options to be set:
 
@@ -179,11 +180,13 @@ Statically defined, this looks like:
       min_cluster_size: 3
 ```
 
-On the other hand, fully isolated zones should be configured with entirely
-separate service discovery integrations. Instead of giving each Envoy the full
-routing table with all instances, it’s better to only enable each Envoy to
-route to instances in its own zone. To enable these zones to fail over
-gracefully, you can add remote front proxies to each cluster with a low weight.
+On the other hand, _fully isolated zones_ should be configured with
+**entirely separate service discovery integrations**. Instead of giving each
+Envoy the full routing table with all instances, it’s better to only enable
+each Envoy to route to instances in its own zone. To enable these zones to fail
+over gracefully, you can add remote front proxies to each cluster with a low
+weight.
+
 This “backhaul” path will allow automatic failover while allowing zones to
 maintain different internal configurations. For example, if you are doing a
 release in the EU region, having the US region fail to the EU’s front proxy

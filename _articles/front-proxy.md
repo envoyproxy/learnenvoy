@@ -214,7 +214,8 @@ trusted without further verification.
 
 ### Add protections from bad actors and unexpected traffic spikes.
 
-This means retries, health checks, etc. What this looks like depends strongly
+This means [retries](automatic-retries.html),
+[health checks](health-check.html), etc. What this looks like depends strongly
 on your infrastructure and the types of issues you’re looking to mitigate.
 
 ## Next Steps

@@ -57,7 +57,7 @@ instances within each service are dynamic. A static configuration can only
 point to a fixed set of instances, while a dynamic control plane can keep Envoy
 up-to-date on the state of your environment, typically by reading from your
 service discovery registry. See
-[Integrating Service Discovery with Envoy](https://www.learnenvoy.io/articles/service-discovery.html)
+[Integrating Service Discovery with Envoy](service-discovery.html)
 for implementations that will do this for you, like
 [Rotor](https://github.com/turbinelabs/rotor).
 

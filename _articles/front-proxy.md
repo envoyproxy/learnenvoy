@@ -71,7 +71,8 @@ For an example of how this would work in AWS,
 If you’re in Kubernetes, you can point NLBs directly to a an exposed Kubernetes
 service in front of an Envoy deployment.
 
-Here’s what that Deployment might look like. It uses envoy-simple, a Docker
+Here’s what that Deployment might look like. It uses
+[envoy-simple](https://github.com/turbinelabs/envoy-simple), a Docker
 container that allows Envoy to be fully dynamically configured by specifying a
 control plane implementation via environment variables. Simply change
 `ENVOY_XDS_HOST` to the network location of your control plane (typically
@@ -99,37 +100,78 @@ spec:
             value: "50000"
 ```
 
-Assuming you’ve saved this file as `envoy.yaml`, you can create a load balancer in your cloud provider with `kubectl`.
+Assuming you’ve saved this file as `envoy.yaml`, you can create a load balancer
+in your cloud provider with `kubectl`.
 
 ```shell
 $ kubectl create -f envoy.yaml
 $ kubectl expose deployment --type=LoadBalancer --port=80 envoy-front-proxy
 ```
 
-You can also use an ingress controller like Contour or Ambassador if you want to manage everything through Kubernetes. These expose Envoy’s configuration as Kubernetes Ingress Resources. This is simple, but less expressive than configuring Envoy through a general-purpose control plane, as the Kubernetes ingress controller spec is lowest-common-denominator by design, with support for only a subset of Envoy's capabilities.
+You can also use an ingress controller like
+[Contour](https://github.com/heptio/contour) or
+[Ambassador](https://github.com/datawire/ambassador) if you want to manage
+everything through Kubernetes. These expose Envoy’s configuration as
+[Kubernetes Ingress Resources](https://kubernetes.io/docs/concepts/services-networking/ingress/).
+This is simple, but less expressive than configuring Envoy through a
+general-purpose control plane, as the Kubernetes ingress controller spec is
+lowest-common-denominator by design, with support for only a subset of Envoy's
+capabilities.
 
-Note that while running Envoy in Kubernetes is simpler if you’re committed to Kubernetes, many people start by running Envoy outside of Kubernetes in order to manage the migration. Running Envoy outside of Kubernetes ensures that any cluster failures doesn’t take down your Envoy front proxy. If you leave Envoy running outside the cluster after completing you migration, it also gives you flexibility to keep running other orchestrators, or even migrate to the thing that replaces Kubernetes!
-SSL and Metrics
-Front proxies are a natural place to terminate SSL, to ensure that individual services don’t have to. You can either do in your cloud’s load balancer (e.g. AWS ELB) or in Envoy itself. To configure SSL, see this article.
+Note that while running Envoy in Kubernetes is simpler if you’re committed to
+Kubernetes, many people start by running Envoy outside of Kubernetes in order
+to manage the migration. Running Envoy outside of Kubernetes ensures that any
+cluster failures doesn’t take down your Envoy front proxy. If you leave Envoy
+running outside the cluster after completing you migration, it also gives you
+flexibility to keep running other orchestrators, or even migrate to the thing
+that replaces Kubernetes!
 
-As a common choke point for all traffic, front proxies are a great place to generate high-level metrics for your site. Make sure to at least send request health metrics to your dashboards: latency, volume, and success rate. Coarsely, this gives you a simple dashboard for “is the site up?” and partitioning the traffic by upstream cluster can give you health metrics for each service that are more relevant to the service teams.
+## SSL and Metrics
 
-If you generate logs from your current front proxy, Envoy can be configured to send request-level access logs to a centralized server. Be aware that the volume of traffic at the edge can make logging expensive or slow, so this may not be cost-effective if it’s not a critical capability.
+Front proxies are a natural place to terminate SSL, to ensure that individual
+services don’t have to. You can either do in your cloud’s load balancer (e.g.
+AWS ELB) or in Envoy itself. To configure SSL, see this article.
 
-Similarly, Envoy provides drop-in configuration for tracing, and and the front proxy is a great place to generate those tracing headers.
-Multiple Data Centers Made Simple
-There are two strategies for running services in multiple zones (availability zones, regions, data centers, etc.). You can pick a single strategy, or you can run both hierarchically.
+As a common choke point for all traffic, front proxies are a great place to
+generate high-level metrics for your site. Make sure to at least send request
+health metrics to your dashboards: latency, volume, and success rate. Coarsely,
+this gives you a simple dashboard for “is the site up?” and partitioning the
+traffic by upstream cluster can give you health metrics for each service that
+are more relevant to the service teams.
 
-If you have a single network space, your best bet is to use Envoy’s Zone Aware Routing to handle any underlying discrepancies in the topology seamlessly. This strategy is best used with closely connected zones like AWS Availability Zones, where multiple zones are operationally a single unit, but cross-zone traffic incurs a cost. In this setup, your network load balancer would balance across a front proxy that spans multiple zones, and Envoy would keep each request in the zone it was first load balanced to. This will minimize cross-zone traffic (which is expensive and slow), while maintaining the ability to incrementally fall back to out-of-zone instances if the local ones are failing.
+If you generate logs from your current front proxy, Envoy can be configured to
+send request-level access logs to a centralized server. Be aware that the
+volume of traffic at the edge can make logging expensive or slow, so this may
+not be cost-effective if it’s not a critical capability.
+
+Similarly, Envoy provides drop-in configuration for tracing, and and the front
+proxy is a great place to generate those tracing headers.
+
+## Multiple Data Centers Made Simple
+
+There are two strategies for running services in multiple zones (availability
+zones, regions, data centers, etc.). You can pick a single strategy, or you can
+run both hierarchically.
+
+If you have a single network space, your best bet is to use Envoy’s Zone Aware
+Routing to handle any underlying discrepancies in the topology seamlessly. This
+strategy is best used with closely connected zones like AWS Availability Zones,
+where multiple zones are operationally a single unit, but cross-zone traffic
+incurs a cost. In this setup, your network load balancer would balance across a
+front proxy that spans multiple zones, and Envoy would keep each request in the
+zone it was first load balanced to. This will minimize cross-zone traffic
+(which is expensive and slow), while maintaining the ability to incrementally
+fall back to out-of-zone instances if the local ones are failing.
 
 Setting up zone-aware load balancing requires two options to be set:
 
-Each cluster (statically defined or returned by the control plane via CDS) must enable zone-aware routing.
-Each Envoy must set `local_cluster_name` to one of the named clusters.
+  - Each cluster (statically defined or returned by the control plane via CDS) must enable zone-aware routing.
+
+  - Each Envoy must set `local_cluster_name` to one of the named clusters.
 
 Statically defined, this looks like:
 
-```
+```yaml
   local_cluster_name: service1
   clusters:
   - name: service1
@@ -137,15 +179,48 @@ Statically defined, this looks like:
       min_cluster_size: 3
 ```
 
-On the other hand, fully isolated zones should be configured with entirely separate service discovery integrations. Instead of giving each Envoy the full routing table with all instances, it’s better to only enable each Envoy to route to instances in its own zone. To enable these zones to fail over gracefully, you can add remote front proxies to each cluster with a low weight. This “backhaul” path will allow automatic failover while allowing zones to maintain different internal configurations. For example, if you are doing a release in the EU region, having the US region fail to the EU’s front proxy keeps the US region from inadvertently routing too much traffic to the new version if there’s a failure mid-release.
+On the other hand, fully isolated zones should be configured with entirely
+separate service discovery integrations. Instead of giving each Envoy the full
+routing table with all instances, it’s better to only enable each Envoy to
+route to instances in its own zone. To enable these zones to fail over
+gracefully, you can add remote front proxies to each cluster with a low weight.
+This “backhaul” path will allow automatic failover while allowing zones to
+maintain different internal configurations. For example, if you are doing a
+release in the EU region, having the US region fail to the EU’s front proxy
+keeps the US region from inadvertently routing too much traffic to the new
+version if there’s a failure mid-release.
 
-Best Practices
-Once you have a front proxy up and running, there are several ways to make operating it easier for you, your team, and the rest of the company.
+## Best Practices
 
-Make routing self-serve. Microservices mean a lot more changes, and service teams should be part of the process. Add guardrails (either people process or RBAC-style rules) to prevent things from breaking.
-Centralize authentication at the edge. Adding a single authentication call at the edge prevents every service from re-verifying the user each time. Take the cookie from the user, verify it with the authentication service, and store the result (including any commonly used data like a user ID) in a header that gets passed to internal services and trusted without further verification.
-Add protections from bad actors and unexpected traffic spikes: retries, health checks, etc. What this looks like depends strongly on your infrastructure and the types of issues you’re looking to mitigate.
-Next Steps
-While this article has focused on how to handle traffic coming from outside your network, it's also possible for Envoy to handle traffic between services (or “east-west” traffic). For a lightweight way to set up this internal mesh, you can route internal requests through this front proxy (or a similarly configured proxy pool specifically for east-west).
+Once you have a front proxy up and running, there are several ways to make
+operating it easier for you, your team, and the rest of the company.
 
-Beyond that, you can take better advantage of Envoy’s unique features as a lightweight sidecar by setting up a Basic Service Mesh.
+### Make routing self-serve.
+
+Microservices mean a lot more changes, and service
+teams should be part of the process. Add guardrails (either people process or
+RBAC-style rules) to prevent things from breaking.
+
+### Centralize authentication at the edge.
+
+Adding a single authentication call at  the edge prevents every service from
+re-verifying the user each time. Take the cookie from the user, verify it with
+the authentication service, and store the result (including any commonly used
+data like a user ID) in a header that gets passed to internal services and
+trusted without further verification.
+
+### Add protections from bad actors and unexpected traffic spikes.
+
+This means retries, health checks, etc. What this looks like depends strongly
+on your infrastructure and the types of issues you’re looking to mitigate.
+
+## Next Steps
+
+While this article has focused on how to handle traffic coming from outside
+your network, it's also possible for Envoy to handle traffic between services
+(or “east-west” traffic). For a lightweight way to set up this internal mesh,
+you can route internal requests through this front proxy (or a similarly
+configured proxy pool specifically for east-west).
+
+Beyond that, you can take better advantage of Envoy’s unique features as a
+lightweight sidecar by setting up a Basic Service Mesh.

@@ -34,9 +34,6 @@ production traffic through it. Once Envoy is stable and tested, it provides a
 high-leverage place to start enabling Envoy’s more advanced features around
 resilience and observability for your whole organization.
 
-[//]: # (_add after service mesh_ If you’re looking to deploy Envoy for internal traffic only, see Basic Service
-Mesh.)
-
 ## Deploying a Front Proxy
 
 Though Envoy is capable enough to be deployed right at the edge of your

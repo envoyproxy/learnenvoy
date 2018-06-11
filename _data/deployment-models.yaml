@@ -15,6 +15,7 @@
 - name: "Front Proxy"
   icon: "download"
   description: "How do you get traffic into your service from the internet? Envoy can take care of terminating SSL, translating traffic from HTTP1.1 to HTTP/2, and more."
+  article: front-proxy.html
 
 - name: "Service Mesh"
   icon: "arrows-alt"

@@ -166,7 +166,6 @@ Setting up zone-aware load balancing requires two options to be set:
 
   - Each cluster (statically defined or returned by the control plane via CDS)
   must enable zone-aware routing.
-
   - Each Envoy must set `local_cluster_name` to one of the named clusters.
 
 Statically defined, this looks like:

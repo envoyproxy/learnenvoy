@@ -50,7 +50,7 @@ A simple, robust deployment of an Envoy front proxy uses an autoscaling group
 of Envoys based on network traffic. Based on where your routing rules currently
 live (NGINX config files, AWS ALB configuration, etc.), you will need to port
 these to a set of Envoy routes. See
-[Routing Configuration](https://www.learnenvoy.io/articles/routing-configuration.html) for more details.
+[Routing Configuration](outing-configuration.html) for more details.
 
 Most modern apps will want to implement a dynamic control plane, since the
 instances within each service are dynamic. A static configuration can only
@@ -58,7 +58,8 @@ point to a fixed set of instances, while a dynamic control plane can keep Envoy
 up-to-date on the state of your environment, typically by reading from your
 service discovery registry. See
 [Integrating Service Discovery with Envoy](https://www.learnenvoy.io/articles/service-discovery.html)
-for implementations that will do this for you, like [Rotor](https://github.com/turbinelabs/rotor).
+for implementations that will do this for you, like
+[Rotor](https://github.com/turbinelabs/rotor).
 
 For an example of how this would work in AWS,
 [see this repository, which uses AWS, CloudFormation, and Rotor](https://github.com/turbinelabs/examples/tree/master/rotor-nlb).
@@ -85,7 +86,7 @@ spec:
   template:
     spec:
       containers:
-      - image: turbinelabs/envoy-simple:0.16.0
+      - image: turbinelabs/envoy-simple:0.17.2
         imagePullPolicy: Always
         name: envoy-simple
         ports:
@@ -163,7 +164,8 @@ the local ones are failing.
 
 Setting up zone-aware load balancing requires two options to be set:
 
-  - Each cluster (statically defined or returned by the control plane via CDS) must enable zone-aware routing.
+  - Each cluster (statically defined or returned by the control plane via CDS)
+  must enable zone-aware routing.
 
   - Each Envoy must set `local_cluster_name` to one of the named clusters.
 
@@ -219,9 +221,6 @@ on your infrastructure and the types of issues you’re looking to mitigate.
 
 While this article has focused on how to handle traffic coming from outside
 your network, it's also possible for Envoy to handle traffic between services
-(or “east-west” traffic). For a lightweight way to set up this internal mesh,
+(or "east-west" traffic). For a lightweight way to set up this internal mesh,
 you can route internal requests through this front proxy (or a similarly
 configured proxy pool specifically for east-west).
-
-Beyond that, you can take better advantage of Envoy’s unique features as a
-lightweight sidecar by setting up a Basic Service Mesh.

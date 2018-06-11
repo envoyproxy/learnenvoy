@@ -50,7 +50,7 @@ A simple, robust deployment of an Envoy front proxy uses an autoscaling group
 of Envoys based on network traffic. Based on where your routing rules currently
 live (NGINX config files, AWS ALB configuration, etc.), you will need to port
 these to a set of Envoy routes. See
-[Routing Configuration](outing-configuration.html) for more details.
+[Routing Configuration](routing-configuration.html) for more details.
 
 Most modern apps will want to implement a dynamic control plane, since the
 instances within each service are dynamic. A static configuration can only

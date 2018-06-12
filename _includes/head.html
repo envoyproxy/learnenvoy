@@ -24,6 +24,21 @@ limitations under the License.
     <meta name="author" content="{{ page.author }}">
     <meta name="keywords" content="{{ page.keyword | strip_html | normalize_whitespace | escape }}">
 
+    <meta content="website" property="og:type" />
+    <meta content="{{ page.url }}" property="og:url" />
+    <meta
+      content="{% if page.title %}{{ page.title }}{% else %}{{ site.title }}{% endif %}"
+      property="og:title"
+    />
+    <meta
+      content="{% if page.description %}{{ page.description }}{% else %}{{ site.description }}{% endif %}"
+      property="og:description"
+    />
+    <meta
+      content="//www.learnenvoy.io/assets/img/envoy-horizontal-color.png"
+      property="og:image"
+    />
+
     <title>{% if page.title %}{{ page.title | escape }}{% else %}{{ site.title | escape }}{% endif %}</title>
 
     <!-- Bootstrap Core CSS -->

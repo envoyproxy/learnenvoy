@@ -1,6 +1,10 @@
 ---
 layout: article
 title: Circuit Breaking
+description: >
+  Envoy's circuit breaking lets you configure failure thresholds to prevent
+  cascading failure in a microservices architecture. Learn how to configure
+  circuit breakers on clusters and best practices for tuning the thresholds.
 ---
 
 [//]: # ( Copyright 2018 Turbine Labs, Inc.                                   )

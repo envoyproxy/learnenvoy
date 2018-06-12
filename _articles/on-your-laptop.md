@@ -1,6 +1,10 @@
 ---
 layout: article
 title: On Your Laptop
+description: >
+  In this article, we'll walk through how to run Envoy on your laptop, test
+  proxy configurations, and observe results. Based on Docker and the official
+  Envoy examples of a front proxy.
 ---
 
 [//]: # ( Copyright 2018 Turbine Labs, Inc.                                   )

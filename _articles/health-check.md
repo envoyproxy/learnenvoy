@@ -1,6 +1,11 @@
 ---
 layout: article
 title: Healthly Hosts in Envoy
+description: >
+  Envoy can be configured with both active and passive health checking in
+order to make the best load balancing decision possible. See how to configure
+  health checking and outlier detection, with example code and best practices
+  for tuning configuration values.
 ---
 
 [//]: # ( Copyright 2018 Turbine Labs, Inc.                                   )

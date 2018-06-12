@@ -1,6 +1,11 @@
 ---
 layout: article
 title: Integrating Service Discovery with Envoy
+description: >
+  Integrating Envoy with service discovery such as Consul, Kubernetes, ECS,
+  AWS EC2, Mesos, and more lets Envoy route to dynamically configured
+  endpoints. See how to set it up, either from scratch or with existing
+  open-source tools.
 ---
 
 [//]: # ( Copyright 2018 Turbine Labs, Inc.                                   )

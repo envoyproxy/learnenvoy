@@ -1,6 +1,11 @@
 ---
 layout: article
 title: Routing with a Control Plane
+description: >
+  Tips and tricks on how large companies configure Envoy's routing at scale.
+  This article covers how to treat routes as data, distributing control across
+  multiple teams, and what sort of changes are most common in distributed
+  systems.
 ---
 
 [//]: # ( Copyright 2018 Turbine Labs, Inc.                                   )

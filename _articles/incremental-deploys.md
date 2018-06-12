@@ -1,6 +1,10 @@
 ---
 layout: article
 title: Incremental Deploys
+description: >
+  Tutorial for getting Envoy running on your laptop as a load balancer that can
+  handle releases via traffic shifting. Implement blue/green deploys and
+  header-based routing against your own services with a local Docker container.
 ---
 
 [//]: # ( Copyright 2018 Turbine Labs, Inc.                                   )

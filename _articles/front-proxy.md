@@ -107,14 +107,16 @@ $ kubectl expose deployment --type=LoadBalancer --port=80 envoy-front-proxy
 ```
 
 You can also use an ingress controller like
-[Contour](https://github.com/heptio/contour) or
-[Ambassador](https://github.com/datawire/ambassador) if you want to manage
-everything through Kubernetes. These expose Envoy’s configuration as
+[Contour](https://github.com/heptio/contour) if you want to manage everything
+through Kubernetes. These expose Envoy’s configuration as
 [Kubernetes Ingress Resources](https://kubernetes.io/docs/concepts/services-networking/ingress/).
 This is simple, but less expressive than configuring Envoy through a
 general-purpose control plane, as the Kubernetes ingress controller spec is
-lowest-common-denominator by design, with support for only a subset of Envoy's
-capabilities.
+lowest-common-denominator by design, with support for only a subset of Envoy’s
+capabilities. There are also Kubernetes-native API Gateways like
+[Ambassador](https://github.com/datawire/ambassador) that offer expanded
+functionality by using other, more expressive Kubernetes resources for
+configuration.
 
 Note that while running Envoy in Kubernetes is simpler if you’re committed to
 Kubernetes, many people start by running Envoy outside of Kubernetes in order

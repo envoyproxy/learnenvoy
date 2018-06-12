@@ -1,6 +1,9 @@
 ---
 layout: article
 title: Getting Help
+description: >
+  Trying to debug Envoy and need more information? Learn how to get more
+  data out of Envoy and the best places to ask for help!
 ---
 
 [//]: # ( Copyright 2018 Turbine Labs, Inc.                                   )

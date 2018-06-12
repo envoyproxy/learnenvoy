@@ -1,6 +1,10 @@
 ---
 layout: article
 title: Routing Basics
+description: >
+  In-depth tutorial on Envoy's routing on your laptop. See how to configure
+  routes, clusters, and listeners with static files in this Docker-based
+  example.
 ---
 
 [//]: # ( Copyright 2018 Turbine Labs, Inc.                                   )

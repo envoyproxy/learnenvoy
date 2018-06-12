@@ -1,6 +1,8 @@
 ---
 layout: article
 title: Glossary
+description: >
+  A list of common Envoy terms and their meanings.
 ---
 
 [//]: # ( Copyright 2018 Turbine Labs, Inc.                                   )

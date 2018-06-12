@@ -34,7 +34,7 @@ infrastructure.
 
 ## Configuring circuit breaking
 
-Envoy provides simple configuration r of circuit breaking. Consider the
+Envoy provides simple configuration for circuit breaking. Consider the
 specifics of your system as you set up circuit breaking.
 
 Circuit breaking is specified as part of a Cluster (a group of similar upstream

@@ -1,6 +1,10 @@
 ---
 layout: article
 title: Setting Up SSL in Envoy
+description: >
+  A tutorial on terminating SSL / TLS with Envoy, including example
+  configuration for both service meshes and public load balancers, as well as
+  a guide for forcing insecure traffic to HTTPS.
 ---
 
 [//]: # ( Copyright 2018 Turbine Labs, Inc.                                   )

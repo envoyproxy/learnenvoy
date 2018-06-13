@@ -1,6 +1,11 @@
 ---
 layout: article
 title: Front Proxy
+description: >
+  One of the most powerful ways to deploy Envoy is as a front proxy. This
+  article covers setting up an Envoy-based load balancer in Kubernetes, EC2,
+  GCP, and more, including practical guides on SSL, multiple data centers, and
+  monitoring.
 ---
 
 [//]: # ( Copyright 2018 Turbine Labs, Inc.                                   )

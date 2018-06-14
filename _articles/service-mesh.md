@@ -146,18 +146,18 @@ unique to it, but Envoy provides a simple way to get the same high-level
 metrics for all services. Keep the following principles in mind when deciding
 which metrics to look at:
 
-  - **Prefer metrics that relate to customer experience**. In particular, Envoy
+  - **Pick metrics that relate to customer experience**. In particular, Envoy
   can generate request volume, request rate, and latency histograms. Resource
   metrics like number of connections or amount of network traffic can mean
   different things on different services. See how
   [Lyft does it here](https://blog.envoyproxy.io/lyfts-envoy-dashboards-5c91738816b1).
 
-  - **Prefer segmentation over simple metrics, not more types of metrics.**
+  - **Segmentation of simple metrics, not more types of metrics.**
   Envoy can produce a stunning number of metrics. Teams with lots of services
   tend to get more value out of a small set of metrics, segmented by service,
   instance, and region.
 
-  - **Consider adding tracing in Envoy.** Since Envoy is present at every
+  - **Add tracing in Envoy.** Since Envoy is present at every
   network hop, it’s guaranteed to capture all intra-instance communication.
   This means that a single configuration can produce complete traces across the
   entire app. That’s a powerful framework to add more detailed custom

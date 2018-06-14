@@ -118,6 +118,22 @@ filter chains within the same listener. You can see an example
 the moment (Envoy v1.6), these filter chains must be identical across domains.
 Copy/paste away!
 
+To expose this to the world, we'll have to modify our `docker-compose.yaml` file
+to expose port 443. Also, we'll replace port 8080 with port 80, just to mimic a
+typical setup.
+
+```yaml
+services:
+  front-envoy:
+  ...
+    expose:
+      - "80"
+      - "443"
+    ports:
+      - "80:80"
+      - "443:443"
+```
+
 You can test that this works with curl. Two notes if you’re using the
 self-signed certs from above:
 

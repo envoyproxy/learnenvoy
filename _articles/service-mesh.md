@@ -53,8 +53,8 @@ Kubernetes makes adding Envoy sidecars easy. You’ll need to do two things:
 
 How you want to configure Envoy will vary depending on your environment—more on
 that below. If you want to use fully dynamic configuration, you can use a
-container like [envoy-simple](github.com/turbinelabs/envoy-simple) and set the
-location of the
+container like [envoy-simple](https://github.com/turbinelabs/envoy-simple) and
+set the location of the
 [various](https://www.learnenvoy.io/articles/service-discovery.html)
 [configuration services](https://www.learnenvoy.io/articles/routing-configuration.html) with
 environment variables.

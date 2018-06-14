@@ -41,9 +41,9 @@ There are three steps to get this running:
 To deploy this to production, you’ll need the certificate for the site you own.
 If you don’t already have this, [Let’s Encrypt](https://letsencrypt.org)
 provides free and automatable certificates. For testing, you can generate a
-private key file `key.pem` and self-signed certificate `cert.pem` using
-OpenSSL. The only important detail it will as you for is the Common Name. We’ll
-use `example.com`:
+private key file `example-com.key` and self-signed certificate `example-com.crt`
+using OpenSSL. The only important detail it will as you for is the Common
+Name. We’ll use `example.com`:
 
 ```console
 $ openssl req -x509 -newkey rsa:4096 -keyout example-com.key -out example-com.crt -days 365
@@ -76,8 +76,8 @@ using Docker and docker-compose in this example, we’ll just add these to our
 Envoy container by modifying `Dockerfile-frontenvoy`:
 
 ```console
-ADD ./key.pem /etc/key.pem
-ADD ./cert.pem /etc/cert.pem
+ADD ./example-com.crt /etc/example-com.crt
+ADD ./example-com.key /etc/example-com.key
 ```
 
 Since TLS configured via Envoy listeners, we’ll add a `tls_context` block next

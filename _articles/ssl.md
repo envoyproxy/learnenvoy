@@ -125,7 +125,9 @@ self-signed certs from above:
    certificate file to Envoy. We do this with the `--cacert` option.
  - To get curl to connect to our Envoy instead of asking the system to resolve
    example.com, we have to explicitly specify that we’re connecting to
-   localhost. We do this with the `--connect-to` option.
+   localhost. We do this with the `--connect-to` option. If your version of curl
+   does not support this option, you can add an entry to your `/etc/hosts` file
+   to redirect `example.com` to `127.0.0.1`.
 
 ```console
 $ docker-compose build

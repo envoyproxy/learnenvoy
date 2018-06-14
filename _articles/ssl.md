@@ -80,7 +80,8 @@ ADD ./key.pem /etc/key.pem
 ADD ./cert.pem /etc/cert.pem
 ```
 
-Since TLS configured via Envoy listeners, we’ll add a `tls_context` block next to our list of filters with the locations of these files in `front-envoy.yaml`:
+Since TLS configured via Envoy listeners, we’ll add a `tls_context` block next
+to our list of filters with the locations of these files in `front-envoy.yaml`:
 
 ```yaml
 tls_context:
@@ -92,7 +93,8 @@ tls_context:
           filename: "/etc/example-com.key"
 ```
 
-This will affect all traffic, and while this will work on any port, we should also change this listener to the standard TLS port, 443.
+This will affect all traffic, and while this will work on any port, we should
+also change this listener to the standard TLS port, 443.
 
 ```yaml
   - address:
@@ -101,7 +103,8 @@ This will affect all traffic, and while this will work on any port, we should al
         port_value: 443
 ```
 
-Finally, we also have to specify the domain to serve traffic on instead of using a wildcard match.
+Finally, we also have to specify the domain to serve traffic on instead of using
+a wildcard match.
 
 ```yaml
 domains:
@@ -118,8 +121,11 @@ Copy/paste away!
 You can test that this works with curl. Two notes if you’re using the
 self-signed certs from above:
 
- - To get curl to successfully validate the certificate, we have to pass the certificate file to Envoy. We do this with the `--cacert` option.
- - To get curl to connect to our Envoy instead of asking the system to resolve example.com, we have to explicitly specify that we’re connecting to localhost. We do this with the `--connect-to` option.
+ - To get curl to successfully validate the certificate, we have to pass the
+   certificate file to Envoy. We do this with the `--cacert` option.
+ - To get curl to connect to our Envoy instead of asking the system to resolve
+   example.com, we have to explicitly specify that we’re connecting to
+   localhost. We do this with the `--connect-to` option.
 
 ```console
 $ docker-compose build

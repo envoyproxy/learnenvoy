@@ -130,7 +130,7 @@ self-signed certs from above:
 ```console
 $ docker-compose build
 $ docker-compose up
-$ curl --cacert example-com.crt --connect-to localhost -H 'Host: example.com' https://example.com/service/1
+$ curl --cacert example-com.crt --connect-to localhost -H 'Host: example.com' https://localhost/service/1
 Hello from behind Envoy (service 1)! hostname: 56e8a5bff6bd resolvedhostname: 172.18.0.2
 ```
 

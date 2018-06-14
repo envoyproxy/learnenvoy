@@ -1,0 +1,194 @@
+---
+layout: article
+title: Service Mesh
+description: >
+  A Service Mesh uses sidecars to handle outbound traffic for each service
+  instance. This allows Envoy to handle load balancing and resilience
+  strategies for all internal calls, as well as providing a coherent layer for
+  observability.
+---
+
+[//]: # ( Copyright 2018 Turbine Labs, Inc.                                   )
+[//]: # ( you may not use this file except in compliance with the License.    )
+[//]: # ( You may obtain a copy of the License at                             )
+[//]: # (                                                                     )
+[//]: # (     http://www.apache.org/licenses/LICENSE-2.0                      )
+[//]: # (                                                                     )
+[//]: # ( Unless required by applicable law or agreed to in writing, software )
+[//]: # ( distributed under the License is distributed on an "AS IS" BASIS,   )
+[//]: # ( WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or     )
+[//]: # ( implied. See the License for the specific language governing        )
+[//]: # ( permissions and limitations under the License.                      )
+
+[//]: # (Service Mesh)
+
+The recent popularity of microservices has made the need for safe, reliable
+service-to-service communication more apparent than ever. Envoy’s lightweight
+footprint, powerful routing constructs, and flexible observability tools make
+it a great proxy to build a service mesh on. In this configuration, Envoy acts
+as the primary load balancer for requests between internal services. Managing
+this public traffic—also called east-west traffic—is trivial in an environment
+with a small number of services, but with dozens of services making hundreds of
+different calls, it’s more complex.
+
+This is a complementary deployment to a Front Proxy, where Envoy handles
+traffic from the outside world (aka north-south traffic).
+
+A basic Service Mesh uses sidecars to handle outbound traffic for each service
+instance. This allows Envoy to handle load balancing and resilience strategies
+for all internal calls, as well as providing a coherent layer for
+observability. Services are still exposed to the internal network, and all
+network calls pass through an Envoy on `localhost`. Rolling out a basic Service
+Mesh can be done one service at a time, making it a practical first step for
+most Envoy deployments.
+
+## Envoy as a Sidecar
+
+### Kubernetes
+
+Kubernetes makes adding Envoy sidecars easy. You’ll need to do two things:
+
+  1. Add an Envoy container to your Pod spec
+  2. Modify your services to send all outbound traffic to this sidecar
+
+How you want to configure Envoy will vary depending on your environment—more on
+that below. If you want to use fully dynamic configuration, you can use a
+container like [envoy-simple](github.com/turbinelabs/envoy-simple) and set the
+location of the
+[various](https://www.learnenvoy.io/articles/service-discovery.html)
+[configuration services](https://www.learnenvoy.io/articles/routing-configuration.html) with
+environment variables.
+
+```yaml
+- image: turbinelabs/envoy-simple:0.17.2
+  imagePullPolicy: Always
+  name: envoy-simple
+  ports:
+    - containerPort: 8000
+  env:
+  - name: ENVOY_XDS_HOST
+    value: "rotor.default.svc.cluster.local"
+  - name: ENVOY_XDS_PORT
+    value: "50000"
+```
+
+Since Pods share the same notion of localhost, the only change you have to make
+to your service is have them talk to localhost on port 8000 instead of remote
+services. If you’re using Kubernetes’ Services, you can override the
+environment variables (e.g. `SERVICENAME_SERVICE_HOST` and
+`SERVICENAME_SERVICE_PORT`) or Kubernetes’ DNS with your Envoy’s listener /
+`containerPort` value.
+
+### Other Environments
+
+Outside of Kubernetes, you have much more flexibility in how you deploy Envoy.
+You can run either the Envoy container or the binary on your hosts. Similar to
+Kubernetes, by running Envoy on localhost, you only have to change your
+services to communicated with Envoy on the port you specify.
+
+Docker, listening on port 8000:
+
+```shell
+$ docker run -d \
+  -e 'ENVOY_XDS_HOST=127.0.0.1' \
+  -e 'ENVOY_XDS_PORT=50000' \
+  -p 8000:8000 \
+  turbinelabs/envoy-simple:0.17.1
+```
+
+Next, you should modify your services to route through Envoy. If changing their
+configuration or code isn’t possible, you can force all outbound traffic
+through Envoy with something like iptables.
+
+## Sidecar Configuration
+
+The easiest way to get started is to have Envoy handle traffic just the name as
+your internal network does. Practically, this means three things:
+
+  - **Expose a single listener for your services to send outbound traffic to.**
+  This matches with the port exposed on your container, e.g. 8000 in the
+  example configs above. Inbound traffic skips Envoy and continues to talk
+  directly to the services. Adding a listener to handle incoming traffic will
+  be covered in Advanced Service Mesh (coming soon!).
+
+  - **Serve the full route table in all sidecars**. By exposing all services to
+  all other services, you’ll ensure nothing breaks on the first iteration. If
+  you have a
+  [Front Proxy](https://www.learnenvoy.io/articles/front-proxy.html), re-using
+  these routes can save time. If not, it’s straightforward to create a
+  [basic set of routes and listeners](https://www.learnenvoy.io/articles/routing-basics.html) in a
+  static Envoy configuration file. Once that’s working in production, it may
+  make sense to limit the routes available for each service. The explicit
+  routing between services helps service teams understand where their internal
+  traffic is coming from, helping them define mutual SLOs.
+
+  - **Consider using dynamic configuration for instance discovery in the first iteration**. Specifically, using
+  [EDS to update Envoy’s notion of available hosts](https://www.learnenvoy.io/articles/service-discovery.html) with an EDS
+  server like [Rotor](https://github.com/turbinelabs/rotor) keeps Envoy’s
+  routing tables in sync with the underlying infrastructure. Envoy can use
+  static configuration for listeners and routes, so it’s simple and valuable to
+  set up a control plane to manage instance availability.
+
+If you’ve been following the examples above, you can set up
+[Rotor](https://github.com/turbinelabs/rotor), an Envoy control plane and
+service discovery bridge, to implement xDS. Remember that Envoy can mix static
+and dynamic configuration, so if you want to statically configure listeners and
+routes (LDS / RDS), you can use your own Envoy container with a static config
+file while still using a dynamic CDS / EDS control plane. Eventually, there are
+[good reasons](https://www.learnenvoy.io/articles/routing-configuration.html )
+to move to a fully dynamic system.
+
+## Observability
+
+One of the biggest benefits of a service mesh is that it provides a uniform
+view over your services. Each service will certainly have metrics and tooling
+unique to it, but Envoy provides a simple way to get the same high-level
+metrics for all services. Keep the following principles in mind when deciding
+which metrics to look at:
+
+  - **Prefer metrics that relate to customer experience**. In particular, Envoy
+  can generate request volume, request rate, and latency histograms. Resource
+  metrics like number of connections or amount of network traffic can mean
+  different things on different services. See how
+  [Lyft does it here](https://blog.envoyproxy.io/lyfts-envoy-dashboards-5c91738816b1).
+
+  - **Prefer segmentation over simple metrics, not more types of metrics.**
+  Envoy can produce a stunning number of metrics. Teams with lots of services
+  tend to get more value out of a small set of metrics, segmented by service,
+  instance, and region.
+
+  - **Consider adding tracing in Envoy.** Since Envoy is present at every
+  network hop, it’s guaranteed to capture all intra-instance communication.
+  This means that a single configuration can produce complete traces across the
+  entire app. That’s a powerful framework to add more detailed custom
+  instrumentation.
+
+## Multiple Regions
+
+As described in Front Proxy, you should have one front proxy per datacenter.
+When setting up a mesh, it’s generally safer to send intra-data center traffic
+to the remote front proxy, instead of exposing all of the internals to all
+datacenters. This can simplify incident management as well, because changes to
+a single region are less likely to affect other regions.
+
+This also means you should split up the configs. Generally you can do this by
+running a different control plane in each data center. If you want to run a
+single control plane, check out the discussion of Locality in Advanced Service
+Mesh (coming soon!).
+
+In this setup, you would still map each service to a single Envoy cluster, but
+instead of including the remote instances, you’d include the remote front proxy
+as the out-of-zone instance in the cluster.
+
+## Next Steps
+
+While this article has focused on how to handle traffic between services, it's
+also possible for Envoy to handle traffic from the public internet
+(“north-west” traffic) as a
+[Front Proxy](https://learnenvoy.io/front-proxy.html). The service mesh and
+front proxy have a lot of overlapping features, so it can be useful to consider
+how to roll them both out.
+
+Beyond that, you can set up Envoy to also handle incoming traffic on each node
+within your service mesh. This gives better isolation between services and
+better observability.

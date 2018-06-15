@@ -41,9 +41,9 @@ There are three steps to get this running:
 To deploy this to production, you’ll need the certificate for the site you own.
 If you don’t already have this, [Let’s Encrypt](https://letsencrypt.org)
 provides free and automatable certificates. For testing, you can generate a
-private key file `key.pem` and self-signed certificate `cert.pem` using
-OpenSSL. The only important detail it will as you for is the Common Name. We’ll
-use `example.com`:
+private key file `example-com.key` and self-signed certificate `example-com.crt`
+using OpenSSL. The only important detail it will as you for is the Common
+Name. We’ll use `example.com`:
 
 ```console
 $ openssl req -x509 -newkey rsa:4096 -keyout example-com.key -out example-com.crt -days 365
@@ -76,11 +76,12 @@ using Docker and docker-compose in this example, we’ll just add these to our
 Envoy container by modifying `Dockerfile-frontenvoy`:
 
 ```console
-ADD ./key.pem /etc/key.pem
-ADD ./cert.pem /etc/cert.pem
+ADD ./example-com.crt /etc/example-com.crt
+ADD ./example-com.key /etc/example-com.key
 ```
 
-Since TLS configured via Envoy listeners, we’ll add a `tls_context` block next to our list of filters with the locations of these files in `front-envoy.yaml`:
+Since TLS configured via Envoy listeners, we’ll add a `tls_context` block next
+to our list of filters with the locations of these files in `front-envoy.yaml`:
 
 ```yaml
 tls_context:
@@ -92,7 +93,8 @@ tls_context:
           filename: "/etc/example-com.key"
 ```
 
-This will affect all traffic, and while this will work on any port, we should also change this listener to the standard TLS port, 443.
+This will affect all traffic, and while this will work on any port, we should
+also change this listener to the standard TLS port, 443.
 
 ```yaml
   - address:
@@ -101,7 +103,8 @@ This will affect all traffic, and while this will work on any port, we should al
         port_value: 443
 ```
 
-Finally, we also have to specify the domain to serve traffic on instead of using a wildcard match.
+Finally, we also have to specify the domain to serve traffic on instead of using
+a wildcard match.
 
 ```yaml
 domains:
@@ -115,16 +118,37 @@ filter chains within the same listener. You can see an example
 the moment (Envoy v1.6), these filter chains must be identical across domains.
 Copy/paste away!
 
+To expose this to the world, we'll have to modify our `docker-compose.yaml` file
+to expose port 443. Also, we'll replace port 8080 with port 80, just to mimic a
+typical setup.
+
+```yaml
+services:
+  front-envoy:
+  ...
+    expose:
+      - "80"
+      - "443"
+    ports:
+      - "80:80"
+      - "443:443"
+```
+
 You can test that this works with curl. Two notes if you’re using the
 self-signed certs from above:
 
- - To get curl to successfully validate the certificate, we have to pass the certificate file to Envoy. We do this with the `--cacert` option.
- - To get curl to connect to our Envoy instead of asking the system to resolve example.com, we have to explicitly specify that we’re connecting to localhost. We do this with the `--connect-to` option.
+ - To get curl to successfully validate the certificate, we have to pass the
+   certificate file to Envoy. We do this with the `--cacert` option.
+ - To get curl to connect to our Envoy instead of asking the system to resolve
+   example.com, we have to explicitly specify that we’re connecting to
+   localhost. We do this with the `--connect-to` option. If your version of curl
+   does not support this option, you can add an entry to your `/etc/hosts` file
+   to redirect `example.com` to `127.0.0.1`.
 
 ```console
 $ docker-compose build
 $ docker-compose up
-$ curl --cacert example-com.crt --connect-to localhost -H 'Host: example.com' https://example.com/service/1
+$ curl --cacert example-com.crt --connect-to localhost -H 'Host: example.com' https://localhost/service/1
 Hello from behind Envoy (service 1)! hostname: 56e8a5bff6bd resolvedhostname: 172.18.0.2
 ```
 

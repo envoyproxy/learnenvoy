@@ -55,8 +55,8 @@ How you want to configure Envoy will vary depending on your environment—more o
 that below. If you want to use fully dynamic configuration, you can use a
 container like [envoy-simple](https://github.com/turbinelabs/envoy-simple) and
 set the location of the
-[various](https://www.learnenvoy.io/articles/service-discovery.html)
-[configuration services](https://www.learnenvoy.io/articles/routing-configuration.html) with
+[various](service-discovery.html)
+[configuration services](routing-configuration.html) with
 environment variables.
 
 ```yaml
@@ -114,9 +114,9 @@ your internal network does. Practically, this means three things:
   - **Serve the full route table in all sidecars**. By exposing all services to
   all other services, you’ll ensure nothing breaks on the first iteration. If
   you have a
-  [Front Proxy](https://www.learnenvoy.io/articles/front-proxy.html), re-using
+  [Front Proxy](front-proxy.html), re-using
   these routes can save time. If not, it’s straightforward to create a
-  [basic set of routes and listeners](https://www.learnenvoy.io/articles/routing-basics.html) in a
+  [basic set of routes and listeners](routing-basics.html) in a
   static Envoy configuration file. Once that’s working in production, it may
   make sense to limit the routes available for each service. The explicit
   routing between services helps service teams understand where their internal
@@ -135,7 +135,7 @@ service discovery bridge, to implement xDS. Remember that Envoy can mix static
 and dynamic configuration, so if you want to statically configure listeners and
 routes (LDS / RDS), you can use your own Envoy container with a static config
 file while still using a dynamic CDS / EDS control plane. Eventually, there are
-[good reasons](https://www.learnenvoy.io/articles/routing-configuration.html )
+[good reasons](routing-configuration.html )
 to move to a fully dynamic system.
 
 ## Observability
@@ -185,7 +185,7 @@ as the out-of-zone instance in the cluster.
 While this article has focused on how to handle traffic between services, it's
 also possible for Envoy to handle traffic from the public internet
 (“north-west” traffic) as a
-[Front Proxy](https://learnenvoy.io/front-proxy.html). The service mesh and
+[Front Proxy](front-proxy.html). The service mesh and
 front proxy have a lot of overlapping features, so it can be useful to consider
 how to roll them both out.
 

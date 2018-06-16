@@ -90,17 +90,22 @@ different protocols will each use a different option:
  - For **HTTP/1.1** connections, use `max_connections`.
  - For **HTTP/2** connections, use `max_requests`.
 
-In both cases, these settings will ensure the circuit breaker is tripped when
-the majority of requests in the last 10 seconds have failed. A conservative
-starting point for a service that does 1,000 requests / second would be 8,000
-max connections / requests (80% of 10,000 requests).
-
-This will prevent catastrophic outages based on timeout failures, where a
+Circuit breakers prevent catastrophic outages based on timeout failures, where a
 single service cascades everywhere. The most insidious failures happen not
 because a service is down, but because it’s hanging on to requests for tens of
 seconds. Generally, it’s better for one service to be completely down than for
 all services to be outside their SLO because they’re waiting for a timeout deep
 in the stack.
+
+A good value for either of these options depends on two things: the number of
+connections/requests to your service and the typical request latency. For
+example, an HTTP/1 service with 1,000 requests / second and average latency of 2
+seconds will typically have 2,000 connections open at any given time. Because
+circuit breakers trip when there are a large number of slower-than-normal
+connections, consider a starting point for this service in the range of 10 x
+2,000. This would open the breaker when most of the requests in the last 10
+seconds have failed to return any response. Exactly what you pick will depend on
+the spikiness of your load and how overprovisioned the service is.
 
 ## Advanced circuit breaking
 

@@ -69,6 +69,9 @@ for implementations that will do this for you, like
 For an example of how this would work in AWS,
 [see this repository, which uses AWS, CloudFormation, and Rotor](https://github.com/turbinelabs/examples/tree/master/rotor-nlb).
 
+If you’re looking to deploy Envoy for internal traffic only, see
+[Basic Service Mesh](service-mesh.html).
+
 ## Deploying Envoy in Kubernetes
 
 If you’re in Kubernetes, you can point NLBs directly to a an exposed Kubernetes

@@ -20,6 +20,7 @@
 - name: "Service Mesh"
   icon: "arrows-alt"
   description: "By co-locating Envoy with your code, you can let Envoy handle the complexities of the network. This makes service-to-service communication safer and more reliable, while alleviating the need to re-implement this functionality within each service."
+  article: service-mesh.html
 
 - name: "Hosted Where You Are"
   icon: "server"

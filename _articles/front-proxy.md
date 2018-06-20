@@ -69,6 +69,9 @@ for implementations that will do this for you, like
 For an example of how this would work in AWS,
 [see this repository, which uses AWS, CloudFormation, and Rotor](https://github.com/turbinelabs/examples/tree/master/rotor-nlb).
 
+If you’re looking to deploy Envoy for internal traffic only, see
+[Basic Service Mesh](service-mesh.html).
+
 ## Deploying Envoy in Kubernetes
 
 If you’re in Kubernetes, you can point NLBs directly to a an exposed Kubernetes
@@ -229,4 +232,6 @@ While this article has focused on how to handle traffic coming from outside
 your network, it's also possible for Envoy to handle traffic between services
 (or "east-west" traffic). For a lightweight way to set up this internal mesh,
 you can route internal requests through this front proxy (or a similarly
-configured proxy pool specifically for east-west).
+configured proxy pool specifically for east-west). Beyond that, you can take
+better advantage of Envoy’s unique features as a lightweight sidecar by
+[setting up a Basic Service Mesh](service-mesh.html).

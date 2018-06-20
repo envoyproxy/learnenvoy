@@ -32,7 +32,7 @@ environment with a small number of services, but with tens or hundreds of
 services making calls to one another, it’s combinatorially more complex.
 
 That's where the Envoy service mesh comes in. This is a complementary
-deployment to a [Front Proxy](frontproxy.html), where Envoy handles traffic
+deployment to a [Front Proxy](front-proxy.html), where Envoy handles traffic
 from the outside world (aka north-south traffic).
 
 A basic Service Mesh uses Envoy sidecars to handle outbound traffic for each

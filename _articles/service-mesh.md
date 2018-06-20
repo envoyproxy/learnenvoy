@@ -187,7 +187,7 @@ as the out-of-zone instance in the cluster.
 While this article has focused on how to handle traffic between services, it's
 also possible for Envoy to handle traffic from the public internet
 (“North/South” traffic) as a
-[Front Proxy](https://learnenvoy.io/front-proxy.html). The service mesh and
+[Front Proxy](front-proxy.html). The service mesh and
 front proxy have a lot of overlapping features, so it can be useful to consider
 how to roll them both out.
 

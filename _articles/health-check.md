@@ -52,7 +52,7 @@ health_checks:
     unhealthy_threshold: 3
     healthy_threshold: 3
     tcp_health_check:
-      send: “”
+      send: ""
       receive: []
 ```
 
@@ -61,7 +61,7 @@ for a non-5xx response, replace `tcp_health_check` with `http_health_check`,
 which defines the URL to test:
 
 ```yaml
-host: “servicehost”
+host: "servicehost"
 path: "/health"
 service_name: "authentication"
 ```

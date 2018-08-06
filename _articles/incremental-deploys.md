@@ -97,7 +97,7 @@ routes:
     prefix: "/service/1"
     headers:
       - name: "x-canary-version"
-        value: "service1a"
+        exact_match: "service1a"
   route:
     cluster: service1a
 - match:

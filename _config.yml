@@ -44,6 +44,7 @@ exclude:
   - node_modules
   - Makefile
 sass:
+  style: compressed
   load_paths:
     - _sass
     - node_modules

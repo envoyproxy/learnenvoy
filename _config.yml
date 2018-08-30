@@ -20,7 +20,7 @@ description: > # this means to ignore newlines until "baseurl:"
   LearnEnvoy is a community content site that helps organizations get the most
   out of the Envoy proxy
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "https://learnenvoy.io" # the base hostname & protocol for your site, e.g. http://example.com
+url: "https://www.learnenvoy.io"
 twitter_username: goturbine
 github_username:  turbinelabs
 
@@ -48,3 +48,6 @@ sass:
   load_paths:
     - _sass
     - node_modules
+
+gems:
+  - jekyll-sitemap

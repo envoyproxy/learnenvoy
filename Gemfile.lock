@@ -40,6 +40,8 @@ GEM
       safe_yaml (~> 1.0)
     jekyll-sass-converter (1.5.2)
       sass (~> 3.4)
+    jekyll-sitemap (1.2.0)
+      jekyll (~> 3.3)
     jekyll-watch (1.5.1)
       listen (~> 3.0)
     kramdown (1.16.2)
@@ -84,6 +86,7 @@ DEPENDENCIES
   agency-jekyll-theme
   html-proofer
   jekyll (= 3.4.0)
+  jekyll-sitemap
   liquefy (~> 0.1.2)
   redcarpet (~> 3.4.0)
   tzinfo-data

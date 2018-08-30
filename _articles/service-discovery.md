@@ -1,6 +1,11 @@
 ---
 layout: article
 title: Integrating Service Discovery with Envoy
+description: >
+  Integrating Envoy with service discovery such as Consul, Kubernetes, ECS,
+  AWS EC2, Mesos, and more lets Envoy route to dynamically configured
+  endpoints. See how to set it up, either from scratch or with existing
+  open-source tools.
 ---
 
 [//]: # ( Copyright 2018 Turbine Labs, Inc.                                   )
@@ -118,18 +123,18 @@ list of endpoints for each service. Envoy periodically polls the EDS endpoint,
 generating a response:
 
 ```yaml
-version_info: “0”
+version_info: "0"
 resources:
-- “@type”: type.googleapis.com/envoy.api.v2.ClusterLoadAssignment
- cluster_name: some_service
- endpoints:
- — lb_endpoints:
- — endpoint:
- address:
- socket_address:
- address: 127.0.0.2
- port_value: 1234
- ```
+- "@type": type.googleapis.com/envoy.api.v2.ClusterLoadAssignment
+  cluster_name: some_service
+  endpoints:
+  - lb_endpoints:
+    - endpoint:
+       address:
+         socket_address:
+           address: 127.0.0.2
+           port_value: 1234
+```
 
 This is simpler than defining clusters, because the only thing Envoy needs to
 know is which cluster(s) this endpoint belongs to.

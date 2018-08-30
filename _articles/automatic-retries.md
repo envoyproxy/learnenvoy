@@ -1,6 +1,11 @@
 ---
 layout: article
 title: Automatic Retries
+description: >
+  Automatic retries are a powerful way to add resilience to your system with
+  essentially no changes to your services. This article covers configuration
+  for Envoy's retries, including when to retry, choosing defaults, and how to
+  configure other Envoy features that augment retries.
 ---
 
 [//]: # ( Copyright 2018 Turbine Labs, Inc.                                   )

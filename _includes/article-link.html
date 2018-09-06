@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 {% endcomment %}
 
+{% if service.name %}
 <div class="col-md-4">
     {% if service.article %}
     <a href="/articles/{{ service.article}}">
@@ -36,3 +37,6 @@ limitations under the License.
         {{ service.description | markdownify }}
     </div>
 </div>
+{% else %}
+<div class="col-md-4"></div>
+{% endif %}

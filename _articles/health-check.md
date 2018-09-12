@@ -51,9 +51,7 @@ health_checks:
     interval_jitter: 1s
     unhealthy_threshold: 3
     healthy_threshold: 3
-    tcp_health_check:
-      send: ""
-      receive: []
+    tcp_health_check: {}
 ```
 
 Envoy also knows about HTTP, gRPC, and Redis protocols. For example, to test
